@@ -42,8 +42,11 @@ export interface Capabilities {
   query: boolean;
   /** Arbitrary date-range filtering. */
   dateRange: boolean;
-  /** Category filtering. */
-  category: boolean;
+  /**
+   * Where category filtering happens. `'client'` means the source cannot filter by
+   * category itself and the query layer drops non-matching articles after the fetch.
+   */
+  category: 'server' | 'client' | false;
   /**
    * Where author filtering happens. `false` means the source cannot filter by author
    * at all and the UI must say so.

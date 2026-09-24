@@ -1,5 +1,5 @@
 # Rendered by the nginx image's entrypoint (envsubst over /etc/nginx/templates/*.template)
-# at container start, so ${..._API_KEY} exist only in the running container's config.
+# at container start, so ${..._KEY} exist only in the running container's config.
 # nginx's own runtime variables ($args, $uri, ...) are brace-less and envsubst leaves them alone.
 
 proxy_cache_path /var/cache/nginx/news levels=1:2 keys_zone=news:10m max_size=64m inactive=10m use_temp_path=off;
@@ -29,12 +29,12 @@ server {
 
     location ~ ^/api/guardian/(?<guardian_path>.*)$ {
         proxy_set_header Host content.guardianapis.com;
-        proxy_pass https://content.guardianapis.com/$guardian_path?$args&api-key=${GUARDIAN_API_KEY};
+        proxy_pass https://content.guardianapis.com/$guardian_path?$args&api-key=${GUARDIAN_KEY};
     }
 
     location ~ ^/api/nyt/(?<nyt_path>.*)$ {
         proxy_set_header Host api.nytimes.com;
-        proxy_pass https://api.nytimes.com/svc/search/v2/$nyt_path?$args&api-key=${NYT_API_KEY};
+        proxy_pass https://api.nytimes.com/svc/search/v2/$nyt_path?$args&api-key=${NYT_KEY};
     }
 
     # NewsAPI is 24h-delayed, so a 5 minute cache costs zero freshness and buys
@@ -42,7 +42,7 @@ server {
     location ~ ^/api/newsapi/(?<newsapi_path>.*)$ {
         proxy_cache_valid 200 5m;
         proxy_set_header Host newsapi.org;
-        proxy_pass https://newsapi.org/v2/$newsapi_path?$args&apiKey=${NEWSAPI_API_KEY};
+        proxy_pass https://newsapi.org/v2/$newsapi_path?$args&apiKey=${NEWSAPI_KEY};
     }
 
     # --- static assets + SPA fallback ------------------------------------

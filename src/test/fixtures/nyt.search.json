@@ -1,0 +1,1148 @@
+{
+  "status": "OK",
+  "copyright": "Copyright (c) 2026 The New York Times Company. All Rights Reserved.",
+  "response": {
+    "docs": [
+      {
+        "abstract": "For months, millions of people have been living under a stifling blanket of toxic haze, fueled by a punishing drought brought on by the El Niño weather pattern.",
+        "byline": {
+          "original": "By Muktita Suhartono and Ulet Ifansasti"
+        },
+        "document_type": "article",
+        "headline": {
+          "main": "‘All We Could See Was Red’: The Wildfires Choking Indonesian Borneo",
+          "kicker": "Indonesia dispatch",
+          "print_headline": ""
+        },
+        "_id": "nyt://article/a352d96b-7dc3-5181-9929-74990e7d8331",
+        "keywords": [
+          {
+            "name": "Subject",
+            "value": "Wildfires",
+            "rank": 1
+          },
+          {
+            "name": "Subject",
+            "value": "Fires and Firefighters",
+            "rank": 2
+          },
+          {
+            "name": "Subject",
+            "value": "El Nino Southern Oscillation",
+            "rank": 3
+          },
+          {
+            "name": "Subject",
+            "value": "Respiratory Diseases",
+            "rank": 4
+          },
+          {
+            "name": "Subject",
+            "value": "Environment",
+            "rank": 5
+          },
+          {
+            "name": "Subject",
+            "value": "Air Pollution",
+            "rank": 6
+          },
+          {
+            "name": "Subject",
+            "value": "Forests and Forestry",
+            "rank": 7
+          },
+          {
+            "name": "Location",
+            "value": "Borneo (Indonesia)",
+            "rank": 8
+          },
+          {
+            "name": "Location",
+            "value": "Indonesia",
+            "rank": 9
+          }
+        ],
+        "multimedia": {
+          "caption": "",
+          "credit": "",
+          "default": {
+            "url": "https://static01.nyt.com/images/2026/09/23/23visualUploader-4172-cover/23visualUploader-4172-cover-articleLarge.jpg",
+            "height": 338,
+            "width": 600
+          },
+          "thumbnail": {
+            "url": "https://static01.nyt.com/images/2026/09/23/23visualUploader-4172-cover/23visualUploader-4172-cover-thumbStandard.jpg",
+            "height": 75,
+            "width": 75
+          }
+        },
+        "news_desk": "Foreign",
+        "print_page": "",
+        "print_section": "",
+        "pub_date": "2026-09-24T21:00:21Z",
+        "section_name": "World",
+        "snippet": "For months, millions of people have been living under a stifling blanket of toxic haze, fueled by a punishing drought brought on by the El Niño weather pattern.",
+        "source": "The New York Times",
+        "subsection_name": "Asia Pacific",
+        "type_of_material": "News",
+        "uri": "nyt://article/a352d96b-7dc3-5181-9929-74990e7d8331",
+        "web_url": "https://www.nytimes.com/2026/09/24/world/asia/indonesia-borneo-wildfires-haze-health-el-nino.html",
+        "word_count": 1192
+      },
+      {
+        "abstract": "At the Climate Forward live event, policymakers, executives and activists debated the boom in data centers, the growing backlash and its environmental effects.",
+        "byline": {
+          "original": "By David Gelles"
+        },
+        "document_type": "article",
+        "headline": {
+          "main": "A Spirited Battle Over Data Centers",
+          "kicker": "",
+          "print_headline": ""
+        },
+        "_id": "nyt://article/350472cf-95e7-576a-b59f-ea6cec395316",
+        "keywords": [
+          {
+            "name": "Subject",
+            "value": "United States Politics and Government",
+            "rank": 1
+          },
+          {
+            "name": "Subject",
+            "value": "Data Centers",
+            "rank": 2
+          },
+          {
+            "name": "Subject",
+            "value": "Global Warming",
+            "rank": 3
+          },
+          {
+            "name": "Subject",
+            "value": "Legislatures and Parliaments",
+            "rank": 4
+          },
+          {
+            "name": "Subject",
+            "value": "Greenhouse Gas Emissions",
+            "rank": 5
+          },
+          {
+            "name": "Subject",
+            "value": "Natural Gas",
+            "rank": 6
+          },
+          {
+            "name": "Organization",
+            "value": "Environmental Protection Agency",
+            "rank": 7
+          },
+          {
+            "name": "Organization",
+            "value": "Energy Department",
+            "rank": 8
+          },
+          {
+            "name": "Organization",
+            "value": "NVIDIA Corporation",
+            "rank": 9
+          },
+          {
+            "name": "Person",
+            "value": "Abbott, Gregory W (1957- )",
+            "rank": 10
+          },
+          {
+            "name": "Person",
+            "value": "Brockovich, Erin",
+            "rank": 11
+          },
+          {
+            "name": "Person",
+            "value": "Pearson, Justin J (1994- )",
+            "rank": 12
+          },
+          {
+            "name": "Person",
+            "value": "Trump, Donald J",
+            "rank": 13
+          },
+          {
+            "name": "Person",
+            "value": "Wright, Chris (1965- )",
+            "rank": 14
+          },
+          {
+            "name": "Person",
+            "value": "Spanberger, Abigail",
+            "rank": 15
+          },
+          {
+            "name": "Location",
+            "value": "California",
+            "rank": 16
+          },
+          {
+            "name": "Location",
+            "value": "Loudoun County (Va)",
+            "rank": 17
+          },
+          {
+            "name": "Location",
+            "value": "Klamath River",
+            "rank": 18
+          },
+          {
+            "name": "Location",
+            "value": "Memphis (Tenn)",
+            "rank": 19
+          },
+          {
+            "name": "Location",
+            "value": "Virginia",
+            "rank": 20
+          },
+          {
+            "name": "Location",
+            "value": "United States",
+            "rank": 21
+          }
+        ],
+        "multimedia": {
+          "caption": "Reporter David Gelles in conversation with Energy Secretary Chris Wright at the Climate Forward event on Wednesday.",
+          "credit": "Demetrius Freeman for The New York Times",
+          "default": {
+            "url": "https://static01.nyt.com/images/2026/09/24/multimedia/24cli-newsletter-event-zgwl/24cli-newsletter-event-zgwl-articleLarge.jpg",
+            "height": 400,
+            "width": 600
+          },
+          "thumbnail": {
+            "url": "https://static01.nyt.com/images/2026/09/24/multimedia/24cli-newsletter-event-zgwl/24cli-newsletter-event-zgwl-thumbStandard.jpg",
+            "height": 75,
+            "width": 75
+          }
+        },
+        "news_desk": "Climate",
+        "print_page": "",
+        "print_section": "",
+        "pub_date": "2026-09-24T19:14:28Z",
+        "section_name": "Climate",
+        "snippet": "At the Climate Forward live event, policymakers, executives and activists debated the boom in data centers, the growing backlash and its environmental effects.",
+        "source": "The New York Times",
+        "subsection_name": "",
+        "type_of_material": "News",
+        "uri": "nyt://article/350472cf-95e7-576a-b59f-ea6cec395316",
+        "web_url": "https://www.nytimes.com/2026/09/24/climate/a-spirited-battle-over-data-centers.html",
+        "word_count": 1645
+      },
+      {
+        "abstract": "It’s time to give the public what it wants: A.I. regulation.",
+        "byline": {
+          "original": "By David Wallace-Wells, Binyamin Appelbaum and Derek Arthur"
+        },
+        "document_type": "article",
+        "headline": {
+          "main": "The Wild West of A.I. Needs to End. Here’s How.",
+          "kicker": "The Opinions",
+          "print_headline": ""
+        },
+        "_id": "nyt://article/00e09f10-6a0b-5383-af55-0a5219bdf52a",
+        "keywords": [
+          {
+            "name": "Subject",
+            "value": "audio-neutral-informative",
+            "rank": 1
+          },
+          {
+            "name": "Subject",
+            "value": "Artificial Intelligence",
+            "rank": 2
+          },
+          {
+            "name": "Subject",
+            "value": "United States Politics and Government",
+            "rank": 3
+          },
+          {
+            "name": "Subject",
+            "value": "Regulation and Deregulation of Industry",
+            "rank": 4
+          },
+          {
+            "name": "Subject",
+            "value": "Computers and the Internet",
+            "rank": 5
+          },
+          {
+            "name": "Subject",
+            "value": "Water",
+            "rank": 6
+          },
+          {
+            "name": "Subject",
+            "value": "Midterm Elections (2026)",
+            "rank": 7
+          },
+          {
+            "name": "Subject",
+            "value": "Legislatures and Parliaments",
+            "rank": 8
+          },
+          {
+            "name": "Subject",
+            "value": "Innovation",
+            "rank": 9
+          },
+          {
+            "name": "Subject",
+            "value": "Polls and Public Opinion",
+            "rank": 10
+          },
+          {
+            "name": "Subject",
+            "value": "Social Media",
+            "rank": 11
+          },
+          {
+            "name": "Subject",
+            "value": "Debates (Political)",
+            "rank": 12
+          },
+          {
+            "name": "Subject",
+            "value": "Boards of Directors",
+            "rank": 13
+          },
+          {
+            "name": "Subject",
+            "value": "Politics and Government",
+            "rank": 14
+          },
+          {
+            "name": "Subject",
+            "value": "Nuclear Weapons",
+            "rank": 15
+          },
+          {
+            "name": "Subject",
+            "value": "Law and Legislation",
+            "rank": 16
+          },
+          {
+            "name": "Subject",
+            "value": "United States International Relations",
+            "rank": 17
+          },
+          {
+            "name": "Subject",
+            "value": "Data Centers",
+            "rank": 18
+          },
+          {
+            "name": "Organization",
+            "value": "Anthropic AI LLC",
+            "rank": 19
+          },
+          {
+            "name": "Organization",
+            "value": "Fuga (Independent IP BV)",
+            "rank": 20
+          },
+          {
+            "name": "Organization",
+            "value": "Hugging Face Inc",
+            "rank": 21
+          },
+          {
+            "name": "Organization",
+            "value": "OpenAI Labs",
+            "rank": 22
+          },
+          {
+            "name": "Organization",
+            "value": "Microsoft Corp",
+            "rank": 23
+          },
+          {
+            "name": "Person",
+            "value": "Amodei, Dario",
+            "rank": 24
+          },
+          {
+            "name": "Person",
+            "value": "Bannon, Stephen K",
+            "rank": 25
+          },
+          {
+            "name": "Person",
+            "value": "Obama, Barack",
+            "rank": 26
+          },
+          {
+            "name": "Person",
+            "value": "Sanders, Bernard",
+            "rank": 27
+          },
+          {
+            "name": "Person",
+            "value": "Trump, Donald J",
+            "rank": 28
+          },
+          {
+            "name": "Person",
+            "value": "Xi Jinping",
+            "rank": 29
+          },
+          {
+            "name": "Location",
+            "value": "United States",
+            "rank": 30
+          },
+          {
+            "name": "Location",
+            "value": "Washington (DC)",
+            "rank": 31
+          }
+        ],
+        "multimedia": {
+          "caption": "",
+          "credit": "",
+          "default": {
+            "url": "https://static01.nyt.com/images/2026/09/24/arts/24opinions-AI-regulations-video-image/24opinions-AI-regulations-video-image-articleLarge.png",
+            "height": 337,
+            "width": 600
+          },
+          "thumbnail": {
+            "url": "https://static01.nyt.com/images/2026/09/24/arts/24opinions-AI-regulations-video-image/24opinions-AI-regulations-video-image-thumbStandard.png",
+            "height": 75,
+            "width": 75
+          }
+        },
+        "news_desk": "OpEd",
+        "print_page": "",
+        "print_section": "",
+        "pub_date": "2026-09-24T19:00:07Z",
+        "section_name": "Opinion",
+        "snippet": "It’s time to give the public what it wants: A.I. regulation.",
+        "source": "The New York Times",
+        "subsection_name": "",
+        "type_of_material": "Op-Ed",
+        "uri": "nyt://article/00e09f10-6a0b-5383-af55-0a5219bdf52a",
+        "web_url": "https://www.nytimes.com/2026/09/24/opinion/ai-regulation-government-tech-industry.html",
+        "word_count": 6275
+      },
+      {
+        "abstract": "Trump’s flailing presidency leaves Americans with the thinnest of hopes for this week’s summit: that he does not further damage the national interest.",
+        "byline": {
+          "original": "By The Editorial Board"
+        },
+        "document_type": "article",
+        "headline": {
+          "main": "Trump’s Failure to Lead Is Costing America and the World",
+          "kicker": "The Editorial Board",
+          "print_headline": ""
+        },
+        "_id": "nyt://article/3a8c9f5b-22bb-5bd3-850f-1b78237de347",
+        "keywords": [
+          {
+            "name": "Subject",
+            "value": "United States International Relations",
+            "rank": 1
+          },
+          {
+            "name": "Subject",
+            "value": "Artificial Intelligence",
+            "rank": 2
+          },
+          {
+            "name": "Subject",
+            "value": "Global Warming",
+            "rank": 3
+          },
+          {
+            "name": "Subject",
+            "value": "US and Israeli Attack on Iran (2026)",
+            "rank": 4
+          },
+          {
+            "name": "Person",
+            "value": "Trump, Donald J",
+            "rank": 5
+          },
+          {
+            "name": "Person",
+            "value": "Xi Jinping",
+            "rank": 6
+          },
+          {
+            "name": "Location",
+            "value": "United States",
+            "rank": 7
+          },
+          {
+            "name": "Location",
+            "value": "China",
+            "rank": 8
+          },
+          {
+            "name": "Location",
+            "value": "Strait of Hormuz",
+            "rank": 9
+          },
+          {
+            "name": "Subject",
+            "value": "Regulation and Deregulation of Industry",
+            "rank": 10
+          }
+        ],
+        "multimedia": {
+          "caption": "",
+          "credit": "Julia Demaree Nikhinson/Associated Press",
+          "default": {
+            "url": "https://static01.nyt.com/images/2026/09/27/opinion/24uschina-editorial1/24uschina-editorial1-articleLarge.jpg",
+            "height": 750,
+            "width": 600
+          },
+          "thumbnail": {
+            "url": "https://static01.nyt.com/images/2026/09/27/opinion/24uschina-editorial1/24uschina-editorial1-thumbStandard.jpg",
+            "height": 75,
+            "width": 75
+          }
+        },
+        "news_desk": "OpEd",
+        "print_page": "",
+        "print_section": "",
+        "pub_date": "2026-09-24T15:00:05Z",
+        "section_name": "Opinion",
+        "snippet": "Trump’s flailing presidency leaves Americans with the thinnest of hopes for this week’s summit: that he does not further damage the national interest.",
+        "source": "The New York Times",
+        "subsection_name": "",
+        "type_of_material": "Editorial",
+        "uri": "nyt://article/3a8c9f5b-22bb-5bd3-850f-1b78237de347",
+        "web_url": "https://www.nytimes.com/2026/09/24/opinion/trump-xi-washington-summit.html",
+        "word_count": 1041
+      },
+      {
+        "abstract": "A federal judge ruled that the new law, which would force fossil fuel companies to pay $75 billion to help cover the costs of climate change, was unconstitutional.",
+        "byline": {
+          "original": "By Karen Zraick"
+        },
+        "document_type": "article",
+        "headline": {
+          "main": "A Second Judge Strikes Down New York’s Climate ‘Superfund’ Law",
+          "kicker": "",
+          "print_headline": "Another Judge Strikes Down A New York Climate Law"
+        },
+        "_id": "nyt://article/d6935e73-1cfd-5d66-b385-d42d4fa1b7d9",
+        "keywords": [
+          {
+            "name": "Subject",
+            "value": "Global Warming",
+            "rank": 1
+          },
+          {
+            "name": "Subject",
+            "value": "Federal-State Relations (US)",
+            "rank": 2
+          },
+          {
+            "name": "Subject",
+            "value": "Law and Legislation",
+            "rank": 3
+          },
+          {
+            "name": "Subject",
+            "value": "Greenhouse Gas Emissions",
+            "rank": 4
+          },
+          {
+            "name": "Subject",
+            "value": "Oil (Petroleum) and Gasoline",
+            "rank": 5
+          },
+          {
+            "name": "Subject",
+            "value": "Regulation and Deregulation of Industry",
+            "rank": 6
+          },
+          {
+            "name": "Subject",
+            "value": "Liability for Products",
+            "rank": 7
+          },
+          {
+            "name": "Organization",
+            "value": "Environmental Protection Agency",
+            "rank": 8
+          },
+          {
+            "name": "Location",
+            "value": "New York State",
+            "rank": 9
+          }
+        ],
+        "multimedia": {
+          "caption": "The plant in Somerset, N.Y., which closed in 2020, was the last coal-fired power station in the state.",
+          "credit": "Libby March for The New York Times",
+          "default": {
+            "url": "https://static01.nyt.com/images/2026/09/24/multimedia/24cli-superfund-mkbh/24cli-superfund-mkbh-articleLarge.jpg",
+            "height": 400,
+            "width": 600
+          },
+          "thumbnail": {
+            "url": "https://static01.nyt.com/images/2026/09/24/multimedia/24cli-superfund-mkbh/24cli-superfund-mkbh-thumbStandard.jpg",
+            "height": 75,
+            "width": 75
+          }
+        },
+        "news_desk": "Climate",
+        "print_page": "21",
+        "print_section": "A",
+        "pub_date": "2026-09-24T14:15:42Z",
+        "section_name": "Climate",
+        "snippet": "A federal judge ruled that the new law, which would force fossil fuel companies to pay $75 billion to help cover the costs of climate change, was unconstitutional.",
+        "source": "The New York Times",
+        "subsection_name": "",
+        "type_of_material": "News",
+        "uri": "nyt://article/d6935e73-1cfd-5d66-b385-d42d4fa1b7d9",
+        "web_url": "https://www.nytimes.com/2026/09/24/climate/new-york-climate-superfund-law.html",
+        "word_count": 679
+      },
+      {
+        "abstract": "The dissent reflects growing unease about the party’s prospects in November, as the G.O.P. struggles to overcome the president’s unpopularity.",
+        "byline": {
+          "original": "By Lisa Lerer and Shane Goldmacher"
+        },
+        "document_type": "article",
+        "headline": {
+          "main": "‘Survival Mode Time’: Republicans Accelerate Their Break With Trump",
+          "kicker": "",
+          "print_headline": ""
+        },
+        "_id": "nyt://article/a67c19dd-9659-5575-b4b7-30ed236c1bb7",
+        "keywords": [
+          {
+            "name": "Subject",
+            "value": "United States Politics and Government",
+            "rank": 1
+          },
+          {
+            "name": "Subject",
+            "value": "US and Israeli Attack on Iran (2026)",
+            "rank": 2
+          },
+          {
+            "name": "Subject",
+            "value": "Midterm Elections (2026)",
+            "rank": 3
+          },
+          {
+            "name": "Subject",
+            "value": "War Powers Act (1973)",
+            "rank": 4
+          },
+          {
+            "name": "Subject",
+            "value": "Political Advertising",
+            "rank": 5
+          },
+          {
+            "name": "Subject",
+            "value": "Elections, Senate",
+            "rank": 6
+          },
+          {
+            "name": "Subject",
+            "value": "Elections, House of Representatives",
+            "rank": 7
+          },
+          {
+            "name": "Subject",
+            "value": "Two Thousand Twenty Six",
+            "rank": 8
+          },
+          {
+            "name": "Organization",
+            "value": "Democratic Party",
+            "rank": 9
+          },
+          {
+            "name": "Organization",
+            "value": "Republican Party",
+            "rank": 10
+          },
+          {
+            "name": "Person",
+            "value": "Trump, Donald J",
+            "rank": 11
+          },
+          {
+            "name": "Person",
+            "value": "Donalds, Byron (1978- )",
+            "rank": 12
+          },
+          {
+            "name": "Person",
+            "value": "Cassidy, Bill (1957- )",
+            "rank": 13
+          },
+          {
+            "name": "Person",
+            "value": "Grassley, Charles E",
+            "rank": 14
+          },
+          {
+            "name": "Person",
+            "value": "Hinson, Ashley (1983- )",
+            "rank": 15
+          },
+          {
+            "name": "Person",
+            "value": "Jeffries, Hakeem",
+            "rank": 16
+          },
+          {
+            "name": "Location",
+            "value": "Michigan",
+            "rank": 17
+          },
+          {
+            "name": "Location",
+            "value": "Iowa",
+            "rank": 18
+          }
+        ],
+        "multimedia": {
+          "caption": "President Trump hosted a splashy gathering for his supporters in Dallas, where he spoke for nearly two hours.",
+          "credit": "Kenny Holston/The New York Times",
+          "default": {
+            "url": "https://static01.nyt.com/images/2026/09/24/multimedia/24pol-gop-break-zjlq/24pol-gop-break-zjlq-articleLarge.jpg",
+            "height": 400,
+            "width": 600
+          },
+          "thumbnail": {
+            "url": "https://static01.nyt.com/images/2026/09/24/multimedia/24pol-gop-break-zjlq/24pol-gop-break-zjlq-thumbStandard.jpg",
+            "height": 75,
+            "width": 75
+          }
+        },
+        "news_desk": "Politics",
+        "print_page": "",
+        "print_section": "",
+        "pub_date": "2026-09-24T09:02:54Z",
+        "section_name": "U.S.",
+        "snippet": "The dissent reflects growing unease about the party’s prospects in November, as the G.O.P. struggles to overcome the president’s unpopularity.",
+        "source": "The New York Times",
+        "subsection_name": "Politics",
+        "type_of_material": "News",
+        "uri": "nyt://article/a67c19dd-9659-5575-b4b7-30ed236c1bb7",
+        "web_url": "https://www.nytimes.com/2026/09/24/us/politics/trump-republicans-midterms-break.html",
+        "word_count": 1646
+      },
+      {
+        "abstract": "Balendra Shah, 36, comes to the U.N. as a sun-glassed symbol of Gen Z political power. But concerns about his style are growing at home after devastating floods left thousands dead or missing.",
+        "byline": {
+          "original": "By Hannah Beech"
+        },
+        "document_type": "article",
+        "headline": {
+          "main": "From a Nepal in Pain, a Young Leader Makes a Case for Climate Reparations",
+          "kicker": "",
+          "print_headline": ""
+        },
+        "_id": "nyt://article/a94ac3f0-4aa5-52c1-a456-12f9e009d7b1",
+        "keywords": [
+          {
+            "name": "Subject",
+            "value": "Floods",
+            "rank": 1
+          },
+          {
+            "name": "Subject",
+            "value": "Generation Z",
+            "rank": 2
+          },
+          {
+            "name": "Subject",
+            "value": "Politics and Government",
+            "rank": 3
+          },
+          {
+            "name": "Location",
+            "value": "Nepal",
+            "rank": 4
+          },
+          {
+            "name": "Person",
+            "value": "Shah, Balendra (Balen)",
+            "rank": 5
+          },
+          {
+            "name": "Organization",
+            "value": "General Assembly (UN)",
+            "rank": 6
+          },
+          {
+            "name": "Subject",
+            "value": "Global Warming",
+            "rank": 7
+          },
+          {
+            "name": "Subject",
+            "value": "Reparations",
+            "rank": 8
+          },
+          {
+            "name": "Subject",
+            "value": "Youth",
+            "rank": 9
+          },
+          {
+            "name": "Subject",
+            "value": "Nepal-Tibet Floods (August 2026)",
+            "rank": 10
+          }
+        ],
+        "multimedia": {
+          "caption": "Balendra Shah, the former mayor of Kathmandu, during his campaign to become the next prime minister of Nepal, in February.",
+          "credit": "Hannah Reyes Morales for The New York Times",
+          "default": {
+            "url": "https://static01.nyt.com/images/2026/09/24/multimedia/24int-nepal-unga-ghfc/24int-nepal-unga-ghfc-articleLarge.jpg",
+            "height": 400,
+            "width": 600
+          },
+          "thumbnail": {
+            "url": "https://static01.nyt.com/images/2026/09/24/multimedia/24int-nepal-unga-ghfc/24int-nepal-unga-ghfc-thumbStandard.jpg",
+            "height": 75,
+            "width": 75
+          }
+        },
+        "news_desk": "Foreign",
+        "print_page": "",
+        "print_section": "",
+        "pub_date": "2026-09-24T04:01:05Z",
+        "section_name": "World",
+        "snippet": "Balendra Shah, 36, comes to the U.N. as a sun-glassed symbol of Gen Z political power. But concerns about his style are growing at home after devastating floods left thousands dead or missing.",
+        "source": "The New York Times",
+        "subsection_name": "Asia Pacific",
+        "type_of_material": "News",
+        "uri": "nyt://article/a94ac3f0-4aa5-52c1-a456-12f9e009d7b1",
+        "web_url": "https://www.nytimes.com/2026/09/24/world/asia/un-general-assembly-nepal-balen-shah.html",
+        "word_count": 517
+      },
+      {
+        "abstract": "New Jersey officials said that the natural gas-powered generators, each the size of a tractor-trailer, were operating without permits.",
+        "byline": {
+          "original": "By Adeel Hassan"
+        },
+        "document_type": "article",
+        "headline": {
+          "main": "Data Center Is Fined $1.1 Million for Operating 62 Power Generators",
+          "kicker": "",
+          "print_headline": ""
+        },
+        "_id": "nyt://article/fe6e1ca0-ca68-5390-bdd1-d2a3ea299297",
+        "keywords": [
+          {
+            "name": "Location",
+            "value": "New Jersey",
+            "rank": 1
+          },
+          {
+            "name": "Subject",
+            "value": "Data Centers",
+            "rank": 2
+          },
+          {
+            "name": "Subject",
+            "value": "Pollution",
+            "rank": 3
+          },
+          {
+            "name": "Subject",
+            "value": "Air Pollution",
+            "rank": 4
+          },
+          {
+            "name": "Subject",
+            "value": "Fines (Penalties)",
+            "rank": 5
+          },
+          {
+            "name": "Person",
+            "value": "Sherrill, Mikie",
+            "rank": 6
+          },
+          {
+            "name": "Location",
+            "value": "Vineland (NJ)",
+            "rank": 7
+          },
+          {
+            "name": "Subject",
+            "value": "Building (Construction)",
+            "rank": 8
+          },
+          {
+            "name": "Subject",
+            "value": "Artificial Intelligence",
+            "rank": 9
+          }
+        ],
+        "multimedia": {
+          "caption": "A data center under construction in Vineland, N.J., last year.",
+          "credit": "USA Today, via Reuters",
+          "default": {
+            "url": "https://static01.nyt.com/images/2026/09/23/multimedia/23xp-data-center-fine-1/23xp-data-center-fine-1-articleLarge.jpg",
+            "height": 400,
+            "width": 600
+          },
+          "thumbnail": {
+            "url": "https://static01.nyt.com/images/2026/09/23/multimedia/23xp-data-center-fine-1/23xp-data-center-fine-1-thumbStandard.jpg",
+            "height": 75,
+            "width": 75
+          }
+        },
+        "news_desk": "Express",
+        "print_page": "",
+        "print_section": "",
+        "pub_date": "2026-09-23T22:37:05Z",
+        "section_name": "New York",
+        "snippet": "New Jersey officials said that the natural gas-powered generators, each the size of a tractor-trailer, were operating without permits.",
+        "source": "The New York Times",
+        "subsection_name": "",
+        "type_of_material": "News",
+        "uri": "nyt://article/fe6e1ca0-ca68-5390-bdd1-d2a3ea299297",
+        "web_url": "https://www.nytimes.com/2026/09/23/nyregion/data-center-pollution-new-jersey.html",
+        "word_count": 894
+      },
+      {
+        "abstract": "Energy Secretary Chris Wright said the Trump administration does not want to ban U.S. diesel exports to curb high prices.",
+        "byline": {
+          "original": "By Maxine Joselow"
+        },
+        "document_type": "article",
+        "headline": {
+          "main": "At a Times Event, Dueling Visions on Climate Change and A.I.",
+          "kicker": "",
+          "print_headline": ""
+        },
+        "_id": "nyt://article/d8949d01-a6e3-5b08-bc3f-914959611317",
+        "keywords": [
+          {
+            "name": "Subject",
+            "value": "United States Politics and Government",
+            "rank": 1
+          },
+          {
+            "name": "Subject",
+            "value": "US and Israeli Attack on Iran (2026)",
+            "rank": 2
+          },
+          {
+            "name": "Subject",
+            "value": "Global Warming",
+            "rank": 3
+          },
+          {
+            "name": "Subject",
+            "value": "Oil (Petroleum) and Gasoline",
+            "rank": 4
+          },
+          {
+            "name": "Subject",
+            "value": "International Relations",
+            "rank": 5
+          },
+          {
+            "name": "Subject",
+            "value": "Greenhouse Gas Emissions",
+            "rank": 6
+          },
+          {
+            "name": "Subject",
+            "value": "Alternative and Renewable Energy",
+            "rank": 7
+          },
+          {
+            "name": "Subject",
+            "value": "Natural Gas",
+            "rank": 8
+          },
+          {
+            "name": "Subject",
+            "value": "Artificial Intelligence",
+            "rank": 9
+          },
+          {
+            "name": "Subject",
+            "value": "International Trade and World Market",
+            "rank": 10
+          },
+          {
+            "name": "Subject",
+            "value": "Data Centers",
+            "rank": 11
+          },
+          {
+            "name": "Organization",
+            "value": "Energy Department",
+            "rank": 12
+          },
+          {
+            "name": "Organization",
+            "value": "New York Times",
+            "rank": 13
+          },
+          {
+            "name": "Person",
+            "value": "Trump, Donald J",
+            "rank": 14
+          },
+          {
+            "name": "Person",
+            "value": "Wright, Chris (1965- )",
+            "rank": 15
+          }
+        ],
+        "multimedia": {
+          "caption": "Energy Secretary Chris Wright speaking at The New York Times’s Climate Forward live journalism event.",
+          "credit": "Demetrius Freeman for The New York Times",
+          "default": {
+            "url": "https://static01.nyt.com/images/2026/09/23/multimedia/23cli-forward-ledeall-01-vjmw/23cli-forward-ledeall-01-vjmw-articleLarge.jpg",
+            "height": 400,
+            "width": 600
+          },
+          "thumbnail": {
+            "url": "https://static01.nyt.com/images/2026/09/23/multimedia/23cli-forward-ledeall-01-vjmw/23cli-forward-ledeall-01-vjmw-thumbStandard.jpg",
+            "height": 75,
+            "width": 75
+          }
+        },
+        "news_desk": "Climate",
+        "print_page": "",
+        "print_section": "",
+        "pub_date": "2026-09-23T22:12:53Z",
+        "section_name": "Climate",
+        "snippet": "Energy Secretary Chris Wright said the Trump administration does not want to ban U.S. diesel exports to curb high prices.",
+        "source": "The New York Times",
+        "subsection_name": "",
+        "type_of_material": "News",
+        "uri": "nyt://article/d8949d01-a6e3-5b08-bc3f-914959611317",
+        "web_url": "https://www.nytimes.com/2026/09/23/climate/climate-forward-chris-wright.html",
+        "word_count": 849
+      },
+      {
+        "abstract": "The storms won’t make landfall there, but even from a distance they could affect the state’s coastline.",
+        "byline": {
+          "original": "By Amy Graff and Jill Cowan"
+        },
+        "document_type": "article",
+        "headline": {
+          "main": "Southern California Watches Warily as Two Hurricanes Churn Far Offshore",
+          "kicker": "",
+          "print_headline": ""
+        },
+        "_id": "nyt://article/a6b9618f-af63-557a-9a52-851a5ed6b5ab",
+        "keywords": [
+          {
+            "name": "Subject",
+            "value": "Hurricanes and Tropical Storms",
+            "rank": 1
+          },
+          {
+            "name": "Subject",
+            "value": "Coastal Areas",
+            "rank": 2
+          },
+          {
+            "name": "Subject",
+            "value": "Beaches",
+            "rank": 3
+          },
+          {
+            "name": "Subject",
+            "value": "Floods",
+            "rank": 4
+          },
+          {
+            "name": "Subject",
+            "value": "Coast Erosion",
+            "rank": 5
+          },
+          {
+            "name": "Subject",
+            "value": "Weather",
+            "rank": 6
+          },
+          {
+            "name": "Person",
+            "value": "Cage, Nicolas",
+            "rank": 7
+          },
+          {
+            "name": "Location",
+            "value": "Baja California (Mexico)",
+            "rank": 8
+          },
+          {
+            "name": "Location",
+            "value": "California",
+            "rank": 9
+          },
+          {
+            "name": "Location",
+            "value": "Dana Point (Calif)",
+            "rank": 10
+          },
+          {
+            "name": "Location",
+            "value": "Long Beach (Calif)",
+            "rank": 11
+          },
+          {
+            "name": "Location",
+            "value": "Malibu (Calif)",
+            "rank": 12
+          },
+          {
+            "name": "Location",
+            "value": "Mexico",
+            "rank": 13
+          }
+        ],
+        "multimedia": {
+          "caption": "A lifeguard kept watch along a closed boardwalk as a Pacific Ocean wave crashed over a sea wall in Long Beach, Calif., earlier this month.",
+          "credit": "Mario Tama/Getty Images",
+          "default": {
+            "url": "https://static01.nyt.com/images/2026/09/23/multimedia/23wea-socal-polo-01-mbpq/23wea-socal-polo-01-mbpq-articleLarge.jpg",
+            "height": 400,
+            "width": 600
+          },
+          "thumbnail": {
+            "url": "https://static01.nyt.com/images/2026/09/23/multimedia/23wea-socal-polo-01-mbpq/23wea-socal-polo-01-mbpq-thumbStandard.jpg",
+            "height": 75,
+            "width": 75
+          }
+        },
+        "news_desk": "Weather",
+        "print_page": "",
+        "print_section": "",
+        "pub_date": "2026-09-23T21:24:33Z",
+        "section_name": "Weather",
+        "snippet": "The storms won’t make landfall there, but even from a distance they could affect the state’s coastline.",
+        "source": "The New York Times",
+        "subsection_name": "",
+        "type_of_material": "News",
+        "uri": "nyt://article/a6b9618f-af63-557a-9a52-851a5ed6b5ab",
+        "web_url": "https://www.nytimes.com/2026/09/23/weather/hurricane-polo-los-angeles.html",
+        "word_count": 932
+      }
+    ],
+    "metadata": {
+      "hits": 10000,
+      "offset": 0,
+      "time": 265
+    }
+  }
+}

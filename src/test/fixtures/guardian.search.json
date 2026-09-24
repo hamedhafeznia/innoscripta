@@ -1,0 +1,486 @@
+{
+  "response": {
+    "status": "ok",
+    "userTier": "developer",
+    "total": 132679,
+    "startIndex": 1,
+    "pageSize": 10,
+    "currentPage": 1,
+    "pages": 13268,
+    "orderBy": "newest",
+    "results": [
+      {
+        "id": "us-news/live/2026/sep/24/trump-xi-jinping-china-ai-trade-summit-latest-news-updates",
+        "type": "liveblog",
+        "sectionId": "us-news",
+        "sectionName": "US news",
+        "webPublicationDate": "2026-09-24T22:06:05Z",
+        "webTitle": "Trump touts ‘great meeting’ with China’s Xi Jinping at White House – live",
+        "webUrl": "https://www.theguardian.com/us-news/live/2026/sep/24/trump-xi-jinping-china-ai-trade-summit-latest-news-updates",
+        "apiUrl": "https://content.guardianapis.com/us-news/live/2026/sep/24/trump-xi-jinping-china-ai-trade-summit-latest-news-updates",
+        "fields": {
+          "trailText": "Xi Jinping says China and US must ensure AI ‘is always under human control’ and backs US-Iran deal to end war and reopen strait of Hormuz",
+          "byline": "Lucy Campbell (now); Shannon Ho (earlier)",
+          "thumbnail": "https://media.guim.co.uk/8cc83c92057d73e6c6e93d3ea9e019699d9a7b29/527_0_5848_4678/500.jpg"
+        },
+        "tags": [
+          {
+            "id": "profile/lucy-campbell",
+            "type": "contributor",
+            "webTitle": "Lucy Campbell",
+            "webUrl": "https://www.theguardian.com/profile/lucy-campbell",
+            "apiUrl": "https://content.guardianapis.com/profile/lucy-campbell",
+            "references": [],
+            "bio": "<p>Lucy Campbell is a Guardian&nbsp;reporter</p>",
+            "firstName": "Lucy ",
+            "lastName": "Campbell"
+          },
+          {
+            "id": "profile/shannon-ho",
+            "type": "contributor",
+            "webTitle": "Shannon Ho",
+            "webUrl": "https://www.theguardian.com/profile/shannon-ho",
+            "apiUrl": "https://content.guardianapis.com/profile/shannon-ho",
+            "references": [],
+            "bio": "<p>Shannon Ho is deputy digital editor at Guardian US</p>",
+            "firstName": "Shannon",
+            "lastName": "Ho"
+          },
+          {
+            "id": "profile/robert-mackey",
+            "type": "contributor",
+            "webTitle": "Robert Mackey",
+            "webUrl": "https://www.theguardian.com/profile/robert-mackey",
+            "apiUrl": "https://content.guardianapis.com/profile/robert-mackey",
+            "references": [],
+            "bio": "<p>Robert Mackey is a writer and editor who has reported for the Guardian, the New York Times, the Intercept and Forensic Architecture</p>",
+            "bylineImageUrl": "https://uploads.guim.co.uk/2025/03/20/Robert_Mackey.jpg",
+            "bylineLargeImageUrl": "https://uploads.guim.co.uk/2025/03/20/Robert_Mackey.png",
+            "firstName": "Robert",
+            "lastName": "Mackey"
+          },
+          {
+            "id": "profile/davidsmith",
+            "type": "contributor",
+            "webTitle": "David Smith",
+            "webUrl": "https://www.theguardian.com/profile/davidsmith",
+            "apiUrl": "https://content.guardianapis.com/profile/davidsmith",
+            "references": [],
+            "bio": "<p>David Smith is the Guardian's Washington  bureau chief. Click <a href=\"https://www.theguardian.com/pgp/PublicKeys/David%20Smith.pub.txt\">here</a> for&nbsp;David's public key. Twitter&nbsp;<a href=\"https://twitter.com/smithinamerica?lang=en\">@smithinamerica</a></p>",
+            "bylineImageUrl": "https://uploads.guim.co.uk/2023/05/25/David_Smith.jpg",
+            "bylineLargeImageUrl": "https://uploads.guim.co.uk/2023/05/25/David_Smith.png",
+            "firstName": "Smith",
+            "lastName": "David",
+            "twitterHandle": "smithinamerica"
+          },
+          {
+            "id": "profile/roberttait",
+            "type": "contributor",
+            "webTitle": "Robert Tait",
+            "webUrl": "https://www.theguardian.com/profile/roberttait",
+            "apiUrl": "https://content.guardianapis.com/profile/roberttait",
+            "references": [],
+            "bio": "<p>Robert Tait is political correspondent for Guardian US, based in Washington DC. He was previously the Guardian's correspondent in the Czech Republic, Iran and Turkey</p>",
+            "bylineImageUrl": "https://static.guim.co.uk/sys-images/Guardian/Pix/pictures/2009/6/15/1245063275963/tait.jpg",
+            "firstName": "Robert",
+            "lastName": "Tait"
+          },
+          {
+            "id": "profile/ariana-baio",
+            "type": "contributor",
+            "webTitle": "Ariana Baio",
+            "webUrl": "https://www.theguardian.com/profile/ariana-baio",
+            "apiUrl": "https://content.guardianapis.com/profile/ariana-baio",
+            "references": [],
+            "bio": "<p>Ariana Baio is a breaking news reporter for The Guardian, focusing on politics</p>",
+            "firstName": "Ariana",
+            "lastName": "Baio"
+          },
+          {
+            "id": "profile/christopher-hippensteel",
+            "type": "contributor",
+            "webTitle": "Chris Hippensteel",
+            "webUrl": "https://www.theguardian.com/profile/christopher-hippensteel",
+            "apiUrl": "https://content.guardianapis.com/profile/christopher-hippensteel",
+            "references": [],
+            "bio": "<p>Chris Hippensteel is a freelance politics blogger and reporter at Guardian US</p>",
+            "firstName": "Christopher",
+            "lastName": "Hippensteel"
+          },
+          {
+            "id": "profile/amy-hawkins",
+            "type": "contributor",
+            "webTitle": "Amy Hawkins",
+            "webUrl": "https://www.theguardian.com/profile/amy-hawkins",
+            "apiUrl": "https://content.guardianapis.com/profile/amy-hawkins",
+            "references": [],
+            "bio": "<p>Amy Hawkins is the Guardian's senior China correspondent. Twitter <a href=\"https://twitter.com/amyhawk_\">@amyhawk_</a></p>",
+            "bylineImageUrl": "https://uploads.guim.co.uk/2024/06/24/Amy_Hawkins.jpg",
+            "bylineLargeImageUrl": "https://uploads.guim.co.uk/2024/06/24/Amy_Hawkins.png",
+            "firstName": "Amy",
+            "lastName": "Hawkins",
+            "twitterHandle": "amyhawk_"
+          }
+        ],
+        "isHosted": false,
+        "pillarId": "pillar/news",
+        "pillarName": "News"
+      },
+      {
+        "id": "world/live/2026/sep/24/netanyahu-mamdani-abbas-trump-unga-un-general-assembly-speech-new-york-israel-palestine-latest-updates",
+        "type": "liveblog",
+        "sectionId": "world",
+        "sectionName": "World news",
+        "webPublicationDate": "2026-09-24T19:42:50Z",
+        "webTitle": "Netanyahu condemns media and Mamdani while praising Trump at UN in New York – as it happened",
+        "webUrl": "https://www.theguardian.com/world/live/2026/sep/24/netanyahu-mamdani-abbas-trump-unga-un-general-assembly-speech-new-york-israel-palestine-latest-updates",
+        "apiUrl": "https://content.guardianapis.com/world/live/2026/sep/24/netanyahu-mamdani-abbas-trump-unga-un-general-assembly-speech-new-york-israel-palestine-latest-updates",
+        "fields": {
+          "trailText": "Israeli prime minister hails IDF as ‘most moral army in the world’",
+          "byline": "Harry Cockburn (now) and Taz Ali (earlier)",
+          "thumbnail": "https://media.guim.co.uk/554732083e467ed2f2500ecf072d1e913438cc66/488_145_2610_2088/500.jpg"
+        },
+        "tags": [
+          {
+            "id": "profile/taz-ali",
+            "type": "contributor",
+            "webTitle": "Taz Ali",
+            "webUrl": "https://www.theguardian.com/profile/taz-ali",
+            "apiUrl": "https://content.guardianapis.com/profile/taz-ali",
+            "references": [],
+            "bio": "<p>Taz Ali is a live blogger and reporter at the Guardian</p>",
+            "bylineImageUrl": "https://uploads.guim.co.uk/2026/03/18/Taz_Ali.jpg",
+            "bylineLargeImageUrl": "https://uploads.guim.co.uk/2026/03/18/Taz_Ali.png",
+            "firstName": "Taz",
+            "lastName": "Ali"
+          },
+          {
+            "id": "profile/harry-cockburn",
+            "type": "contributor",
+            "webTitle": "Harry Cockburn",
+            "webUrl": "https://www.theguardian.com/profile/harry-cockburn",
+            "apiUrl": "https://content.guardianapis.com/profile/harry-cockburn",
+            "references": [],
+            "bio": "<p>Harry Cockburn is a reporter and live blogger for the Guardian</p>",
+            "firstName": "Harry",
+            "lastName": "Cockburn"
+          },
+          {
+            "id": "profile/patrickwintour",
+            "type": "contributor",
+            "webTitle": "Patrick Wintour",
+            "webUrl": "https://www.theguardian.com/profile/patrickwintour",
+            "apiUrl": "https://content.guardianapis.com/profile/patrickwintour",
+            "references": [],
+            "bio": "<p>Patrick Wintour is diplomatic editor for the Guardian</p>",
+            "bylineImageUrl": "https://static.guim.co.uk/sys-images/Guardian/Pix/contributor/2015/2/4/1423058508175/Patrick-Wintour.jpg",
+            "bylineLargeImageUrl": "https://uploads.guim.co.uk/2017/10/09/Patrick-Wintour,-R.png",
+            "firstName": "wintour",
+            "lastName": ""
+          }
+        ],
+        "isHosted": false,
+        "pillarId": "pillar/news",
+        "pillarName": "News"
+      },
+      {
+        "id": "sport/live/2026/sep/24/somerset-v-surrey-warwickshire-v-leics-and-more-county-championship-cricket-live",
+        "type": "liveblog",
+        "sectionId": "sport",
+        "sectionName": "Sport",
+        "webPublicationDate": "2026-09-24T18:54:06Z",
+        "webTitle": "Warwickshire blow through Leicestershire to hone in on title: County Championship cricket, day one – as it happened",
+        "webUrl": "https://www.theguardian.com/sport/live/2026/sep/24/somerset-v-surrey-warwickshire-v-leics-and-more-county-championship-cricket-live",
+        "apiUrl": "https://content.guardianapis.com/sport/live/2026/sep/24/somerset-v-surrey-warwickshire-v-leics-and-more-county-championship-cricket-live",
+        "fields": {
+          "trailText": "Warwickshire bowled out Leicestershire for just 125 at Edgbaston, while Surrey racked up runs at Somerset",
+          "byline": "James Wallace at Edgbaston",
+          "thumbnail": "https://media.guim.co.uk/83d59c0636489aee583598eddaabfdf1510e9c81/313_82_2038_1630/500.jpg"
+        },
+        "tags": [
+          {
+            "id": "profile/james-wallace",
+            "type": "contributor",
+            "webTitle": "James Wallace",
+            "webUrl": "https://www.theguardian.com/profile/james-wallace",
+            "apiUrl": "https://content.guardianapis.com/profile/james-wallace",
+            "references": [],
+            "bio": "<p>James Wallace is a freelance sports writer</p>",
+            "bylineImageUrl": "https://uploads.guim.co.uk/2022/08/30/James_Wallace.jpg",
+            "bylineLargeImageUrl": "https://uploads.guim.co.uk/2022/08/30/James_Wallace.png",
+            "firstName": "James",
+            "lastName": "Wallace"
+          },
+          {
+            "id": "profile/luke-mclaughlin",
+            "type": "contributor",
+            "webTitle": "Luke McLaughlin",
+            "webUrl": "https://www.theguardian.com/profile/luke-mclaughlin",
+            "apiUrl": "https://content.guardianapis.com/profile/luke-mclaughlin",
+            "references": [],
+            "bio": "<p>Luke McLaughlin is a sub editor and writer on sport for the Guardian</p>",
+            "bylineImageUrl": "https://uploads.guim.co.uk/2025/06/10/Luke_McLaughlin.jpg",
+            "bylineLargeImageUrl": "https://uploads.guim.co.uk/2025/06/10/Luke_McLaughlin.png",
+            "firstName": "Luke ",
+            "lastName": "McLaughlin"
+          }
+        ],
+        "isHosted": false,
+        "pillarId": "pillar/sport",
+        "pillarName": "Sport"
+      },
+      {
+        "id": "environment/2026/sep/24/explainer-uk-climate-crisis-national-security-report-suppressed",
+        "type": "article",
+        "sectionId": "environment",
+        "sectionName": "Environment",
+        "webPublicationDate": "2026-09-24T18:27:58Z",
+        "webTitle": "Why is the UK’s suppressed climate national security report significant?",
+        "webUrl": "https://www.theguardian.com/environment/2026/sep/24/explainer-uk-climate-crisis-national-security-report-suppressed",
+        "apiUrl": "https://content.guardianapis.com/environment/2026/sep/24/explainer-uk-climate-crisis-national-security-report-suppressed",
+        "fields": {
+          "trailText": "Warnings about the catastrophic effects of vital ecosystems collapsing were not published under previous prime minister",
+          "byline": "Fiona Harvey Environment editor",
+          "thumbnail": "https://media.guim.co.uk/9421c6a20c1172db6b9d71dd9ac72a5f3dab1499/469_0_2699_2160/500.jpg"
+        },
+        "tags": [
+          {
+            "id": "profile/fiona-harvey",
+            "type": "contributor",
+            "webTitle": "Fiona Harvey",
+            "webUrl": "https://www.theguardian.com/profile/fiona-harvey",
+            "apiUrl": "https://content.guardianapis.com/profile/fiona-harvey",
+            "references": [],
+            "bio": "<p>Fiona Harvey is an environment editor at the Guardian</p>",
+            "bylineImageUrl": "https://uploads.guim.co.uk/2022/12/08/Fiona_Harvey_old_image.jpg",
+            "bylineLargeImageUrl": "https://uploads.guim.co.uk/2022/12/08/Fiona_Harvey_old_image.png",
+            "firstName": "Fiona",
+            "lastName": "Harvey"
+          }
+        ],
+        "isHosted": false,
+        "pillarId": "pillar/news",
+        "pillarName": "News"
+      },
+      {
+        "id": "commentisfree/2026/sep/24/the-guardian-view-on-a-supersized-el-nino-a-natural-phenomenon-and-human-folly-are-a-lethal-combination",
+        "type": "article",
+        "sectionId": "commentisfree",
+        "sectionName": "Opinion",
+        "webPublicationDate": "2026-09-24T17:37:39Z",
+        "webTitle": "The Guardian view on a supersized El Niño: a natural phenomenon and human folly are a lethal combination | Editorial",
+        "webUrl": "https://www.theguardian.com/commentisfree/2026/sep/24/the-guardian-view-on-a-supersized-el-nino-a-natural-phenomenon-and-human-folly-are-a-lethal-combination",
+        "apiUrl": "https://content.guardianapis.com/commentisfree/2026/sep/24/the-guardian-view-on-a-supersized-el-nino-a-natural-phenomenon-and-human-folly-are-a-lethal-combination",
+        "fields": {
+          "trailText": "<strong>Editorial:</strong> Hundreds of thousands are expected to die, millions to go hungry. This is not just about weather patterns, but about injustice",
+          "byline": "Editorial",
+          "thumbnail": "https://media.guim.co.uk/12292dff1cddbc47964e94b0833f0d2c91d336d9/79_0_5000_4000/500.jpg"
+        },
+        "tags": [
+          {
+            "id": "profile/editorial",
+            "type": "contributor",
+            "webTitle": "Editorial",
+            "webUrl": "https://www.theguardian.com/profile/editorial",
+            "apiUrl": "https://content.guardianapis.com/profile/editorial",
+            "references": [],
+            "bio": "<p>Editorials from the Guardian. All Guardian and Observer editorials can be found <a href=\"https://www.theguardian.com/tone/editorials\">here</a></p>",
+            "firstName": "editorial",
+            "lastName": ""
+          }
+        ],
+        "isHosted": false,
+        "pillarId": "pillar/opinion",
+        "pillarName": "Opinion"
+      },
+      {
+        "id": "world/2026/sep/24/un-global-inequality-panel-plan-proposal-general-assembly-ipcc",
+        "type": "article",
+        "sectionId": "world",
+        "sectionName": "World news",
+        "webPublicationDate": "2026-09-24T14:37:22Z",
+        "webTitle": "Leaders join push to create UN body to tackle ‘awful reality’ of inequality",
+        "webUrl": "https://www.theguardian.com/world/2026/sep/24/un-global-inequality-panel-plan-proposal-general-assembly-ipcc",
+        "apiUrl": "https://content.guardianapis.com/world/2026/sep/24/un-global-inequality-panel-plan-proposal-general-assembly-ipcc",
+        "fields": {
+          "trailText": "Body would be modelled on climate panel and recognise inequality as a global challenge threatening world security",
+          "byline": "Patrick Wintour in New York",
+          "thumbnail": "https://media.guim.co.uk/3518fbd22e25cf08718ffb8448617635abdf8d44/232_0_2500_2000/500.jpg"
+        },
+        "tags": [
+          {
+            "id": "profile/patrickwintour",
+            "type": "contributor",
+            "webTitle": "Patrick Wintour",
+            "webUrl": "https://www.theguardian.com/profile/patrickwintour",
+            "apiUrl": "https://content.guardianapis.com/profile/patrickwintour",
+            "references": [],
+            "bio": "<p>Patrick Wintour is diplomatic editor for the Guardian</p>",
+            "bylineImageUrl": "https://static.guim.co.uk/sys-images/Guardian/Pix/contributor/2015/2/4/1423058508175/Patrick-Wintour.jpg",
+            "bylineLargeImageUrl": "https://uploads.guim.co.uk/2017/10/09/Patrick-Wintour,-R.png",
+            "firstName": "wintour",
+            "lastName": ""
+          }
+        ],
+        "isHosted": false,
+        "pillarId": "pillar/news",
+        "pillarName": "News"
+      },
+      {
+        "id": "us-news/2026/sep/24/climate-protesters-ai",
+        "type": "article",
+        "sectionId": "us-news",
+        "sectionName": "US news",
+        "webPublicationDate": "2026-09-24T14:00:21Z",
+        "webTitle": "‘Eat the rich, save the planet’: climate protesters call out big tech’s disconnect from reality",
+        "webUrl": "https://www.theguardian.com/us-news/2026/sep/24/climate-protesters-ai",
+        "apiUrl": "https://content.guardianapis.com/us-news/2026/sep/24/climate-protesters-ai",
+        "fields": {
+          "trailText": "Activists gathered outside the OpenAI offices on Monday during climate week in New York City",
+          "byline": "Lex McMenamin in New York City, with photographs by Julius Constantine Motal",
+          "thumbnail": "https://media.guim.co.uk/2f8de6f654120c850d0f7a51880eb6372245f7ec/644_0_5001_4000/500.jpg"
+        },
+        "tags": [
+          {
+            "id": "profile/lex-mcmenamin",
+            "type": "contributor",
+            "webTitle": "Lex McMenamin",
+            "webUrl": "https://www.theguardian.com/profile/lex-mcmenamin",
+            "apiUrl": "https://content.guardianapis.com/profile/lex-mcmenamin",
+            "references": [],
+            "bio": "<p>Lex McMenamin is the movement building reporter for the Guardian's <a href=\"https://www.theguardian.com/us-news/series/building-power\">Building Power</a> series. Signal: lex_mcmenamin.68. Bluesky:&nbsp;@lexmcmenamin.com</p>",
+            "firstName": "Lex",
+            "lastName": "McMenamin"
+          },
+          {
+            "id": "profile/julius-constantine-motal",
+            "type": "contributor",
+            "webTitle": "Julius Constantine Motal",
+            "webUrl": "https://www.theguardian.com/profile/julius-constantine-motal",
+            "apiUrl": "https://content.guardianapis.com/profile/julius-constantine-motal",
+            "references": [],
+            "bio": "<p>Julius Constantine Motal is a photo editor for the Guardian US</p>",
+            "bylineImageUrl": "https://uploads.guim.co.uk/2025/03/25/Julius_Motal.jpg",
+            "bylineLargeImageUrl": "https://uploads.guim.co.uk/2025/03/25/Julius_Motal.png",
+            "firstName": "Julius",
+            "lastName": "Motal"
+          }
+        ],
+        "isHosted": false,
+        "pillarId": "pillar/news",
+        "pillarName": "News"
+      },
+      {
+        "id": "us-news/2026/sep/24/fossil-fuels-trump-donations",
+        "type": "article",
+        "sectionId": "us-news",
+        "sectionName": "US news",
+        "webPublicationDate": "2026-09-24T12:30:17Z",
+        "webTitle": "Fossil-fuel firms in line for billions in benefits after answering Trump’s donation call",
+        "webUrl": "https://www.theguardian.com/us-news/2026/sep/24/fossil-fuels-trump-donations",
+        "apiUrl": "https://content.guardianapis.com/us-news/2026/sep/24/fossil-fuels-trump-donations",
+        "fields": {
+          "trailText": "Senators’ report says taxpayers face higher bills after ‘bargain’ between president and major polluters",
+          "byline": "Maya Yang",
+          "thumbnail": "https://media.guim.co.uk/fb6710bb52640d6c26b010acec77c121ad91526a/0_0_5000_4000/500.jpg"
+        },
+        "tags": [
+          {
+            "id": "profile/maya-yang",
+            "type": "contributor",
+            "webTitle": "Maya Yang",
+            "webUrl": "https://www.theguardian.com/profile/maya-yang",
+            "apiUrl": "https://content.guardianapis.com/profile/maya-yang",
+            "references": [],
+            "bio": "<p>Maya Yang is a breaking news reporter and live blogger for Guardian US</p>",
+            "firstName": "Maya",
+            "lastName": "Yang"
+          }
+        ],
+        "isHosted": false,
+        "pillarId": "pillar/news",
+        "pillarName": "News"
+      },
+      {
+        "id": "us-news/2026/sep/24/first-thing-trump-xi-washington-tensions-trade-ai-taiwan",
+        "type": "article",
+        "sectionId": "us-news",
+        "sectionName": "US news",
+        "webPublicationDate": "2026-09-24T12:24:00Z",
+        "webTitle": "First Thing: Trump welcomes Xi to Washington amid tensions over trade, AI and Taiwan",
+        "webUrl": "https://www.theguardian.com/us-news/2026/sep/24/first-thing-trump-xi-washington-tensions-trade-ai-taiwan",
+        "apiUrl": "https://content.guardianapis.com/us-news/2026/sep/24/first-thing-trump-xi-washington-tensions-trade-ai-taiwan",
+        "fields": {
+          "trailText": "State visit takes place at same time as UN general assembly, which Chinese leader has avoided",
+          "byline": "Martin Belam",
+          "thumbnail": "https://media.guim.co.uk/7bf41ed8892e9a3c082b2e85898674cc3f5e84a8/846_0_6418_5137/500.jpg"
+        },
+        "tags": [
+          {
+            "id": "profile/martin-belam",
+            "type": "contributor",
+            "webTitle": "Martin Belam",
+            "webUrl": "https://www.theguardian.com/profile/martin-belam",
+            "apiUrl": "https://content.guardianapis.com/profile/martin-belam",
+            "references": [],
+            "bio": "<p>Martin Belam is a live blogger for the Guardian based in London, and writes the <a href=\"https://www.theguardian.com/lifeandstyle/series/thursday-quiz\">Thursday quiz</a></p>",
+            "bylineImageUrl": "https://uploads.guim.co.uk/2023/05/15/Martin_Belam.jpg",
+            "bylineLargeImageUrl": "https://uploads.guim.co.uk/2023/05/15/Martin_Belam.png",
+            "firstName": "Martin",
+            "lastName": "Belam"
+          }
+        ],
+        "isHosted": false,
+        "pillarId": "pillar/news",
+        "pillarName": "News"
+      },
+      {
+        "id": "education/2026/sep/24/indian-oil-gas-heir-professor-sustainability-newcastle-university-anant-ambani",
+        "type": "article",
+        "sectionId": "education",
+        "sectionName": "Education",
+        "webPublicationDate": "2026-09-24T10:26:44Z",
+        "webTitle": "Backlash as Indian oil heir made professor of sustainability by Newcastle University",
+        "webUrl": "https://www.theguardian.com/education/2026/sep/24/indian-oil-gas-heir-professor-sustainability-newcastle-university-anant-ambani",
+        "apiUrl": "https://content.guardianapis.com/education/2026/sep/24/indian-oil-gas-heir-professor-sustainability-newcastle-university-anant-ambani",
+        "fields": {
+          "trailText": "Role for Anant Ambani, son of India’s richest person, who also runs a controversial mega-zoo, met with incredulity",
+          "byline": "Rachel Hall and Patrick Greenfield",
+          "thumbnail": "https://media.guim.co.uk/0526a3df6627d56653fc028803c5e2f4f27571e9/120_0_2166_1733/500.jpg"
+        },
+        "tags": [
+          {
+            "id": "profile/rachel-hall",
+            "type": "contributor",
+            "webTitle": "Rachel Hall",
+            "webUrl": "https://www.theguardian.com/profile/rachel-hall",
+            "apiUrl": "https://content.guardianapis.com/profile/rachel-hall",
+            "references": [],
+            "bio": "<p>Rachel Hall is a reporter at the Guardian</p>",
+            "bylineImageUrl": "https://uploads.guim.co.uk/2022/11/17/Rachel_Hall.jpg",
+            "bylineLargeImageUrl": "https://uploads.guim.co.uk/2022/11/17/Rachel_Hall_Next_Gen.png",
+            "firstName": "Rachel",
+            "lastName": "Hall "
+          },
+          {
+            "id": "profile/patrick-greenfield",
+            "type": "contributor",
+            "webTitle": "Patrick Greenfield",
+            "webUrl": "https://www.theguardian.com/profile/patrick-greenfield",
+            "apiUrl": "https://content.guardianapis.com/profile/patrick-greenfield",
+            "references": [],
+            "bio": "<p>Patrick Greenfield is a biodiversity and environment reporter for the Guardian</p>",
+            "bylineImageUrl": "https://uploads.guim.co.uk/2022/08/30/Patrick_Greenfield.jpg",
+            "bylineLargeImageUrl": "https://uploads.guim.co.uk/2022/08/30/Patrick_Greenfield.png",
+            "firstName": "Patrick",
+            "lastName": "Greenfield",
+            "twitterHandle": "pgreenfielduk"
+          }
+        ],
+        "isHosted": false,
+        "pillarId": "pillar/news",
+        "pillarName": "News"
+      }
+    ]
+  }
+}

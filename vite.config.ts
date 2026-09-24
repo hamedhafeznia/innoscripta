@@ -34,7 +34,7 @@ export default defineConfig(({ mode }) => {
           target: 'https://content.guardianapis.com',
           changeOrigin: true,
           rewrite: (url) =>
-            withKey(url.replace(/^\/api\/guardian/, ''), 'api-key', env.GUARDIAN_API_KEY),
+            withKey(url.replace(/^\/api\/guardian/, ''), 'api-key', env.GUARDIAN_KEY),
         },
         '/api/nyt': {
           target: 'https://api.nytimes.com',
@@ -43,14 +43,14 @@ export default defineConfig(({ mode }) => {
             withKey(
               url.replace(/^\/api\/nyt/, '/svc/search/v2'),
               'api-key',
-              env.NYT_API_KEY,
+              env.NYT_KEY,
             ),
         },
         '/api/newsapi': {
           target: 'https://newsapi.org',
           changeOrigin: true,
           rewrite: (url) =>
-            withKey(url.replace(/^\/api\/newsapi/, '/v2'), 'apiKey', env.NEWSAPI_API_KEY),
+            withKey(url.replace(/^\/api\/newsapi/, '/v2'), 'apiKey', env.NEWSAPI_KEY),
         },
       },
     },

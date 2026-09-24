@@ -4,8 +4,8 @@ A React + TypeScript SPA that aggregates **The Guardian**, **NYT Article Search*
 and **NewsAPI.org** into one searchable, filterable, personalisable feed.
 Frontend only, containerised.
 
-> Status: phase 2 of 7 (core model + merge). The routes still render placeholders;
-> the adapters, query layer and UI land in the following phases.
+> Status: phase 3 of 7 (adapters). The routes still render placeholders;
+> the query layer and UI land in the following phases.
 
 ## Run it
 
@@ -75,6 +75,23 @@ Adding a source is **one new adapter file and one registry line**. No UI and no
 query-layer change: each adapter declares its own capabilities and its own
 unserviceable filter combinations, and the rest of the app reads that descriptor
 rather than checking source ids.
+
+## Known API limitations
+
+Each adapter declares what it can and cannot do, and the UI shows the reason in a
+per-source notice rather than silently returning a short list.
+
+- **NewsAPI needs `/top-headlines` for a category and `/everything` for dates**, and
+  neither endpoint does both. A search combining the two excludes NewsAPI and says so.
+  It also has no politics category, and one request carries one category. A category
+  search returns *recent headlines only*: `/top-headlines` has no sort or date options.
+- **NewsAPI cannot filter by author at all**, so that filtering happens client-side.
+- **NYT's `fq` parameter returns zero hits** for every query we could construct,
+  including the examples in NYT's own documentation (`hits: 0, docs: null`). Sending one
+  would silently drop NYT out of any category- or author-filtered search, so the adapter
+  does not send it and filters those two facets client-side instead.
+- **NewsAPI's free plan allows 100 requests a day in total** and its articles are
+  delayed 24 hours with a one-month lookback.
 
 ## Cut from scope
 
