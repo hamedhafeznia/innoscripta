@@ -4,8 +4,8 @@ A React + TypeScript SPA that aggregates **The Guardian**, **NYT Article Search*
 and **NewsAPI.org** into one searchable, filterable, personalisable feed.
 Frontend only, containerised.
 
-> Status: phase 1 of 7 (scaffold + Docker). The routes render placeholders;
-> the query layer, adapters and UI land in the following phases.
+> Status: phase 2 of 7 (core model + merge). The routes still render placeholders;
+> the adapters, query layer and UI land in the following phases.
 
 ## Run it
 
@@ -54,6 +54,27 @@ Responses are cached by nginx for 5 minutes (NewsAPI) and 2 minutes (Guardian, N
 **Only `200` responses are cached**, so a rate-limit error is never served from cache.
 NewsAPI is 24h-delayed anyway, so its cache costs zero freshness — and it buys real
 headroom against a free-plan budget of **100 requests/day**.
+
+## Merging three sources into one list
+
+The three APIs page independently and reach back to different dates, so a naive
+concatenation puts an incomplete tail at the bottom of the list: the next page of a
+shallower source can hold an article that belonged higher up.
+
+`src/core/merge.ts` is one pure function. It dedupes the carried buffer plus the newly
+fetched pages by normalised URL, sorts by publication date, and then **cuts the list at
+the most recent of the live sources' oldest items**. Above that floor the ordering is
+complete from every source; everything below it is carried on the cursor and emitted
+once a later page lowers the floor. Exhausted and failed sources are excluded from the
+floor — neither can contribute anything further, so neither should hold articles back.
+
+Carried articles are never refetched: NewsAPI's free plan allows 100 requests a day in
+total, which a refetch-on-scroll design would burn through in minutes.
+
+Adding a source is **one new adapter file and one registry line**. No UI and no
+query-layer change: each adapter declares its own capabilities and its own
+unserviceable filter combinations, and the rest of the app reads that descriptor
+rather than checking source ids.
 
 ## Cut from scope
 
