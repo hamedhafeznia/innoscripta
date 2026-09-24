@@ -1,0 +1,58 @@
+# Rendered by the nginx image's entrypoint (envsubst over /etc/nginx/templates/*.template)
+# at container start, so ${..._API_KEY} exist only in the running container's config.
+# nginx's own runtime variables ($args, $uri, ...) are brace-less and envsubst leaves them alone.
+
+proxy_cache_path /var/cache/nginx/news levels=1:2 keys_zone=news:10m max_size=64m inactive=10m use_temp_path=off;
+
+server {
+    listen 80;
+    server_name _;
+    root /usr/share/nginx/html;
+
+    # proxy_pass below is built from variables, so nginx needs an explicit resolver.
+    resolver 1.1.1.1 8.8.8.8 valid=300s ipv6=off;
+    resolver_timeout 5s;
+
+    gzip on;
+    gzip_types text/css application/javascript application/json image/svg+xml;
+
+    # --- shared upstream behaviour ---------------------------------------
+    # Only 200s are cached. Rate-limit and auth errors must never be served from
+    # cache, and must never mask a recovered upstream.
+    proxy_cache news;
+    proxy_cache_valid 200 2m;
+    proxy_cache_lock on;
+    proxy_ssl_server_name on;
+    proxy_http_version 1.1;
+    proxy_set_header Accept-Encoding "";
+    add_header X-Proxy-Cache $upstream_cache_status always;
+
+    location ~ ^/api/guardian/(?<guardian_path>.*)$ {
+        proxy_set_header Host content.guardianapis.com;
+        proxy_pass https://content.guardianapis.com/$guardian_path?$args&api-key=${GUARDIAN_API_KEY};
+    }
+
+    location ~ ^/api/nyt/(?<nyt_path>.*)$ {
+        proxy_set_header Host api.nytimes.com;
+        proxy_pass https://api.nytimes.com/svc/search/v2/$nyt_path?$args&api-key=${NYT_API_KEY};
+    }
+
+    # NewsAPI is 24h-delayed, so a 5 minute cache costs zero freshness and buys
+    # real headroom against the 100 requests/day free-plan budget.
+    location ~ ^/api/newsapi/(?<newsapi_path>.*)$ {
+        proxy_cache_valid 200 5m;
+        proxy_set_header Host newsapi.org;
+        proxy_pass https://newsapi.org/v2/$newsapi_path?$args&apiKey=${NEWSAPI_API_KEY};
+    }
+
+    # --- static assets + SPA fallback ------------------------------------
+    location /assets/ {
+        expires 1y;
+        add_header Cache-Control "public, immutable";
+        try_files $uri =404;
+    }
+
+    location / {
+        try_files $uri $uri/ /index.html;
+    }
+}
