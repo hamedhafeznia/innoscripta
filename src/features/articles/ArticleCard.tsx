@@ -90,7 +90,8 @@ export function ArticleCard({ article }: { article: Article }) {
             skipped. Serif, tight, balanced — the headline is the only thing on the card
             allowed to be loud, and wrapping it evenly stops the grid looking ragged. */}
         <h3 className="font-serif text-[1.35rem] leading-[1.25] font-medium tracking-[-0.011em] text-balance break-words">
-          {/* Links out: none of these APIs reliably return full body text. */}
+          {/* Links out: none of these APIs reliably return full body text, so there is no
+              detail page to open — the "Read at" link below says so on the card itself. */}
           <a
             className="decoration-1 underline-offset-[3px] group-hover:underline focus-visible:underline"
             href={article.url}
@@ -106,6 +107,18 @@ export function ArticleCard({ article }: { article: Article }) {
             {article.description}
           </p>
         ) : null}
+
+        {/* The headline and this link share a destination. The headline is the natural click;
+            this one says where it leads, so leaving the app is expected, not a surprise. */}
+        <a
+          className="w-fit text-[0.8rem] font-medium text-brand underline-offset-[3px] hover:underline focus-visible:underline"
+          href={article.url}
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label={`Read at ${publisher}: ${article.title}`}
+        >
+          Read at {publisher} <span aria-hidden="true">↗</span>
+        </a>
 
         <div className="mt-auto flex flex-wrap items-center justify-between gap-2 pt-1">
           {article.author ? (
