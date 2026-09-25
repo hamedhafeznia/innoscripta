@@ -55,13 +55,41 @@ describe('guardian adapter', () => {
         })
         .then(() => {
           const params = request.url.searchParams;
-          expect(params.get('section')).toBe('technology|sport');
+          // Every section the display side files under a category, ORed with `|`.
+          expect(params.get('section')?.split('|')).toEqual(
+            expect.arrayContaining(['technology', 'sport', 'football']),
+          );
           expect(params.get('tag')).toBe('profile/davidsmith');
           expect(params.get('q')).toBe('ai');
           expect(params.get('page-size')).toBe('10');
           expect(params.get('order-by')).toBe('newest');
         });
     });
+
+    it('asks for every section it would file under a category, not just the obvious one', async () => {
+      const request = captureRequest('/api/guardian/search', fixture);
+
+      await guardianSource.search({ page: 1, categories: ['entertainment'] });
+
+      // Filtering on `culture` alone would hide every film, music and TV story that the
+      // card would then have been happy to label entertainment.
+      expect(request.url.searchParams.get('section')?.split('|')).toEqual(
+        expect.arrayContaining(['culture', 'film', 'music', 'tv-and-radio', 'stage', 'books']),
+      );
+    });
+
+    it.each(['business', 'technology', 'sports', 'science', 'health', 'politics', 'entertainment'] as const)(
+      'files every section it asks for under %s as that same category',
+      async (category) => {
+        const request = captureRequest('/api/guardian/search', fixture);
+        await guardianSource.search({ page: 1, categories: [category] });
+
+        const sections = request.url.searchParams.get('section')!.split('|');
+        for (const sectionId of sections) {
+          expect(toArticle({ ...results[0]!, sectionId }).category).toBe(category);
+        }
+      },
+    );
 
     it('sends dates in the Guardian YYYY-MM-DD form', async () => {
       const request = captureRequest('/api/guardian/search', fixture);

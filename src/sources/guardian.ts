@@ -6,24 +6,15 @@ import { PAGE_SIZE, type NewsSource, type SearchParams, type SourcePage } from '
 import { asHttpUrl, httpUrl, keepValid, optionalText, requiredText, timestamp } from '../core/validate';
 
 /**
- * Canonical category -> Guardian section id. Deliberately local to this adapter:
- * a shared `categoryMap` would look DRY but would mean a fourth source could not be
- * added without editing a file that three other adapters depend on.
- */
-const SECTION_BY_CATEGORY: Record<Exclude<Category, 'general'>, string> = {
-  business: 'business',
-  technology: 'technology',
-  sports: 'sport',
-  science: 'science',
-  health: 'society',
-  politics: 'politics',
-  entertainment: 'culture',
-};
-
-/**
- * Guardian section id -> canonical category. Not a mechanical inverse of the map above:
- * the Guardian splits culture across several sections and files climate under
- * environment, so the mapping is many-to-one in this direction.
+ * Guardian section id -> canonical category. Local to this adapter on purpose: a shared
+ * `categoryMap` would look DRY but would mean a fourth source could not be added without
+ * editing a file that three other adapters depend on.
+ *
+ * The one table, read both ways. The Guardian splits culture across several sections and
+ * files climate under environment, so it is many-to-one this way and one-to-many the
+ * other (`sectionsFor`). Two tables would be free to disagree, and did: filtering on
+ * `culture` alone hid every film and music story the card would happily label
+ * entertainment.
  */
 const CATEGORY_BY_SECTION: Record<string, Category> = {
   business: 'business',
@@ -45,6 +36,13 @@ const CATEGORY_BY_SECTION: Record<string, Category> = {
   games: 'entertainment',
   books: 'entertainment',
 };
+
+/** Every section this adapter files under `category`: what a filter has to ask for. */
+function sectionsFor(category: Category): string[] {
+  return Object.entries(CATEGORY_BY_SECTION)
+    .filter(([, mapped]) => mapped === category)
+    .map(([section]) => section);
+}
 
 /** What an article cannot do without; everything else degrades to absent. */
 const guardianResult = z.object({
@@ -132,7 +130,7 @@ export const guardianSource: NewsSource = {
     // which is exactly the semantics the app promises: categories AND, authors OR.
     const sections = (params.categories ?? [])
       .filter((category) => category !== 'general')
-      .map((category) => SECTION_BY_CATEGORY[category as Exclude<Category, 'general'>])
+      .flatMap(sectionsFor)
       .join('|');
 
     // Already contributor tag ids (`profile/<slug>`), carried on Article.authorRef:
