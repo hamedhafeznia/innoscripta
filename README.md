@@ -104,6 +104,22 @@ source can do, and the feed says so on the page:
 Client-side matching never silently empties a page: the query layer refetches up to
 twice more before reporting that there are no further matches.
 
+## Date ranges are walked a day at a time
+
+A busy news day carries around 200 articles *per source*. Read newest-first at ten per
+source per page, a ten-day range would need hundreds of "Load more" clicks before it
+reached its second day — the filter is applied correctly, but the range is unreachable,
+which looks exactly like a filter that does not work.
+
+So a multi-day range is read one day at a time: you get the top of each day, and Load more
+steps back to the previous day. A ten-day range takes ten clicks instead of several
+hundred, and the page says which day you are in and which day comes next. A single-day
+range pages into that day as usual.
+
+Dates are handled in **UTC end to end** — the three APIs take whole dates with no timezone
+and read them as UTC, so the day shown on a card is the day it was filtered on. Hovering a
+date gives the exact local time.
+
 ## Merging three sources into one list
 
 The three APIs page independently and reach back to different dates, so a naive

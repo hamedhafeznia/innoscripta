@@ -3,6 +3,7 @@ import { useSearchParams } from 'react-router-dom';
 import { parseFilters, toSearchParams, type Filters } from '../../core/filters';
 import { Button } from '@/components/ui/button';
 import { ArticleList, ArticleListSkeleton } from '../articles/ArticleList';
+import { RangeProgress } from '../articles/RangeProgress';
 import { ResultsPlaceholder } from '../articles/ResultsPlaceholder';
 import { SourceNotices } from '../articles/SourceNotices';
 import { useArticles } from '../query/useArticles';
@@ -34,7 +35,7 @@ export function SearchPage() {
   // A back/forward navigation changes the URL under us; the input follows it.
   useEffect(() => setKeyword(filters.query), [filters.query]);
 
-  const { articles, notices, outOfMatches, unreachable, isPending, isError, error, refetch, isFetching, fetchNextPage, hasNextPage, isFetchingNextPage } =
+  const { articles, notices, outOfMatches, unreachable, oldestDay, nextDay, isPending, isError, error, refetch, isFetching, fetchNextPage, hasNextPage, isFetchingNextPage } =
     useArticles(filters, []);
 
   return (
@@ -75,7 +76,13 @@ export function SearchPage() {
           <p className="m-0 text-[0.7rem] font-medium tracking-[0.08em] text-muted-foreground uppercase tabular-nums" role="status">
             {articles.length} article{articles.length === 1 ? '' : 's'}
           </p>
-          <ArticleList articles={articles} />
+          <RangeProgress
+            filters={filters}
+            articles={articles}
+            nextDay={nextDay}
+            hasMore={hasNextPage}
+          />
+          <ArticleList articles={articles} collapseDays={Boolean(oldestDay)} />
         </>
       )}
 

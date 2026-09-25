@@ -21,7 +21,8 @@ export function App() {
         {/* Sticky and quiet: a hairline and the wordmark, so the page below it is the
             thing with presence. Solid rather than blurred — nothing here needs to suggest
             depth, and a calm surface is the point. */}
-        <header className="sticky top-0 z-20 border-b bg-background/98">
+        <header // Fully opaque: at 98% the day headings ghost through as they scroll under it.
+          className="sticky top-0 z-20 border-b bg-background">
           <div className="mx-auto flex max-w-6xl flex-wrap items-baseline justify-between gap-4 px-4 py-3.5 sm:px-6">
             <span className="font-serif text-[1.15rem] leading-none font-medium tracking-[-0.015em]">
               innoscripta <span className="text-muted-foreground">news</span>

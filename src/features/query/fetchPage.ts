@@ -14,6 +14,62 @@ import type { Cursor, ResultPage, SourceCursor, SourceNotice } from './types';
  */
 const MAX_EXTRA_ROUNDS = 2;
 
+/**
+ * The fewest articles a page should show before the reader has to press Load more.
+ *
+ * The ragged-tail cut can legitimately emit very little: the shallowest source's reach
+ * sets the floor, and a source filtered client-side (NYT by category) may have reached
+ * back only a few hours while contributing a single match. The buffer holds the rest, so
+ * nothing is lost — but a page of one article reads as a broken filter. Below this many,
+ * the fan-out goes another round and the pages are shown together. Bounded by
+ * `MAX_EXTRA_ROUNDS`, so the request budget stays capped; if that is not enough, the page
+ * is topped up from the buffer (see the end of `fetchPage`).
+ */
+const MIN_PAGE_SIZE = 6;
+
+/** `YYYY-MM-DD` arithmetic in UTC, which is the timezone the three APIs read dates in. */
+function addDays(day: string, delta: number): string {
+  const date = new Date(`${day}T00:00:00Z`);
+  date.setUTCDate(date.getUTCDate() + delta);
+  return date.toISOString().slice(0, 10);
+}
+
+/**
+ * A range spanning more than one day is walked a day at a time.
+ *
+ * Both bounds are required: without them there is no newest day to start from or no
+ * oldest day to stop at. A single-day range needs no walking — ordinary paging already
+ * burrows into exactly the day that was asked for.
+ *
+ * The reason is arithmetic. A busy day carries a couple of hundred articles per source,
+ * so at ten per source per page a ten-day range needs hundreds of Load mores before it
+ * reaches its second day. Walking shows the top of every day in the range instead, which
+ * is what asking for a range means.
+ */
+function walksByDay(filters: Filters): boolean {
+  return Boolean(filters.from && filters.to && filters.from !== filters.to);
+}
+
+/**
+ * A new day is a new question, so every source starts at its first page again. Without
+ * this the walk would ask each source for page 2 of a day it has never read.
+ */
+function freshPages(cursor: Cursor): Cursor['perSource'] {
+  const perSource = {} as Cursor['perSource'];
+  for (const [id, entry] of Object.entries(cursor.perSource)) {
+    perSource[id as SourceId] = { nextPage: 1, exhausted: false, oldestSeen: entry.oldestSeen };
+  }
+  return perSource;
+}
+
+/** The one-day window to ask for, and the filters narrowed to it. */
+function dayWindow(filters: Filters, cursor: Cursor): { day: string; filters: Filters } | null {
+  if (!walksByDay(filters)) return null;
+
+  const day = cursor.day ?? filters.to!;
+  return { day, filters: { ...filters, from: day, to: day } };
+}
+
 export function initialCursor(): Cursor {
   const perSource = {} as Record<SourceId, SourceCursor>;
   for (const source of SOURCES) {
@@ -225,6 +281,7 @@ export async function fetchPage({
   const { live, notices: staticNotices } = selectSources(filters, authors, cursor);
 
   let current = cursor;
+  let window = dayWindow(filters, current);
   let articles: Article[] = [];
   let roundNotices: SourceNotice[] = [];
   let lastResults: readonly SourceResult[] = [];
@@ -237,21 +294,56 @@ export async function fetchPage({
     if (!stillLive.length) {
       // Nothing left to ask: flush whatever the buffer still holds.
       const flushed = mergePage({ buffer: current.buffer, results: [] });
-      articles = flushed.articles;
+      articles = [...articles, ...flushed.articles];
       current = { ...current, buffer: flushed.buffer };
       exhaustedEverything = true;
       break;
     }
 
-    const round = await fetchRound(filters, authors, current, stillLive, signal);
+    const round = await fetchRound(
+      window?.filters ?? filters,
+      authors,
+      current,
+      stillLive,
+      signal,
+    );
     roundNotices = round.notices;
     lastResults = round.results;
 
-    const merged = mergePage({ buffer: current.buffer, results: round.results });
-    current = advance(current, round.results, merged.buffer);
-    articles = merged.articles;
+    // Walking a range emits the whole day it just read. `exhausted` is literally true
+    // here — this day will not be asked for again — and with no live source left to
+    // undercut it, the ragged-tail cut has nothing to hold back. Every article of the
+    // next day is older than every article of this one, so the ordering stays sound.
+    const results = window
+      ? round.results.map((result) =>
+          result.status === 'ok' ? { ...result, exhausted: true } : result,
+        )
+      : round.results;
 
-    if (articles.length) break;
+    const merged = mergePage({ buffer: current.buffer, results });
+    current = advance(current, results, merged.buffer);
+    // Accumulate: an earlier round of this same page may already have emitted articles,
+    // and they are no longer in the buffer. Every one of this round's articles is older
+    // than the earlier rounds' (the cut guarantees it), but sorting keeps that visible.
+    articles = [...articles, ...merged.articles].sort((a, b) =>
+      b.publishedAt.localeCompare(a.publishedAt),
+    );
+
+    if (window) {
+      // Whatever this day held has now been emitted; the cursor moves to the day before.
+      current = { ...current, day: addDays(window.day, -1), perSource: freshPages(current) };
+    }
+
+    if (window ? articles.length : articles.length >= MIN_PAGE_SIZE) break;
+
+    // An empty day is not a reason to stop walking: step to the next one and look there.
+    if (window) {
+      const next = dayWindow(filters, current);
+      if (!next || next.day < filters.from!) break;
+      window = next;
+      rounds += 1;
+      continue;
+    }
 
     // The extra rounds exist to get past client-side filtering that emptied a page. If
     // every source failed there is nothing to filter and nothing to get past: retrying
@@ -261,7 +353,23 @@ export async function fetchPage({
     rounds += 1;
   }
 
+  // Extra rounds are capped, and a shallow source can still hold the cut above everything
+  // else it fetched. Rather than show a page of two, release the newest buffered articles.
+  // The cost is a small ordering compromise: a not-yet-fetched article from the shallow
+  // source may turn up on the next page, above these. Everything released was already
+  // fetched, so nothing is refetched, and the buffer is newest-first, so the page stays
+  // sorted.
+  if (!window && articles.length < MIN_PAGE_SIZE && current.buffer.length) {
+    const take = MIN_PAGE_SIZE - articles.length;
+    articles = [...articles, ...current.buffer.slice(0, take)];
+    current = { ...current, buffer: current.buffer.slice(take) };
+  }
+
+  const nextDay = window ? addDays(window.day, -1) : undefined;
+  const walkedPast = Boolean(window && nextDay! < filters.from!);
+
   const done =
+    walkedPast ||
     exhaustedEverything ||
     (live.every((source) => current.perSource[source.id]!.exhausted) && !current.buffer.length);
 
@@ -271,6 +379,8 @@ export async function fetchPage({
   return {
     articles,
     cursor: current,
+    day: window?.day,
+    nextDay: walkedPast ? undefined : nextDay,
     notices: [...staticNotices, ...roundNotices],
     done,
     // An empty page with nothing reachable is not an empty result set.

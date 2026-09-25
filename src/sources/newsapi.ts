@@ -113,22 +113,33 @@ export const newsapiSource: NewsSource = {
   // after the fetch. Category is server-side, but only via /top-headlines.
   capabilities: { query: true, dateRange: true, category: 'server', author: 'client' },
 
+  // Every reason is a sentence fragment: the notice already prints the source name in
+  // bold ahead of it, so a message that names NewsAPI again reads "NewsAPI NewsAPI ...".
   unserviceable(params: SearchParams): string | null {
     const categories = requestedCategories(params);
-    if (!categories.length) return null;
+
+    // `/everything` is the only endpoint with dates, and it refuses to run without a
+    // keyword: "the scope of your search is too broad". A date range on its own is
+    // therefore a question this source cannot be asked.
+    if (!categories.length) {
+      if ((params.from || params.to) && !params.query) {
+        return 'needs a keyword to search a date range, so it was left out.';
+      }
+      return null;
+    }
 
     // A category needs /top-headlines; dates only exist on /everything. Neither does both.
     if (params.from || params.to) {
-      return 'NewsAPI cannot combine a category with a date range, so it was left out.';
+      return 'cannot combine a category with a date range, so it was left out.';
     }
 
     // One request carries one category. Two would double a 100-requests-a-day budget.
     if (categories.length > 1) {
-      return 'NewsAPI can only filter one category at a time, so it was left out.';
+      return 'can only filter one category at a time, so it was left out.';
     }
 
     if (!NEWSAPI_CATEGORY[categories[0]!]) {
-      return `NewsAPI has no ${categories[0]} category, so it was left out.`;
+      return `has no ${categories[0]} category, so it was left out.`;
     }
 
     return null;

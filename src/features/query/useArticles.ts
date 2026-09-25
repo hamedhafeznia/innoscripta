@@ -31,5 +31,8 @@ export function useArticles(filters: Filters, authors: FollowedAuthor[]) {
     outOfMatches: lastPage?.outOfMatches ?? false,
     /** Nothing answered, so there is nothing to page through and nothing to report empty. */
     unreachable: lastPage?.unreachable ?? false,
+    /** The oldest day read so far, and the day Load more will fetch next. */
+    oldestDay: lastPage?.day,
+    nextDay: lastPage?.nextDay,
   };
 }

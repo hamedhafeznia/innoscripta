@@ -99,6 +99,23 @@ anyway — the explicit rule keeps the merge visibly deterministic.)
 Tests required for: ragged-tail cut, dedupe across sources, dedupe across pages,
 buffer carry, exhaustion, single-source failure.
 
+### Date ranges walk day by day
+
+A range spanning more than one day is read **one day at a time**: the cursor holds the day
+being read, each fan-out asks every source for that single day, and Load more steps to the
+day before rather than deeper into the current one.
+
+This is arithmetic, not taste. A busy day carries ~200 articles *per source*, so at 10 per
+source per page a ten-day range needs hundreds of Load mores to reach its second day —
+the filter works but the range is unreachable, which reads as a broken filter.
+
+- Both bounds are required; a single-day range pages into that day normally.
+- A walked day is emitted whole: `exhausted` is literally true (the day is not asked for
+  again), and every article of the next day is older than every article of this one, so
+  the ragged-tail cut has nothing to protect.
+- A new day resets every source to page 1.
+- Cost: one request per source per day. A ten-day range is ~10% of NewsAPI's daily budget.
+
 ### Cursor
 
 ```ts

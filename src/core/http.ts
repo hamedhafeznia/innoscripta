@@ -76,7 +76,11 @@ function kindFromStatus(status: number): SourceErrorKind {
  * that something technical broke and they are not the audience for the explanation.
  */
 function messageFromStatus(status: number): string {
-  if (status === 429) return 'has answered all it can today.';
+  // Neutral about the window on purpose. A 429 from NewsAPI is its 100-a-day cap, but
+  // from NYT it is usually a per-minute throttle that clears in seconds — and the status
+  // alone cannot tell them apart. "Today" would send a reader away for a day over a
+  // one-minute limit.
+  if (status === 429) return 'has hit its request limit for now.';
   if (status === 401 || status === 403) return 'would not let us in.';
   return 'is not responding just now.';
 }

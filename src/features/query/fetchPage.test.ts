@@ -72,7 +72,10 @@ describe('fetchPage', () => {
       const page = await run({ query: 'climate' });
 
       expect(page.notices).toContainEqual(
-        expect.objectContaining({ sourceId: 'newsapi', message: 'has answered all it can today.' }),
+        expect.objectContaining({
+          sourceId: 'newsapi',
+          message: 'has hit its request limit for now.',
+        }),
       );
     });
 
@@ -156,6 +159,75 @@ describe('fetchPage', () => {
 
       expect(page.articles.length).toBeGreaterThan(0);
       expect(page.articles.every((article) => article.category === 'science')).toBe(true);
+    });
+
+    it('keeps fetching until a category page has enough to read, instead of showing one or two', async () => {
+      // Three of every ten NYT articles are Climate, so one round leaves a thin page.
+      let call = 0;
+      server.use(
+        http.get('*/api/nyt/articlesearch.json', () => {
+          call += 1;
+          return HttpResponse.json({
+            response: {
+              docs: nytFixture.response.docs.map((doc, index) => ({
+                ...doc,
+                _id: `${doc._id}-${call}`,
+                web_url: `https://www.nytimes.com/test/p${call}-${index}`,
+                pub_date: `2026-01-${String(20 - call).padStart(2, '0')}T12:00:0${index}Z`,
+              })),
+            },
+          });
+        }),
+      );
+
+      const page = await run({ categories: ['science'], sources: ['nyt'] });
+
+      expect(page.articles.length).toBeGreaterThanOrEqual(6);
+      expect(page.articles.every((article) => article.category === 'science')).toBe(true);
+      expect(call).toBeLessThanOrEqual(3);
+    });
+
+    it('fills a thin page from the buffer when a shallow source holds the cut too high', async () => {
+      // NYT reaches back only hours and matches the category once per page, so its oldest
+      // item sits far above every Guardian article and the cut would hide all of them.
+      let call = 0;
+      server.use(
+        http.get('*/api/nyt/articlesearch.json', () => {
+          call += 1;
+          return HttpResponse.json({
+            response: {
+              docs: nytFixture.response.docs.map((doc, index) => ({
+                ...doc,
+                _id: `${doc._id}-${call}`,
+                web_url: `https://www.nytimes.com/test/p${call}-${index}`,
+                pub_date: `2026-09-24T12:00:0${index}Z`,
+                news_desk: index === 1 ? 'Climate' : 'Foreign',
+                section_name: index === 1 ? 'Climate' : 'World',
+              })),
+            },
+          });
+        }),
+        http.get('*/api/guardian/search', () =>
+          HttpResponse.json({
+            ...guardianFixture,
+            response: {
+              ...guardianFixture.response,
+              results: guardianFixture.response.results.map((result, index) => ({
+                ...result,
+                id: `${result.id}-${call}`,
+                webUrl: `https://www.theguardian.com/test/g${call}-${index}`,
+                webPublicationDate: `2026-09-01T12:00:0${index}Z`,
+              })),
+            },
+          }),
+        ),
+      );
+
+      const page = await run({ categories: ['science'], sources: ['guardian', 'nyt'] });
+      const dates = page.articles.map((article) => article.publishedAt);
+
+      expect(page.articles.length).toBeGreaterThanOrEqual(6);
+      expect([...dates].sort().reverse()).toEqual(dates);
     });
 
     it('auto-fetches further pages rather than showing an empty page', async () => {
@@ -306,5 +378,115 @@ describe('fetchPage author following', () => {
 
     expect(page.articles.length).toBeGreaterThan(0);
     expect(page.articles[0]!.author).toContain('Ulet Ifansasti');
+  });
+});
+
+describe('walking a date range a day at a time', () => {
+  /** Answers any one-day Guardian window with articles stamped inside that day. */
+  function serveDays(seen: string[]) {
+    server.use(
+      http.get('*/api/guardian/search', ({ request }) => {
+        const params = new URL(request.url).searchParams;
+        const day = params.get('from-date')!;
+        seen.push(`${day}:${params.get('page')}`);
+        return HttpResponse.json({
+          response: {
+            currentPage: 1,
+            pages: 40, // a busy day: forty pages deep, never exhausted
+            // A full page, so the adapter does not read a short page as exhaustion.
+            results: Array.from({ length: 10 }, (_, i) => ({
+              id: `${day}-${i}`,
+              sectionId: 'world',
+              sectionName: 'World',
+              webPublicationDate: `${day}T${String(23 - i).padStart(2, '0')}:00:00Z`,
+              webTitle: `${day} story ${i}`,
+              webUrl: `https://example.com/${day}/${i}`,
+            })),
+          },
+        });
+      }),
+    );
+  }
+
+  it('starts at the newest day of the range', async () => {
+    const seen: string[] = [];
+    serveDays(seen);
+
+    const page = await run({ from: '2026-09-01', to: '2026-09-10', sources: ['guardian'] });
+
+    expect(seen).toEqual(['2026-09-10:1']);
+    expect(page.day).toBe('2026-09-10');
+    expect(page.nextDay).toBe('2026-09-09');
+  });
+
+  it('steps back one day per page instead of deeper into the same day', async () => {
+    const seen: string[] = [];
+    serveDays(seen);
+
+    let cursor = initialCursor();
+    const days: (string | undefined)[] = [];
+    for (let i = 0; i < 4; i += 1) {
+      const page = await fetchPage({
+        filters: filters({ from: '2026-09-01', to: '2026-09-10', sources: ['guardian'] }),
+        authors: [],
+        cursor,
+      });
+      days.push(page.day);
+      cursor = page.cursor;
+    }
+
+    expect(days).toEqual(['2026-09-10', '2026-09-09', '2026-09-08', '2026-09-07']);
+    // Always page 1: a new day is a new question, never page 2 of a day never read.
+    expect(seen).toEqual([
+      '2026-09-10:1',
+      '2026-09-09:1',
+      '2026-09-08:1',
+      '2026-09-07:1',
+    ]);
+  });
+
+  it('emits the whole day rather than holding a tail back', async () => {
+    // Every article of the next day is older than every article of this one, so there is
+    // nothing a cut could protect — holding items back would only strand them.
+    serveDays([]);
+
+    const page = await run({ from: '2026-09-01', to: '2026-09-10', sources: ['guardian'] });
+
+    expect(page.articles).toHaveLength(10);
+    expect(page.cursor.buffer).toEqual([]);
+  });
+
+  it('stops when it walks past the start of the range', async () => {
+    serveDays([]);
+
+    let cursor = initialCursor();
+    let page = await run({ from: '2026-09-09', to: '2026-09-10', sources: ['guardian'] }, cursor);
+    expect(page.done).toBe(false);
+
+    page = await fetchPage({
+      filters: filters({ from: '2026-09-09', to: '2026-09-10', sources: ['guardian'] }),
+      authors: [],
+      cursor: page.cursor,
+    });
+
+    expect(page.day).toBe('2026-09-09');
+    expect(page.done).toBe(true);
+    expect(page.nextDay).toBeUndefined();
+  });
+
+  it('pages into the day itself when the range is a single day', async () => {
+    const seen: string[] = [];
+    serveDays(seen);
+
+    let page = await run({ from: '2026-09-10', to: '2026-09-10', sources: ['guardian'] });
+    page = await fetchPage({
+      filters: filters({ from: '2026-09-10', to: '2026-09-10', sources: ['guardian'] }),
+      authors: [],
+      cursor: page.cursor,
+    });
+
+    // No walking: one day asked for is one day read, deeper each time.
+    expect(seen).toEqual(['2026-09-10:1', '2026-09-10:2']);
+    expect(page.day).toBeUndefined();
   });
 });

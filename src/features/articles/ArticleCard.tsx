@@ -2,10 +2,24 @@ import type { Article } from '../../core/article';
 import { SOURCES } from '../../sources/registry';
 import { FollowAuthorButton } from '../preferences/FollowAuthorButton';
 
+/*
+ * UTC, deliberately. The three APIs filter by whole dates with no timezone, which they
+ * read as UTC, so a search for "3 to 6 September" is a UTC range. Formatting the card in
+ * the reader's own zone makes an article published at 23:41Z on the 6th render as the 7th
+ * for anyone east of London — a result dated outside the range the reader just asked for.
+ * The day shown and the day filtered are now the same day.
+ */
 const DATE_FORMAT = new Intl.DateTimeFormat(undefined, {
   day: 'numeric',
   month: 'short',
   year: 'numeric',
+  timeZone: 'UTC',
+});
+
+/** The reader's own zone, with the time, kept on hover for when the exact moment matters. */
+const EXACT_FORMAT = new Intl.DateTimeFormat(undefined, {
+  dateStyle: 'full',
+  timeStyle: 'short',
 });
 
 function providerLabel(article: Article): string {
@@ -63,14 +77,19 @@ export function ArticleCard({ article }: { article: Article }) {
             <span className="text-muted-foreground/80">{article.sourceCategory}</span>
           ) : null}
           {/* Tabular figures so a column of dates lines up instead of shimmering. */}
-          <time className="tabular-nums" dateTime={article.publishedAt}>
+          <time
+            className="tabular-nums"
+            dateTime={article.publishedAt}
+            title={EXACT_FORMAT.format(published)}
+          >
             {DATE_FORMAT.format(published)}
           </time>
         </p>
 
-        {/* Serif, tight, balanced: the headline is the only thing on the card allowed to
-            be loud, and wrapping it evenly is what stops a grid looking ragged. */}
-        <h2 className="font-serif text-[1.35rem] leading-[1.25] font-medium tracking-[-0.011em] text-balance break-words">
+        {/* h3 under the day's h2, under the page's h1: a complete ladder with nothing
+            skipped. Serif, tight, balanced — the headline is the only thing on the card
+            allowed to be loud, and wrapping it evenly stops the grid looking ragged. */}
+        <h3 className="font-serif text-[1.35rem] leading-[1.25] font-medium tracking-[-0.011em] text-balance break-words">
           {/* Links out: none of these APIs reliably return full body text. */}
           <a
             className="decoration-1 underline-offset-[3px] group-hover:underline focus-visible:underline"
@@ -80,7 +99,7 @@ export function ArticleCard({ article }: { article: Article }) {
           >
             {article.title}
           </a>
-        </h2>
+        </h3>
 
         {article.description ? (
           <p className="line-clamp-3 text-[0.9rem] leading-relaxed text-pretty text-muted-foreground">

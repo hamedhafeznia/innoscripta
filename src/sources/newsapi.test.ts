@@ -132,3 +132,49 @@ describe('newsapi adapter', () => {
     });
   });
 });
+
+describe('newsapi date handling', () => {
+  it('excludes itself from a date range with no keyword, rather than failing', () => {
+    // /everything refuses to run on dates alone: "the scope of your search is too broad".
+    // Without this the reader got a red "not responding" notice for a working source.
+    expect(newsapiSource.unserviceable({ page: 1, from: '2026-09-03', to: '2026-09-06' })).toMatch(
+      /needs a keyword to search a date range/,
+    );
+  });
+
+  it('serves a date range once there is a keyword', () => {
+    expect(
+      newsapiSource.unserviceable({ page: 1, query: 'climate', from: '2026-09-03' }),
+    ).toBeNull();
+  });
+
+  it('never repeats the source name, which the notice already prints', () => {
+    const reasons = [
+      newsapiSource.unserviceable({ page: 1, from: '2026-09-03' }),
+      newsapiSource.unserviceable({ page: 1, categories: ['technology'], from: '2026-09-03' }),
+      newsapiSource.unserviceable({ page: 1, categories: ['technology', 'sports'] }),
+      newsapiSource.unserviceable({ page: 1, categories: ['politics'] }),
+      newsapiSource.notice({ page: 1, categories: ['technology'] }),
+    ];
+
+    for (const reason of reasons) {
+      expect(reason).toBeTruthy();
+      expect(reason).not.toMatch(/NewsAPI/);
+    }
+  });
+});
+
+describe('rate limit copy', () => {
+  it('does not promise a daily window it cannot know', async () => {
+    // NewsAPI's 429 is a daily cap; NYT's is usually a per-minute throttle. The status
+    // code cannot tell them apart, so the copy must be true of both.
+    server.use(
+      http.get('*/api/newsapi/everything', () => HttpResponse.json({}, { status: 429 })),
+    );
+
+    await expect(newsapiSource.search({ page: 1, query: 'ai' })).rejects.toMatchObject({
+      kind: 'rateLimited',
+      message: expect.not.stringContaining('today'),
+    });
+  });
+});

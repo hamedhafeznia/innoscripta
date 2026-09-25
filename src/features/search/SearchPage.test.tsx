@@ -144,6 +144,20 @@ describe('SearchPage', () => {
     ).toBeInTheDocument();
   });
 
+  it('walks h1 to h2 to h3 with no level skipped', async () => {
+    // A screen reader's heading list is a table of contents. The day is the section and
+    // the headline sits inside it; jumping h1 -> h3 would hide that structure.
+    serveAll();
+
+    renderWithProviders(<SearchPage />, { route: '/search?q=climate' });
+    await anArticle();
+
+    const levels = [...document.querySelectorAll('h1, h2, h3')].map((h) => h.tagName);
+    expect(levels[0]).toBe('H1');
+    expect(levels[1]).toBe('H2');
+    expect(levels[2]).toBe('H3');
+  });
+
   it('explains an empty result rather than showing a blank page', async () => {
     server.use(
       http.get('*/api/guardian/search', () =>

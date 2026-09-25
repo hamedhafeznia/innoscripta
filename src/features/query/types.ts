@@ -7,6 +7,12 @@ import type { Article, SourceId } from '../../core/article';
  */
 export interface Cursor {
   perSource: Record<SourceId, SourceCursor>;
+  /**
+   * The day currently being read, `YYYY-MM-DD`, when the filters name a range spanning
+   * more than one day. Paging then walks the range a day at a time instead of burrowing
+   * into its newest day — see `dayWindow` in fetchPage.
+   */
+  day?: string;
   /** Fetched but not yet emitted: below the cut. Carried, never refetched. */
   buffer: Article[];
 }
@@ -46,6 +52,10 @@ export interface ResultPage {
    * everything, and the auto-fetch budget ran out before anything matched.
    */
   outOfMatches: boolean;
+  /** The day this page covers, when the range is being walked a day at a time. */
+  day?: string;
+  /** The next day Load more will fetch, so the control can say where it goes. */
+  nextDay?: string;
   /**
    * Every source we actually asked this round failed. Distinct from "nothing matched":
    * nothing was searched at all, so telling the reader there are no more matches — or
