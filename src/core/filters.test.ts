@@ -1,4 +1,4 @@
-import { parseFilters, toSearchParams, type Filters } from './filters';
+import { countActiveFilters, parseFilters, toSearchParams, type Filters } from './filters';
 
 describe('parseFilters', () => {
   it('reads a complete, well-formed URL', () => {
@@ -76,5 +76,23 @@ describe('toSearchParams', () => {
     };
 
     expect(parseFilters(toSearchParams(filters))).toEqual(filters);
+  });
+});
+
+describe('countActiveFilters', () => {
+  it('is zero for an unfiltered page', () => {
+    expect(countActiveFilters({ query: '', categories: [], sources: [] })).toBe(0);
+  });
+
+  it('counts each narrowing choice once: keyword, each date, each category, each provider', () => {
+    expect(
+      countActiveFilters({
+        query: 'climate',
+        from: '2026-09-01',
+        to: '2026-09-24',
+        categories: ['science', 'health'],
+        sources: ['guardian'],
+      }),
+    ).toBe(6);
   });
 });

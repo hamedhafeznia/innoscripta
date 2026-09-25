@@ -3,12 +3,10 @@ import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { ArticleCard } from './ArticleCard';
 import type { DayGroup } from './day';
+import { ARTICLE_GRID } from './layout';
 
 /** Two clean rows on a three-column grid, and the next day reachable by scrolling. */
 const VISIBLE_PER_DAY = 6;
-
-const GRID =
-  'grid w-full list-none grid-cols-1 gap-x-7 gap-y-12 p-0 sm:grid-cols-2 lg:grid-cols-3';
 
 export function DaySection({ group, collapsed }: { group: DayGroup; collapsed: boolean }) {
   const [expanded, setExpanded] = useState(false);
@@ -36,7 +34,7 @@ export function DaySection({ group, collapsed }: { group: DayGroup; collapsed: b
         </Link>
       </h2>
 
-      <ul id={listId} className={GRID}>
+      <ul id={listId} className={ARTICLE_GRID}>
         {visible.map((article) => (
           <li key={article.id}>
             <ArticleCard article={article} />

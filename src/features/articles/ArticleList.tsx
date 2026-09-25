@@ -2,14 +2,7 @@ import type { Article } from '../../core/article';
 import { Skeleton } from '@/components/ui/skeleton';
 import { DaySection } from './DaySection';
 import { groupByDay } from './day';
-
-/**
- * Wide gutters and a narrow column count: a reading grid, not a dashboard grid. The
- * vertical gap runs larger than the horizontal one so rows read as separate stories
- * rather than as a continuous wall.
- */
-const GRID =
-  'grid w-full list-none grid-cols-1 gap-x-7 gap-y-12 p-0 sm:grid-cols-2 lg:grid-cols-3';
+import { ARTICLE_GRID } from './layout';
 
 /**
  * Grouped by day, always.
@@ -47,7 +40,7 @@ export function ArticleListSkeleton({ count = 6 }: { count?: number }) {
   return (
     <div className="w-full" aria-hidden="true">
       <Skeleton className="mb-5 h-4 w-48" />
-      <ul className={GRID}>
+      <ul className={ARTICLE_GRID}>
         {Array.from({ length: count }, (_, index) => (
           <li key={index} className="flex flex-col gap-3">
             <Skeleton className="aspect-[3/2] w-full rounded-md" />

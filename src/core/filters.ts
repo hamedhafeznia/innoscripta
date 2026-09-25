@@ -93,3 +93,14 @@ export function toSearchParams(filters: Filters): URLSearchParams {
   if (filters.sources.length) params.set('src', filters.sources.join(','));
   return params;
 }
+
+/** How many filters are actually narrowing the query. Zero means an unfiltered page. */
+export function countActiveFilters(filters: Filters): number {
+  return (
+    (filters.query ? 1 : 0) +
+    (filters.from ? 1 : 0) +
+    (filters.to ? 1 : 0) +
+    filters.categories.length +
+    filters.sources.length
+  );
+}

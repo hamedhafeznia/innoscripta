@@ -1,5 +1,6 @@
-import { CATEGORIES, type Category, type SourceId } from '../../core/article';
-import type { Filters } from '../../core/filters';
+import { CATEGORIES } from '../../core/article';
+import { countActiveFilters, type Filters } from '../../core/filters';
+import { toggle } from '../../lib/toggle';
 import { SOURCES } from '../../sources/registry';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -17,15 +18,8 @@ interface FilterBarProps {
   onChange: (filters: Filters) => void;
 }
 
-function toggle<T>(values: T[], value: T): T[] {
-  return values.includes(value) ? values.filter((item) => item !== value) : [...values, value];
-}
-
 export function FilterBar({ filters, keyword, onKeywordChange, onChange, bare }: FilterBarProps) {
-  const hasFilters =
-    Boolean(filters.query || filters.from || filters.to) ||
-    filters.categories.length > 0 ||
-    filters.sources.length > 0;
+  const hasFilters = countActiveFilters(filters) > 0;
 
   return (
     <form
@@ -72,7 +66,7 @@ export function FilterBar({ filters, keyword, onKeywordChange, onChange, bare }:
         <legend className="mb-2 text-[0.7rem] font-medium tracking-[0.08em] text-muted-foreground uppercase">
           Categories
         </legend>
-        {CATEGORIES.map((category: Category) => (
+        {CATEGORIES.map((category) => (
           <CheckboxChip
             key={category}
             label={category}
@@ -93,7 +87,7 @@ export function FilterBar({ filters, keyword, onKeywordChange, onChange, bare }:
             key={source.id}
             label={source.label}
             checked={filters.sources.includes(source.id)}
-            onToggle={() => onChange({ ...filters, sources: toggle(filters.sources, source.id as SourceId) })}
+            onToggle={() => onChange({ ...filters, sources: toggle(filters.sources, source.id) })}
             className="bg-background"
           />
         ))}

@@ -1,13 +1,13 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { parseFilters, toSearchParams, type Filters } from '../../core/filters';
+import { countActiveFilters, parseFilters, toSearchParams, type Filters } from '../../core/filters';
 import { ArticleList, ArticleListSkeleton } from '../articles/ArticleList';
 import { LoadMore } from '../articles/LoadMore';
 import { RangeProgress } from '../articles/RangeProgress';
 import { ResultsPlaceholder } from '../articles/ResultsPlaceholder';
 import { SourceNotices } from '../articles/SourceNotices';
 import { useArticles } from '../query/useArticles';
-import { countActiveFilters, FilterPanel } from './FilterPanel';
+import { FilterPanel } from './FilterPanel';
 import { useDebouncedValue } from './useDebouncedValue';
 
 export function SearchPage() {

@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import type { Article, Category, SourceId } from '../../core/article';
+import { toggle } from '../../lib/toggle';
 
 /**
  * A followed author is one person, remembered across sessions. `ref` is the source's
@@ -32,10 +33,6 @@ const sameAuthor = (a: string, b: string) => a.toLowerCase() === b.toLowerCase()
 /** The display byline may list several people; the first is the one a follow is about. */
 export function primaryAuthor(article: Article): string | null {
   return article.author?.split(',')[0]?.trim() || null;
-}
-
-function toggle<T>(values: T[], value: T): T[] {
-  return values.includes(value) ? values.filter((item) => item !== value) : [...values, value];
 }
 
 export const usePreferences = create<PreferencesStore>()(
