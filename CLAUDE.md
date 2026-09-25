@@ -11,7 +11,8 @@ searchable, filterable, personalizable feed. Frontend only. Containerized.
 ## Stack
 
 Vite · React · TypeScript · React Query (fetching/cache) · Zustand + localStorage
-(preferences) · Vitest + RTL + MSW (tests) · Docker multi-stage → nginx.
+(preferences) · **Tailwind CSS v4 + shadcn/ui** (styling) · Vitest + RTL + MSW (tests) ·
+Docker multi-stage → nginx.
 
 ## Sources
 
@@ -178,10 +179,34 @@ to see if you know what's worth testing.
 
 ---
 
+## Styling
+
+Tailwind CSS v4 via `@tailwindcss/vite` (no `tailwind.config.js`; theme lives in CSS).
+shadcn/ui components are **vendored into `src/components/ui/`** — they are our source,
+not a dependency, and may be edited.
+
+- **The design tokens are the contract.** The `--bg / --surface / --text / --text-muted /
+  --border / --brand / --radius` set defined in `src/styles.css` is authoritative; the
+  shadcn variable names (`--background`, `--foreground`, `--muted-foreground`, `--primary`,
+  `--card`, …) are mapped onto it. Change a colour in one place only.
+- The brand colour is **`--brand`, not `--accent`**: shadcn uses `--accent` for a subtle
+  hover background, and two meanings under one name is how a palette rots.
+- Tokens are declared for both light and `.dark`, which makes phase 6's dark mode a
+  toggle rather than a rewrite.
+- **Add only the components actually used.** Button, Input, Badge, Card, Skeleton, Alert,
+  Sheet, Popover, Calendar, Checkbox, Select. No component gets vendored "for later".
+- **Tests must not assert on class names.** They assert roles, labels and text, so a
+  restyle cannot break them. If a migration forces a test change, the test was
+  testing the wrong thing — fix the test's premise, don't loosen the assertion.
+- Semantics are not negotiable for styling's sake: a `<fieldset>`/`<legend>` group, a
+  `role="status"`, an `aria-pressed` toggle and a visible focus ring all survive the
+  migration or the migration is wrong.
+
 ## Structure
 
 Feature folders: `features/search/`, `features/feed/`, `features/preferences/`,
-`sources/` (adapters + registry), `core/` (Article type, merge, url schema).
+`sources/` (adapters + registry), `core/` (Article type, merge, url schema),
+`components/ui/` (vendored shadcn primitives), `lib/` (`cn` and friends).
 
 ---
 
@@ -209,6 +234,9 @@ E2E/Playwright, a11y beyond keyboard + labels, PWA/offline.
 3. **Adapters** — capture one real response per API as MSW fixtures; three adapters with tests.
 4. **Search** — query layer; `/search` with URL schema + filters; debounced search; Load More.
 5. **Feed** — preferences, `/feed`, Follow author.
+5.5. **Styling migration** — Tailwind v4 + shadcn/ui; map the existing tokens onto\
+   shadcn's variables; migrate component by component, tests green after each; delete the\
+   hand-written CSS at the end; Docker must still build.
 6. **Polish** — skeletons / empty / error states; mobile pass; a11y pass; dark mode only if time remains.
 7. **Review** — `/code-review`, `/make-interfaces-feel-better`, README final check.
 

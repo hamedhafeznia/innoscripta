@@ -1,4 +1,5 @@
 import type { Article } from '../../core/article';
+import { Button } from '@/components/ui/button';
 import { primaryAuthor, useIsFollowing, usePreferences } from './store';
 
 /**
@@ -14,13 +15,15 @@ export function FollowAuthorButton({ article }: { article: Article }) {
   if (!name) return null;
 
   return (
-    <button
+    <Button
       type="button"
-      className={following ? 'follow follow-on' : 'follow'}
+      variant="outline"
+      size="xs"
+      className={following ? 'rounded-full border-primary text-primary' : 'rounded-full'}
       aria-pressed={following}
       onClick={() => (following ? unfollowAuthor(name) : followAuthor(article))}
     >
       {following ? `Following ${name}` : `Follow ${name}`}
-    </button>
+    </Button>
   );
 }
