@@ -1,0 +1,108 @@
+import { http, HttpResponse } from 'msw';
+import { screen, waitFor, within } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
+import guardianFixture from '../../test/fixtures/guardian.search.json';
+import nytFixture from '../../test/fixtures/nyt.search.json';
+import newsapiFixture from '../../test/fixtures/newsapi.search.json';
+import { currentLocation, renderWithProviders } from '../../test/renderApp';
+import { server } from '../../test/server';
+import { SearchPage } from './SearchPage';
+
+function serveAll() {
+  server.use(
+    http.get('*/api/guardian/search', () => HttpResponse.json(guardianFixture)),
+    http.get('*/api/nyt/articlesearch.json', () => HttpResponse.json(nytFixture)),
+    http.get('*/api/newsapi/everything', () => HttpResponse.json(newsapiFixture)),
+    http.get('*/api/newsapi/top-headlines', () => HttpResponse.json(newsapiFixture)),
+  );
+}
+
+const anArticle = () => screen.findAllByRole('article');
+
+describe('SearchPage', () => {
+  it('renders articles from every provider for the filters in the URL', async () => {
+    serveAll();
+
+    renderWithProviders(<SearchPage />, { route: '/search?q=climate' });
+
+    expect(await anArticle()).not.toHaveLength(0);
+    expect(screen.getByRole('searchbox', { name: 'Search' })).toHaveValue('climate');
+  });
+
+  it('writes a typed keyword into the URL', async () => {
+    serveAll();
+    const user = userEvent.setup();
+
+    renderWithProviders(<SearchPage />, { route: '/search' });
+    await anArticle();
+
+    await user.type(screen.getByRole('searchbox', { name: 'Search' }), 'climate');
+
+    // That the keystrokes are debounced first is covered in useDebouncedValue.test.ts.
+    await waitFor(() => expect(currentLocation()).toBe('/search?q=climate'));
+  });
+
+  it('puts a chosen category into the URL as ?cat=', async () => {
+    serveAll();
+    const user = userEvent.setup();
+
+    renderWithProviders(<SearchPage />, { route: '/search?q=climate' });
+    await anArticle();
+
+    await user.click(screen.getByRole('checkbox', { name: 'science' }));
+
+    await waitFor(() => expect(currentLocation()).toBe('/search?q=climate&cat=science'));
+  });
+
+  it('shows what returned and a notice naming the source that failed', async () => {
+    serveAll();
+    server.use(http.get('*/api/nyt/articlesearch.json', () => HttpResponse.error()));
+
+    renderWithProviders(<SearchPage />, { route: '/search?q=climate' });
+
+    expect(await anArticle()).not.toHaveLength(0);
+    const notices = await screen.findByRole('list', { name: 'Source notices' });
+    expect(within(notices).getByText(/New York Times/)).toBeInTheDocument();
+  });
+
+  it('lets a notice be dismissed', async () => {
+    serveAll();
+    server.use(http.get('*/api/nyt/articlesearch.json', () => HttpResponse.error()));
+    const user = userEvent.setup();
+
+    renderWithProviders(<SearchPage />, { route: '/search?q=climate' });
+
+    const notices = await screen.findByRole('list', { name: 'Source notices' });
+    await user.click(within(notices).getByRole('button', { name: /Dismiss notice/ }));
+
+    await waitFor(() =>
+      expect(screen.queryByRole('list', { name: 'Source notices' })).not.toBeInTheDocument(),
+    );
+  });
+
+  it('appends the next page when Load more is pressed', async () => {
+    serveAll();
+    const user = userEvent.setup();
+
+    renderWithProviders(<SearchPage />, { route: '/search?q=climate' });
+    const first = await anArticle();
+
+    await user.click(screen.getByRole('button', { name: 'Load more' }));
+
+    await waitFor(async () => expect((await anArticle()).length).toBeGreaterThan(first.length));
+  });
+
+  it('explains an empty result rather than showing a blank page', async () => {
+    server.use(
+      http.get('*/api/guardian/search', () =>
+        HttpResponse.json({ response: { currentPage: 1, pages: 1, results: [] } }),
+      ),
+      http.get('*/api/nyt/articlesearch.json', () => HttpResponse.json({ response: { docs: [] } })),
+      http.get('*/api/newsapi/everything', () => HttpResponse.json({ status: 'ok', articles: [] })),
+    );
+
+    renderWithProviders(<SearchPage />, { route: '/search?q=nothingmatchesthis' });
+
+    expect(await screen.findByText(/No articles matched these filters/)).toBeInTheDocument();
+  });
+});

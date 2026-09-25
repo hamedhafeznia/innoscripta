@@ -4,8 +4,8 @@ A React + TypeScript SPA that aggregates **The Guardian**, **NYT Article Search*
 and **NewsAPI.org** into one searchable, filterable, personalisable feed.
 Frontend only, containerised.
 
-> Status: phase 3 of 7 (adapters). The routes still render placeholders;
-> the query layer and UI land in the following phases.
+> Status: phase 4 of 7 (search). `/search` is live; `/feed` and the preference
+> layer land next.
 
 ## Run it
 
@@ -54,6 +54,27 @@ Responses are cached by nginx for 5 minutes (NewsAPI) and 2 minutes (Guardian, N
 **Only `200` responses are cached**, so a rate-limit error is never served from cache.
 NewsAPI is 24h-delayed anyway, so its cache costs zero freshness — and it buys real
 headroom against a free-plan budget of **100 requests/day**.
+
+## Filters live in the URL
+
+`/search` keeps every filter in the query string — `?q=&from=&to=&cat=a,b&src=x,y` —
+so a search is shareable and survives the back button. One zod schema parses it, and it
+**treats the URL as untrusted input**: unknown categories, unknown providers, malformed
+dates and unknown parameters are dropped, never thrown on. A mangled URL renders an
+unfiltered page rather than a blank screen.
+
+`src` selects **providers** — which of the three APIs we ask — not publishers. A card
+shows the publisher where the source gives us one ("The Irish Times") and the provider
+it came through underneath ("via NewsAPI").
+
+Typing is debounced by 350 ms before it reaches the URL or the network. At three
+sources a keystroke would otherwise cost three requests.
+
+Paging is an explicit **Load More**, not infinite scroll, for the same reason.
+Because the cursor carries whole articles it is not URL-serializable and lives in the
+React Query cache only, so **a reload returns to page 1**. Carrying it in the URL would
+mean refetching the truncated tail on every reload, which the 100/day budget cannot pay
+for.
 
 ## Merging three sources into one list
 

@@ -122,6 +122,51 @@ describe('mergePage', () => {
     });
   });
 
+  describe('client-side filtering', () => {
+    it('cuts on how far the source reached, not on what survived the filter', () => {
+      // NYT fetched back to the 21st but only its 23rd survived a client-side category
+      // filter. Cutting at the 23rd would emit Guardian's 22nd, and NYT's next page
+      // could still hold a matching 22nd that belonged above it.
+      const result = mergePage({
+        buffer: [],
+        results: [
+          ok('guardian', [at('2026-09-24T00:00:00Z', 'g-24'), at('2026-09-22T00:00:00Z', 'g-22')]),
+          {
+            sourceId: 'nyt',
+            status: 'ok',
+            exhausted: false,
+            articles: [at('2026-09-23T00:00:00Z', 'n-23')],
+            oldestFetched: '2026-09-21T00:00:00Z',
+          },
+        ],
+      });
+
+      expect(titles(result.articles)).toEqual(['g-24', 'n-23', 'g-22']);
+      expect(result.buffer).toEqual([]);
+    });
+
+    it('keeps a source that filtered down to nothing in the cut', () => {
+      // Nothing of NYT's page matched, but it is still live and still reached the 21st,
+      // so Guardian's older items must wait rather than ship out of order.
+      const result = mergePage({
+        buffer: [],
+        results: [
+          ok('guardian', [at('2026-09-24T00:00:00Z', 'g-24'), at('2026-09-19T00:00:00Z', 'g-19')]),
+          {
+            sourceId: 'nyt',
+            status: 'ok',
+            exhausted: false,
+            articles: [],
+            oldestFetched: '2026-09-21T00:00:00Z',
+          },
+        ],
+      });
+
+      expect(titles(result.articles)).toEqual(['g-24']);
+      expect(titles(result.buffer)).toEqual(['g-19']);
+    });
+  });
+
   describe('dedupe', () => {
     it('drops the same story arriving from two sources', () => {
       const shared = 'https://www.example.com/world/quake?utm_source=twitter#top';

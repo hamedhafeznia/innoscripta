@@ -2,7 +2,21 @@ import type { Article, SourceId } from './article';
 
 /** One source's contribution to a single fan-out round. */
 export type SourceResult =
-  | { sourceId: SourceId; status: 'ok'; articles: Article[]; exhausted: boolean }
+  | {
+      sourceId: SourceId;
+      status: 'ok';
+      /** What this source contributes to the page, after any client-side filtering. */
+      articles: Article[];
+      exhausted: boolean;
+      /**
+       * How far back the source actually reached this round, before client-side
+       * filtering removed anything. The cut depends on a source's *reach*, not on what
+       * survived the filter: a page filtered down to nothing still reached back to some
+       * date, and articles older than that date must wait. Defaults to the oldest of
+       * `articles` when the source filtered nothing out.
+       */
+      oldestFetched?: string;
+    }
   /** Threw, rate-limited, or was excluded as unserviceable. Contributes nothing. */
   | { sourceId: SourceId; status: 'failed' };
 
@@ -79,9 +93,11 @@ function findCutPoint(results: readonly SourceResult[]): string | null {
   for (const result of results) {
     if (result.status !== 'ok' || result.exhausted) continue;
 
-    let oldest: string | null = null;
-    for (const article of result.articles) {
-      if (oldest === null || article.publishedAt < oldest) oldest = article.publishedAt;
+    let oldest: string | null = result.oldestFetched ?? null;
+    if (oldest === null) {
+      for (const article of result.articles) {
+        if (oldest === null || article.publishedAt < oldest) oldest = article.publishedAt;
+      }
     }
     if (oldest === null) continue;
 
