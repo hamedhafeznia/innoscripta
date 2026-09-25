@@ -74,7 +74,7 @@ const guardianResponse = z.object({
 });
 
 /** "Lucy Campbell (now); Shannon Ho (earlier)" -> "Lucy Campbell, Shannon Ho". */
-function normalizeByline(byline: string | undefined): string | null {
+function normalizeByline(byline: string | null | undefined): string | null {
   if (!byline) return null;
 
   const cleaned = byline
@@ -87,7 +87,7 @@ function normalizeByline(byline: string | undefined): string | null {
 }
 
 /** Strips the Guardian's HTML from trailText, which is markup, not plain text. */
-function stripHtml(html: string | undefined): string | null {
+function stripHtml(html: string | null | undefined): string | null {
   if (!html) return null;
   const text = html.replace(/<[^>]*>/g, '').trim();
   return text || null;

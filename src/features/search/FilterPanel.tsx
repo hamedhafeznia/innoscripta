@@ -1,5 +1,4 @@
 import { SlidersHorizontal } from 'lucide-react';
-import type { Filters } from '../../core/filters';
 import { Button } from '@/components/ui/button';
 import {
   Sheet,
