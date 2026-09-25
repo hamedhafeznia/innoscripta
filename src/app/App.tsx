@@ -30,7 +30,7 @@ export function App() {
             <NavLink
               to="/search"
               className={({ isActive }) =>
-                `text-sm underline-offset-[6px] decoration-1 ${
+                `relative text-sm underline-offset-[6px] decoration-1 after:absolute after:inset-x-0 after:top-1/2 after:h-11 after:-translate-y-1/2 ${
                   isActive
                     ? 'font-medium text-foreground underline'
                     : 'text-muted-foreground hover:text-foreground'
@@ -42,7 +42,7 @@ export function App() {
             <NavLink
               to="/feed"
               className={({ isActive }) =>
-                `text-sm underline-offset-[6px] decoration-1 ${
+                `relative text-sm underline-offset-[6px] decoration-1 after:absolute after:inset-x-0 after:top-1/2 after:h-11 after:-translate-y-1/2 ${
                   isActive
                     ? 'font-medium text-foreground underline'
                     : 'text-muted-foreground hover:text-foreground'

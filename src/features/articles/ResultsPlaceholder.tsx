@@ -34,7 +34,7 @@ export function ResultsPlaceholder({
         className="flex w-full flex-col items-center gap-3 rounded-lg border bg-surface/60 px-6 py-12 text-center"
       >
         <p className="m-0 font-serif text-xl font-medium">No source could be reached.</p>
-        <p className="m-0 max-w-prose text-sm text-muted-foreground">
+        <p className="m-0 max-w-prose text-sm text-pretty text-muted-foreground">
           Nothing was searched, so there are no results to show — not even an empty one. The
           notices above say what each source reported.
         </p>

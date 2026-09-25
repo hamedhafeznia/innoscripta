@@ -19,19 +19,20 @@ export function CheckboxChip({
   const id = useId();
 
   return (
+    // The whole chip is the label, not just the 16px box and the word: a chip that looks
+    // pressable everywhere must be pressable everywhere. Taller on touch than on desktop.
     // Checked reads as filled-and-dark, not as the focus blue: at magnification a chip
     // tinted with --ring is hard to tell apart from the chip that merely has focus.
-    <div
-      className={`inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-[0.8rem] transition-colors ${
+    <label
+      htmlFor={id}
+      className={`inline-flex min-h-11 cursor-pointer items-center gap-1.5 rounded-full border px-3 py-1 text-[0.8rem] transition-colors select-none sm:min-h-9 ${
         checked
           ? 'border-foreground/25 bg-foreground/[0.06] text-foreground'
           : 'text-muted-foreground hover:border-foreground/20 hover:text-foreground'
       } ${className ?? ''}`}
     >
       <Checkbox id={id} checked={checked} onCheckedChange={onToggle} />
-      <label htmlFor={id} className="cursor-pointer capitalize select-none">
-        {label}
-      </label>
-    </div>
+      <span className="capitalize">{label}</span>
+    </label>
   );
 }

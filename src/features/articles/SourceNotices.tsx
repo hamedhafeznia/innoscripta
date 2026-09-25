@@ -74,8 +74,8 @@ export function SourceNotices({ notices }: { notices: SourceNotice[] }) {
               role={notice.kind === 'error' ? 'alert' : 'status'}
               className="items-center border-border/70 bg-transparent px-4 py-2.5"
             >
-              <Icon className={tone} />
-              <AlertDescription className="pr-7 text-[0.85rem] text-muted-foreground">
+              <Icon className={tone} strokeWidth={1.5} />
+              <AlertDescription className="pr-7 text-[0.85rem] text-pretty text-muted-foreground">
                 <span>
                   <strong className="font-medium text-foreground">
                     {listNames(notice.sources)}
@@ -87,7 +87,9 @@ export function SourceNotices({ notices }: { notices: SourceNotice[] }) {
                 type="button"
                 variant="ghost"
                 size="icon-sm"
-                className="absolute top-1.5 right-1.5 text-muted-foreground"
+                // rounded-sm, not the button default: the alert is 10px with the control
+                // inset 6px, so a concentric inner corner is 4px.
+                className="absolute top-1.5 right-1.5 rounded-sm text-muted-foreground"
                 onClick={() => setDismissed((current) => [...current, notice.id])}
                 aria-label={`Dismiss notice about ${listNames(notice.sources)}`}
               >

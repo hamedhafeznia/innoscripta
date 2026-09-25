@@ -22,7 +22,7 @@ function ImageFallback({ publisher }: { publisher: string }) {
   return (
     <div
       aria-hidden="true"
-      className="flex aspect-[3/2] w-full items-center justify-center overflow-hidden rounded-md bg-surface ring-1 ring-foreground/8 ring-inset"
+      className="flex aspect-[3/2] w-full items-center justify-center overflow-hidden rounded-md bg-surface outline-1 -outline-offset-1 outline-black/10 dark:outline-white/10"
     >
       <span className="font-serif text-6xl leading-none font-light text-muted-foreground/25 select-none">
         {publisher.slice(0, 1).toUpperCase()}
@@ -41,8 +41,10 @@ export function ArticleCard({ article }: { article: Article }) {
       {article.imageUrl ? (
         <img
           // A hairline inside the edge: without it a pale photograph dissolves into the
-          // page and the grid loses its rhythm wherever the sky is white.
-          className="aspect-[3/2] w-full rounded-md bg-surface object-cover ring-1 ring-foreground/8 ring-inset"
+          // page and the grid loses its rhythm wherever the sky is white. Pure black and
+          // pure white, never a tinted near-black — a tinted edge picks up the surface
+          // beneath it and reads as dirt on the photograph.
+          className="aspect-[3/2] w-full rounded-md bg-surface object-cover outline-1 -outline-offset-1 outline-black/10 dark:outline-white/10"
           src={article.imageUrl}
           alt=""
           loading="lazy"
@@ -81,7 +83,7 @@ export function ArticleCard({ article }: { article: Article }) {
         </h2>
 
         {article.description ? (
-          <p className="line-clamp-3 text-[0.9rem] leading-relaxed text-muted-foreground">
+          <p className="line-clamp-3 text-[0.9rem] leading-relaxed text-pretty text-muted-foreground">
             {article.description}
           </p>
         ) : null}

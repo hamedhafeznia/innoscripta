@@ -66,7 +66,7 @@ export function DateRangeField({ label, value, onChange, min, max }: DateRangeFi
             // field's name and lose the date currently chosen.
             aria-label={`${label}: ${selected ? LABEL_FORMAT.format(selected) : 'any date'}`}
           >
-            <CalendarIcon />
+            <CalendarIcon strokeWidth={1.5} />
             {selected ? LABEL_FORMAT.format(selected) : <span className="text-muted-foreground">Any</span>}
           </Button>
         </PopoverTrigger>

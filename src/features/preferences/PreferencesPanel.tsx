@@ -64,8 +64,11 @@ export function PreferencesPanel() {
               <Button
                 type="button"
                 variant="ghost"
-                size="icon-xs"
-                className="text-muted-foreground"
+                // icon-sm over icon-xs: 24px is too small to hit. A pseudo-element could
+                // reach 44px but would collide with the neighbouring chip 8px away, so the
+                // control grows instead.
+                size="icon-sm"
+                className="rounded-full text-muted-foreground"
                 onClick={() => unfollowAuthor(author.name)}
                 aria-label={`Unfollow ${author.name}`}
               >
