@@ -64,4 +64,14 @@ describe('DaySection', () => {
       '/search?from=2026-09-10&to=2026-09-10',
     );
   });
+
+  it('links its heading to a one-day search for that day', () => {
+    renderSection(3);
+
+    const heading = screen.getByRole('heading', { level: 2 });
+    expect(within(heading).getByRole('link')).toHaveAttribute(
+      'href',
+      '/search?from=2026-09-10&to=2026-09-10',
+    );
+  });
 });

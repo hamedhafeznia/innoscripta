@@ -4,7 +4,7 @@ import { toggle } from '../../lib/toggle';
 import { SOURCES } from '../../sources/registry';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { CheckboxChip } from '../articles/CheckboxChip';
+import { CheckboxChip } from '@/components/CheckboxChip';
 import { DateRangeField } from './DateRangeField';
 
 interface FilterBarProps {

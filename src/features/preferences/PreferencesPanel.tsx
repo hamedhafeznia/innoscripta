@@ -3,7 +3,7 @@ import { CATEGORIES } from '../../core/article';
 import { SOURCES } from '../../sources/registry';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { CheckboxChip } from '../articles/CheckboxChip';
+import { CheckboxChip } from '@/components/CheckboxChip';
 import { usePreferences } from './store';
 
 /**

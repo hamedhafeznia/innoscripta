@@ -1,6 +1,7 @@
 import { useId, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
+import { EMPTY_FILTERS, toSearchParams } from '../../core/filters';
 import { ArticleCard } from './ArticleCard';
 import type { DayGroup } from './day';
 import { ARTICLE_GRID } from './layout';
@@ -28,7 +29,10 @@ export function DaySection({ group, collapsed }: { group: DayGroup; collapsed: b
             walking, so this is how a reader gets past the slice we fetched. */}
         <Link
           className="underline-offset-4 hover:text-foreground hover:underline"
-          to={{ pathname: '/search', search: `from=${group.key}&to=${group.key}` }}
+          to={{
+            pathname: '/search',
+            search: toSearchParams({ ...EMPTY_FILTERS, from: group.key, to: group.key }).toString(),
+          }}
         >
           {group.label}
         </Link>
