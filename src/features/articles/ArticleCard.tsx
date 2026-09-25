@@ -1,5 +1,5 @@
 import type { Article } from '../../core/article';
-import { SOURCES } from '../../sources/registry';
+import { getSource } from '../../sources/registry';
 import { FollowAuthorButton } from '../preferences/FollowAuthorButton';
 
 /*
@@ -23,7 +23,7 @@ const EXACT_FORMAT = new Intl.DateTimeFormat(undefined, {
 });
 
 function providerLabel(article: Article): string {
-  return SOURCES.find((source) => source.id === article.source)?.label ?? article.source;
+  return getSource(article.source)?.label ?? article.source;
 }
 
 /**
