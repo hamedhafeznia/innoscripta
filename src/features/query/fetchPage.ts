@@ -4,6 +4,7 @@ import { SourceError } from '../../core/http';
 import { mergePage, type SourceResult } from '../../core/merge';
 import type { NewsSource, SearchParams } from '../../core/source';
 import { SOURCES } from '../../sources/registry';
+import type { FollowedAuthor } from '../preferences/store';
 import type { Cursor, ResultPage, SourceCursor, SourceNotice } from './types';
 
 /**
@@ -28,29 +29,55 @@ export function initialCursor(): Cursor {
 export interface PageRequest {
   filters: Filters;
   /** OR-ed with each other, AND-ed with the filters. Empty means "any author". */
-  authors: string[];
+  authors: FollowedAuthor[];
   cursor: Cursor;
   signal?: AbortSignal;
 }
 
-function toSearchParams(filters: Filters, authors: string[], page: number): SearchParams {
+/**
+ * Where a source's author filtering happens *this round*.
+ *
+ * A source that can filter server-side only does so when every followed author carries
+ * an identifier it understands. Send it a partial list and it returns only those
+ * authors' articles, silently losing the rest — and follows are additive, so losing one
+ * is a wrong answer, not a narrower one. One name-only follow therefore moves the whole
+ * set to the client side, where names are all that is needed.
+ */
+function authorStrategy(source: NewsSource, authors: FollowedAuthor[]): 'server' | 'client' | 'none' {
+  if (!authors.length) return 'none';
+  if (source.capabilities.author === false) return 'none';
+  if (source.capabilities.author === 'server' && authors.every((author) => author.ref)) {
+    return 'server';
+  }
+  return 'client';
+}
+
+function toSearchParams(
+  filters: Filters,
+  authors: FollowedAuthor[],
+  source: NewsSource | null,
+  page: number,
+): SearchParams {
+  const serverSide = source && authorStrategy(source, authors) === 'server';
+
   return {
     query: filters.query || undefined,
     from: filters.from,
     to: filters.to,
     categories: filters.categories,
-    authors,
+    // Server-side sources want their own identifiers; nobody else is sent authors at all.
+    authors: serverSide ? authors.map((author) => author.ref!) : [],
     page,
   };
 }
 
 /** Case- and punctuation-insensitive, so "Muktita Suhartono" matches "By M. Suhartono". */
-function authorMatches(article: Article, authors: readonly string[]): boolean {
+function authorMatches(article: Article, authors: readonly FollowedAuthor[]): boolean {
   if (!authors.length) return true;
   if (!article.author) return false;
 
   const haystack = article.author.toLowerCase();
-  return authors.some((author) => haystack.includes(author.toLowerCase()));
+  return authors.some((author) => haystack.includes(author.name.toLowerCase()));
 }
 
 function categoryMatches(article: Article, categories: readonly string[]): boolean {
@@ -59,7 +86,7 @@ function categoryMatches(article: Article, categories: readonly string[]): boole
 }
 
 /** Which sources run at all: selected, serviceable, and not yet exhausted. */
-function selectSources(filters: Filters, authors: string[], cursor: Cursor) {
+function selectSources(filters: Filters, authors: FollowedAuthor[], cursor: Cursor) {
   const selected = filters.sources.length
     ? SOURCES.filter((source) => filters.sources.includes(source.id))
     : SOURCES;
@@ -68,13 +95,13 @@ function selectSources(filters: Filters, authors: string[], cursor: Cursor) {
   const notices: SourceNotice[] = [];
 
   for (const source of selected) {
-    const reason = source.unserviceable(toSearchParams(filters, authors, 1));
+    const reason = source.unserviceable(toSearchParams(filters, authors, source, 1));
     if (reason) {
       notices.push(notice(source, 'excluded', reason));
       continue;
     }
 
-    const caveat = source.notice(toSearchParams(filters, authors, 1));
+    const caveat = source.notice(toSearchParams(filters, authors, source, 1));
     if (caveat) notices.push(notice(source, 'caveat', caveat));
 
     if (cursor.perSource[source.id]?.exhausted) continue;
@@ -108,7 +135,7 @@ function notice(
  */
 async function fetchRound(
   filters: Filters,
-  authors: string[],
+  authors: FollowedAuthor[],
   cursor: Cursor,
   sources: readonly NewsSource[],
   signal?: AbortSignal,
@@ -116,7 +143,7 @@ async function fetchRound(
   const settled = await Promise.allSettled(
     sources.map((source) =>
       source.search(
-        toSearchParams(filters, authors, cursor.perSource[source.id]!.nextPage),
+        toSearchParams(filters, authors, source, cursor.perSource[source.id]!.nextPage),
         signal,
       ),
     ),
@@ -143,7 +170,7 @@ async function fetchRound(
       (article) =>
         (source.capabilities.category !== 'client' ||
           categoryMatches(article, filters.categories)) &&
-        (source.capabilities.author !== 'client' || authorMatches(article, authors)),
+        (authorStrategy(source, authors) !== 'client' || authorMatches(article, authors)),
     );
 
     let oldestFetched: string | undefined;

@@ -4,8 +4,7 @@ A React + TypeScript SPA that aggregates **The Guardian**, **NYT Article Search*
 and **NewsAPI.org** into one searchable, filterable, personalisable feed.
 Frontend only, containerised.
 
-> Status: phase 4 of 7 (search). `/search` is live; `/feed` and the preference
-> layer land next.
+> Status: phase 5 of 7 (feed). Both routes are live; polish and review remain.
 
 ## Run it
 
@@ -75,6 +74,35 @@ Because the cursor carries whole articles it is not URL-serializable and lives i
 React Query cache only, so **a reload returns to page 1**. Carrying it in the URL would
 mean refetching the truncated tail on every reload, which the 100/day budget cannot pay
 for.
+
+## Two routes, one engine
+
+`/search` parses filters out of the URL. `/feed` takes **no URL parameters at all**: it
+reads stored preferences, derives the same `Filters` object, and hands it to the same
+hook. A **Refine in search** button opens `/search` pre-filled with those filters.
+
+The split between the two is about what the thing *is*:
+
+- **Categories and providers are predicates on a query.** They narrow a result set, they
+  are AND-ed together, and they belong in a URL you can share. They live in `/search`'s
+  query string, and `/feed` keeps its own copy as a preference.
+- **Followed authors are a property of the reader.** They are OR-ed with each other and
+  additive — each one widens the feed — and they are meaningless in someone else's
+  browser. They live in Zustand, persisted to `localStorage`, and never in the URL.
+
+A **Follow** button sits on every card. Where that filter then runs depends on what the
+source can do, and the feed says so on the page:
+
+- The Guardian can filter server-side, by the contributor tag (`profile/<slug>`) the
+  adapter keeps on each article. It only does so when *every* followed author has such a
+  tag — a partial list would return those authors' articles and silently lose the rest,
+  and since follows are additive, that is a wrong answer rather than a narrower one. One
+  name-only follow moves the whole set to client-side matching.
+- NYT and NewsAPI publish a byline string and no author identifier, so they are always
+  matched on this device after fetching.
+
+Client-side matching never silently empties a page: the query layer refetches up to
+twice more before reporting that there are no further matches.
 
 ## Merging three sources into one list
 

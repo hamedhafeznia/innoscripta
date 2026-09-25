@@ -1,5 +1,6 @@
 import { useInfiniteQuery } from '@tanstack/react-query';
 import type { Filters } from '../../core/filters';
+import type { FollowedAuthor } from '../preferences/store';
 import { fetchPage, initialCursor } from './fetchPage';
 import type { Cursor, ResultPage } from './types';
 
@@ -9,9 +10,9 @@ import type { Cursor, ResultPage } from './types';
  *
  * The cursor is the page param, which is why it never has to be URL-serializable.
  */
-export function useArticles(filters: Filters, authors: string[]) {
+export function useArticles(filters: Filters, authors: FollowedAuthor[]) {
   const query = useInfiniteQuery<ResultPage, Error, ResultPage[], unknown[], Cursor>({
-    queryKey: ['articles', filters, [...authors].sort()],
+    queryKey: ['articles', filters, [...authors].map((a) => a.name).sort()],
     initialPageParam: initialCursor(),
     queryFn: ({ pageParam, signal }) => fetchPage({ filters, authors, cursor: pageParam, signal }),
     getNextPageParam: (lastPage) => (lastPage.done ? undefined : lastPage.cursor),

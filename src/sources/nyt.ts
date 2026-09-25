@@ -95,6 +95,8 @@ export function toArticle(doc: NytDoc): Article {
     source: 'nyt',
     publisher: doc.source ?? 'The New York Times',
     author: normalizeByline(doc.byline?.original),
+    // NYT publishes a byline string and no author identifier, so there is nothing to ref.
+    authorRef: null,
     description: doc.abstract || doc.snippet || null,
     imageUrl: toImageUrl(doc.multimedia),
     sourceCategory: doc.section_name ?? doc.news_desk ?? null,

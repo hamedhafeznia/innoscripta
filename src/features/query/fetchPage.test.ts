@@ -4,12 +4,20 @@ import nytFixture from '../../test/fixtures/nyt.search.json';
 import newsapiFixture from '../../test/fixtures/newsapi.search.json';
 import { server } from '../../test/server';
 import { EMPTY_FILTERS, type Filters } from '../../core/filters';
+import type { FollowedAuthor } from '../preferences/store';
 import { fetchPage, initialCursor } from './fetchPage';
+
+/** A follow with no source identifier behind it, as an NYT or NewsAPI card produces. */
+const byName = (name: string): FollowedAuthor => ({ name, ref: null });
 import type { Cursor } from './types';
 
 const filters = (overrides: Partial<Filters> = {}): Filters => ({ ...EMPTY_FILTERS, ...overrides });
 
-const run = (overrides: Partial<Filters> = {}, cursor: Cursor = initialCursor(), authors: string[] = []) =>
+const run = (
+  overrides: Partial<Filters> = {},
+  cursor: Cursor = initialCursor(),
+  authors: FollowedAuthor[] = [],
+) =>
   fetchPage({ filters: filters(overrides), authors, cursor });
 
 /** Answers all three providers with their captured fixture. */
@@ -126,7 +134,7 @@ describe('fetchPage', () => {
 
       const page = await fetchPage({
         filters: filters({ sources: ['nyt'] }),
-        authors: ['Muktita Suhartono'],
+        authors: [byName('Muktita Suhartono')],
         cursor: initialCursor(),
       });
 
@@ -144,7 +152,7 @@ describe('fetchPage', () => {
 
       const page = await fetchPage({
         filters: filters({ sources: ['nyt'] }),
-        authors: ['Nobody At All'],
+        authors: [byName('Nobody At All')],
         cursor: initialCursor(),
       });
 
@@ -206,3 +214,59 @@ function emptyOfAuthor(body: { response: { docs: unknown[] } }) {
     },
   };
 }
+
+describe('fetchPage author following', () => {
+  const withRef = (name: string, ref: string) => ({ name, ref });
+
+  it('filters the Guardian server-side when every follow carries its contributor tag', async () => {
+    let requested: URL | undefined;
+    server.use(
+      http.get('*/api/guardian/search', ({ request }) => {
+        requested = new URL(request.url);
+        return HttpResponse.json(guardianFixture);
+      }),
+    );
+
+    await fetchPage({
+      filters: filters({ sources: ['guardian'] }),
+      authors: [withRef('Lucy Campbell', 'profile/lucy-campbell')],
+      cursor: initialCursor(),
+    });
+
+    expect(requested?.searchParams.get('tag')).toBe('profile/lucy-campbell');
+  });
+
+  it('falls back to client-side when one follow has no tag behind it', async () => {
+    // A partial tag list would return only the tagged authors and silently lose the
+    // rest. Follows are additive, so that is a wrong answer, not a narrower one.
+    let requested: URL | undefined;
+    server.use(
+      http.get('*/api/guardian/search', ({ request }) => {
+        requested = new URL(request.url);
+        return HttpResponse.json(guardianFixture);
+      }),
+    );
+
+    const page = await fetchPage({
+      filters: filters({ sources: ['guardian'] }),
+      authors: [withRef('Lucy Campbell', 'profile/lucy-campbell'), byName('Ada Lovelace')],
+      cursor: initialCursor(),
+    });
+
+    expect(requested?.searchParams.has('tag')).toBe(false);
+    expect(page.articles.every((article) => /lucy campbell|ada lovelace/i.test(article.author ?? ''))).toBe(true);
+  });
+
+  it('matches a followed author inside a multi-name byline', async () => {
+    server.use(http.get('*/api/nyt/articlesearch.json', () => HttpResponse.json(nytFixture)));
+
+    const page = await fetchPage({
+      filters: filters({ sources: ['nyt'] }),
+      authors: [byName('Ulet Ifansasti')],
+      cursor: initialCursor(),
+    });
+
+    expect(page.articles.length).toBeGreaterThan(0);
+    expect(page.articles[0]!.author).toContain('Ulet Ifansasti');
+  });
+});

@@ -77,6 +77,8 @@ export function toArticle(article: NewsApiArticle, nativeCategory?: string): Art
     source: 'newsapi',
     publisher: article.source?.name ?? null,
     author: normalizeByline(article.author),
+    // NewsAPI's author is display-only: a free-text string with no identifier behind it.
+    authorRef: null,
     description: article.description ?? null,
     imageUrl: article.urlToImage ?? null,
     sourceCategory: nativeCategory ?? null,

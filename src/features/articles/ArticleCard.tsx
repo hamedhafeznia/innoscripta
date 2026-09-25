@@ -1,5 +1,6 @@
 import type { Article } from '../../core/article';
 import { SOURCES } from '../../sources/registry';
+import { FollowAuthorButton } from '../preferences/FollowAuthorButton';
 
 const DATE_FORMAT = new Intl.DateTimeFormat(undefined, {
   day: 'numeric',
@@ -41,7 +42,10 @@ export function ArticleCard({ article }: { article: Article }) {
 
         {article.author ? <p className="card-author">{article.author}</p> : null}
 
-        <p className="card-provider">via {providerLabel(article)}</p>
+        <p className="card-provider">
+          <span>via {providerLabel(article)}</span>
+          <FollowAuthorButton article={article} />
+        </p>
       </div>
     </article>
   );

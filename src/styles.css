@@ -401,3 +401,41 @@ body {
     grid-template-columns: 1fr;
   }
 }
+
+/* --- feed ---------------------------------------------------------------- */
+.page-head {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.page-head .button-quiet {
+  text-decoration: none;
+}
+
+.card-provider {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.follow {
+  padding: 4px 10px;
+  font: inherit;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  cursor: pointer;
+}
+
+.follow-on {
+  color: var(--accent);
+  border-color: var(--accent);
+}

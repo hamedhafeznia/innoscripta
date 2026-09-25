@@ -104,6 +104,8 @@ export function toArticle(result: GuardianResult): Article {
     source: 'guardian',
     publisher: 'The Guardian',
     author,
+    // The first contributor is the primary author; following is per person, not per byline.
+    authorRef: contributors[0]?.id ?? null,
     description: stripHtml(result.fields?.trailText),
     imageUrl: result.fields?.thumbnail ?? null,
     sourceCategory: result.sectionName ?? null,
@@ -127,7 +129,9 @@ export const guardianSource: NewsSource = {
       .map((category) => SECTION_BY_CATEGORY[category as Exclude<Category, 'general'>])
       .join('|');
 
-    const authorTags = (params.authors ?? []).map((author) => `profile/${author}`).join('|');
+    // Already contributor tag ids (`profile/<slug>`), carried on Article.authorRef:
+    // the Guardian's own identifier, not a name we could have guessed the slug from.
+    const authorTags = (params.authors ?? []).join('|');
 
     const url = buildUrl('/api/guardian/search', {
       q: params.query,

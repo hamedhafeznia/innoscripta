@@ -39,6 +39,12 @@ export interface Article {
   publisher: string | null;
   /** Normalised by the adapter: no leading "By ", no trailing whitespace. */
   author: string | null;
+  /**
+   * The primary author as the *source* identifies them, when it identifies them at all
+   * — the Guardian's `profile/<slug>` contributor tag. It is what lets a followed author
+   * be filtered server-side; sources that only publish a byline string leave it null.
+   */
+  authorRef: string | null;
   description: string | null;
   imageUrl: string | null;
   /** The source's own category label, for display. */

@@ -47,7 +47,12 @@ describe('guardian adapter', () => {
       const request = captureRequest('/api/guardian/search', fixture);
 
       return guardianSource
-        .search({ page: 1, query: 'ai', categories: ['technology', 'sports'], authors: ['davidsmith'] })
+        .search({
+          page: 1,
+          query: 'ai',
+          categories: ['technology', 'sports'],
+          authors: ['profile/davidsmith'],
+        })
         .then(() => {
           const params = request.url.searchParams;
           expect(params.get('section')).toBe('technology|sport');

@@ -13,6 +13,7 @@ export function makeArticle(overrides: Partial<Article> & { publishedAt: string 
     title: 'Headline',
     publisher: null,
     author: null,
+    authorRef: null,
     description: null,
     imageUrl: null,
     sourceCategory: null,
