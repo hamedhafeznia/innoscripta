@@ -95,4 +95,72 @@ describe('guardian adapter', () => {
       await expect(guardianSource.search({ page: 13268 })).resolves.toMatchObject({ exhausted: true });
     });
   });
+
+  describe('when the response is not what it should be', () => {
+    it('drops an article with an unreadable date and keeps the rest', async () => {
+      captureRequest('/api/guardian/search', {
+        response: {
+          ...fixture.response,
+          results: [
+            { ...results[0]!, webPublicationDate: 'not a date' },
+            results[1]!,
+          ],
+        },
+      });
+
+      const page = await guardianSource.search({ page: 1 });
+
+      expect(page.articles.map((article) => article.id)).toEqual([`guardian:${results[1]!.id}`]);
+    });
+
+    it('drops an article with no headline or no link', async () => {
+      const { webTitle: _title, ...untitled } = results[0]!;
+      const { webUrl: _url, ...unlinked } = results[1]!;
+      captureRequest('/api/guardian/search', {
+        response: { ...fixture.response, results: [untitled, unlinked, results[2]!] },
+      });
+
+      const page = await guardianSource.search({ page: 1 });
+
+      expect(page.articles).toHaveLength(1);
+    });
+
+    it('keeps an article whose image is not an http(s) URL, without the image', async () => {
+      captureRequest('/api/guardian/search', {
+        response: {
+          ...fixture.response,
+          results: [{ ...results[0]!, fields: { thumbnail: 'javascript:alert(1)' } }],
+        },
+      });
+
+      const [article] = (await guardianSource.search({ page: 1 })).articles;
+
+      expect(article?.imageUrl).toBeNull();
+    });
+
+    it('does not read dropped articles as the end of the results', async () => {
+      // Ten came back, one was unusable: the page was full, so there is more to read.
+      captureRequest('/api/guardian/search', {
+        response: {
+          ...fixture.response,
+          currentPage: 1,
+          pages: 40,
+          results: results.map((result, index) =>
+            index === 0 ? { ...result, webPublicationDate: 'nope' } : result,
+          ),
+        },
+      });
+
+      const page = await guardianSource.search({ page: 1 });
+
+      expect(page.articles).toHaveLength(9);
+      expect(page.exhausted).toBe(false);
+    });
+
+    it('fails the source, rather than crashing later, when the envelope is missing', async () => {
+      captureRequest('/api/guardian/search', { unexpected: true });
+
+      await expect(guardianSource.search({ page: 1 })).rejects.toMatchObject({ kind: 'upstream' });
+    });
+  });
 });

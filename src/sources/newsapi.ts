@@ -1,7 +1,9 @@
+import { z } from 'zod';
 import type { Article, Category } from '../core/article';
 import { normalizeUrl } from '../core/article';
 import { buildUrl, fetchJson } from '../core/http';
 import { PAGE_SIZE, type NewsSource, type SearchParams, type SourcePage } from '../core/source';
+import { asHttpUrl, httpUrl, keepValid, optionalText, requiredText, timestamp } from '../core/validate';
 
 /** `/everything` caps the free plan at 100 results, i.e. 10 pages of 10. */
 const MAX_PAGES = 10;
@@ -33,21 +35,21 @@ const CATEGORY_BY_NEWSAPI: Record<string, Category> = {
   general: 'general',
 };
 
-interface NewsApiArticle {
-  source?: { id?: string | null; name?: string | null };
-  author?: string | null;
-  title: string;
-  description?: string | null;
-  url: string;
-  urlToImage?: string | null;
-  publishedAt: string;
-}
+/** What an article cannot do without; everything else degrades to absent. */
+const newsApiArticle = z.object({
+  url: httpUrl,
+  title: requiredText,
+  publishedAt: timestamp,
+  source: z.object({ name: optionalText }).nullish().catch(undefined),
+  author: optionalText,
+  description: optionalText,
+  urlToImage: optionalText,
+});
 
-interface NewsApiResponse {
-  status: string;
-  totalResults?: number;
-  articles?: NewsApiArticle[];
-}
+type NewsApiArticle = z.output<typeof newsApiArticle>;
+
+/** The envelope only: items are validated one by one so a bad one is dropped, not fatal. */
+const newsApiResponse = z.object({ articles: z.array(z.unknown()).optional() });
 
 /** Bylines arrive in every shape; strip the lead-in and collapse separators. */
 function normalizeByline(author: string | null | undefined): string | null {
@@ -80,7 +82,7 @@ export function toArticle(article: NewsApiArticle, nativeCategory?: string): Art
     // NewsAPI's author is display-only: a free-text string with no identifier behind it.
     authorRef: null,
     description: article.description ?? null,
-    imageUrl: article.urlToImage ?? null,
+    imageUrl: asHttpUrl(article.urlToImage),
     sourceCategory: nativeCategory ?? null,
     category: (nativeCategory && CATEGORY_BY_NEWSAPI[nativeCategory]) || 'general',
   };
@@ -171,11 +173,12 @@ export const newsapiSource: NewsSource = {
           page: params.page,
         });
 
-    const body = await fetchJson<NewsApiResponse>('newsapi', url, signal);
+    const body = await fetchJson('newsapi', url, newsApiResponse, signal);
     const articles = body.articles ?? [];
 
     return {
-      articles: articles.map((article) => toArticle(article, nativeCategory)),
+      articles: keepValid(newsApiArticle, articles).map((article) => toArticle(article, nativeCategory)),
+      // Judged on what came back, not on what survived validation.
       exhausted: params.page >= MAX_PAGES || articles.length < PAGE_SIZE,
     };
   },

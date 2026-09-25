@@ -178,3 +178,58 @@ describe('rate limit copy', () => {
     });
   });
 });
+
+describe('newsapi adapter when the response is not what it should be', () => {
+  const search = () => newsapiSource.search({ page: 1, query: 'ai' });
+
+  it('drops an article with an unreadable date and keeps the rest', async () => {
+    captureRequest('/api/newsapi/everything', {
+      status: 'ok',
+      articles: [{ ...articles[0]!, publishedAt: 'sometime' }, articles[1]!],
+    });
+
+    const page = await search();
+
+    expect(page.articles.map((article) => article.url)).toEqual([articles[1]!.url]);
+  });
+
+  it('drops an article with no title or no link', async () => {
+    captureRequest('/api/newsapi/everything', {
+      status: 'ok',
+      articles: [{ ...articles[0]!, title: '' }, { ...articles[1]!, url: 'not a url' }, articles[2]!],
+    });
+
+    expect((await search()).articles).toHaveLength(1);
+  });
+
+  it('keeps an article whose image is not an http(s) URL, without the image', async () => {
+    captureRequest('/api/newsapi/everything', {
+      status: 'ok',
+      articles: [{ ...articles[0]!, urlToImage: 'javascript:alert(1)' }],
+    });
+
+    const [article] = (await search()).articles;
+
+    expect(article?.imageUrl).toBeNull();
+  });
+
+  it('does not read dropped articles as the end of the results', async () => {
+    captureRequest('/api/newsapi/everything', {
+      status: 'ok',
+      articles: articles.map((article, index) =>
+        index === 0 ? { ...article, publishedAt: 'nope' } : article,
+      ),
+    });
+
+    const page = await search();
+
+    expect(page.articles).toHaveLength(articles.length - 1);
+    expect(page.exhausted).toBe(articles.length < 10);
+  });
+
+  it('fails the source when the body is not an object at all', async () => {
+    captureRequest('/api/newsapi/everything', ['unexpected']);
+
+    await expect(search()).rejects.toMatchObject({ kind: 'upstream' });
+  });
+});

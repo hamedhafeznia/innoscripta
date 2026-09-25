@@ -98,4 +98,57 @@ describe('nyt adapter', () => {
       await expect(nytSource.search({ page: 1 })).resolves.toEqual({ articles: [], exhausted: true });
     });
   });
+
+  describe('when the response is not what it should be', () => {
+    it('drops a doc with an unreadable date and keeps the rest', async () => {
+      captureRequest('/api/nyt/articlesearch.json', {
+        response: { docs: [{ ...docs[0]!, pub_date: 'someday' }, docs[1]!] },
+      });
+
+      const page = await nytSource.search({ page: 1 });
+
+      expect(page.articles.map((article) => article.id)).toEqual([`nyt:${docs[1]!._id}`]);
+    });
+
+    it('drops a doc with no headline or no link', async () => {
+      captureRequest('/api/nyt/articlesearch.json', {
+        response: {
+          docs: [{ ...docs[0]!, headline: {} }, { ...docs[1]!, web_url: undefined }, docs[2]!],
+        },
+      });
+
+      const page = await nytSource.search({ page: 1 });
+
+      expect(page.articles).toHaveLength(1);
+    });
+
+    it('keeps a doc whose image is not an http(s) URL, without the image', async () => {
+      captureRequest('/api/nyt/articlesearch.json', {
+        response: { docs: [{ ...docs[0]!, multimedia: { default: { url: 'javascript:alert(1)' } } }] },
+      });
+
+      const [article] = (await nytSource.search({ page: 1 })).articles;
+
+      expect(article?.imageUrl).toBeNull();
+    });
+
+    it('does not read dropped docs as the end of the results', async () => {
+      captureRequest('/api/nyt/articlesearch.json', {
+        response: {
+          docs: docs.map((doc, index) => (index === 0 ? { ...doc, pub_date: 'nope' } : doc)),
+        },
+      });
+
+      const page = await nytSource.search({ page: 1 });
+
+      expect(page.articles).toHaveLength(9);
+      expect(page.exhausted).toBe(false);
+    });
+
+    it('fails the source when the envelope is missing', async () => {
+      captureRequest('/api/nyt/articlesearch.json', { unexpected: true });
+
+      await expect(nytSource.search({ page: 1 })).rejects.toMatchObject({ kind: 'upstream' });
+    });
+  });
 });

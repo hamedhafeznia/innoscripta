@@ -1,7 +1,9 @@
+import { z } from 'zod';
 import type { Article, Category } from '../core/article';
 import { normalizeUrl } from '../core/article';
 import { buildUrl, fetchJson } from '../core/http';
 import { PAGE_SIZE, type NewsSource, type SearchParams, type SourcePage } from '../core/source';
+import { asHttpUrl, httpUrl, keepValid, optionalText, requiredText, timestamp } from '../core/validate';
 
 /**
  * Canonical category -> Guardian section id. Deliberately local to this adapter:
@@ -44,30 +46,34 @@ const CATEGORY_BY_SECTION: Record<string, Category> = {
   books: 'entertainment',
 };
 
-interface GuardianTag {
-  id: string;
-  type: string;
-  webTitle: string;
-}
+/** What an article cannot do without; everything else degrades to absent. */
+const guardianResult = z.object({
+  id: requiredText,
+  webUrl: httpUrl,
+  webTitle: requiredText,
+  webPublicationDate: timestamp,
+  sectionId: optionalText,
+  sectionName: optionalText,
+  fields: z
+    .object({ thumbnail: optionalText, trailText: optionalText, byline: optionalText })
+    .optional()
+    .catch(undefined),
+  tags: z
+    .array(z.object({ id: z.string(), type: z.string(), webTitle: z.string() }))
+    .optional()
+    .catch(undefined),
+});
 
-interface GuardianResult {
-  id: string;
-  sectionId?: string;
-  sectionName?: string;
-  webPublicationDate: string;
-  webTitle: string;
-  webUrl: string;
-  fields?: { thumbnail?: string; trailText?: string; byline?: string };
-  tags?: GuardianTag[];
-}
+type GuardianResult = z.output<typeof guardianResult>;
 
-interface GuardianResponse {
-  response: {
-    currentPage: number;
-    pages: number;
-    results: GuardianResult[];
-  };
-}
+/** The envelope only: items are validated one by one so a bad one is dropped, not fatal. */
+const guardianResponse = z.object({
+  response: z.object({
+    currentPage: z.number(),
+    pages: z.number(),
+    results: z.array(z.unknown()),
+  }),
+});
 
 /** "Lucy Campbell (now); Shannon Ho (earlier)" -> "Lucy Campbell, Shannon Ho". */
 function normalizeByline(byline: string | undefined): string | null {
@@ -107,7 +113,7 @@ export function toArticle(result: GuardianResult): Article {
     // The first contributor is the primary author; following is per person, not per byline.
     authorRef: contributors[0]?.id ?? null,
     description: stripHtml(result.fields?.trailText),
-    imageUrl: result.fields?.thumbnail ?? null,
+    imageUrl: asHttpUrl(result.fields?.thumbnail),
     sourceCategory: result.sectionName ?? null,
     category: (result.sectionId && CATEGORY_BY_SECTION[result.sectionId]) || 'general',
   };
@@ -146,10 +152,12 @@ export const guardianSource: NewsSource = {
       tag: authorTags || undefined,
     });
 
-    const { response } = await fetchJson<GuardianResponse>('guardian', url, signal);
+    const { response } = await fetchJson('guardian', url, guardianResponse, signal);
 
     return {
-      articles: response.results.map(toArticle),
+      articles: keepValid(guardianResult, response.results).map(toArticle),
+      // Judged on what came back, not on what survived validation: a full page with one
+      // unusable article in it is still a full page.
       exhausted: response.currentPage >= response.pages || response.results.length < PAGE_SIZE,
     };
   },

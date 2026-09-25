@@ -1,3 +1,4 @@
+import type { z } from 'zod';
 import type { SourceId } from './article';
 
 export type SourceErrorKind =
@@ -36,17 +37,24 @@ export function buildUrl(path: string, params: Record<string, string | number | 
 /**
  * Fetches JSON from the same-origin `/api/*` proxy. No key handling here by design:
  * the key is added by nginx (or Vite's dev proxy) and never exists in the browser.
+ *
+ * The body is checked against `schema` rather than cast: an answer of the wrong shape is
+ * the source failing, and should say so, not surface as a TypeError three calls later.
+ * Schemas describe the envelope only; each item is validated on its own (`keepValid`),
+ * so one bad article does not fail the page.
  */
-export async function fetchJson<T>(
+export async function fetchJson<S extends z.ZodType>(
   sourceId: SourceId,
   url: string,
+  schema: S,
   signal?: AbortSignal,
-): Promise<T> {
+): Promise<z.output<S>> {
   let response: Response;
   try {
     response = await fetch(url, { signal, headers: { Accept: 'application/json' } });
   } catch (cause) {
-    if (cause instanceof DOMException && cause.name === 'AbortError') throw cause;
+    // By name, not `instanceof DOMException`: the class differs between realms, the name does not.
+    if (cause instanceof Error && cause.name === 'AbortError') throw cause;
     throw new SourceError(sourceId, 'network', 'could not be reached.');
   }
 
@@ -58,11 +66,19 @@ export async function fetchJson<T>(
     );
   }
 
+  const unreadable = () =>
+    new SourceError(sourceId, 'upstream', 'sent something we could not read.');
+
+  let body: unknown;
   try {
-    return (await response.json()) as T;
+    body = await response.json();
   } catch {
-    throw new SourceError(sourceId, 'upstream', 'sent something we could not read.');
+    throw unreadable();
   }
+
+  const parsed = schema.safeParse(body);
+  if (!parsed.success) throw unreadable();
+  return parsed.data;
 }
 
 function kindFromStatus(status: number): SourceErrorKind {

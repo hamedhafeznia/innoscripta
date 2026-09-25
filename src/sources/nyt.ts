@@ -1,7 +1,9 @@
+import { z } from 'zod';
 import type { Article, Category } from '../core/article';
 import { normalizeUrl } from '../core/article';
 import { buildUrl, fetchJson } from '../core/http';
 import { PAGE_SIZE, type NewsSource, type SearchParams, type SourcePage } from '../core/source';
+import { asHttpUrl, httpUrl, keepValid, optionalText, requiredText, timestamp } from '../core/validate';
 
 /** Article Search returns a fixed 10 docs and caps out at 100 pages (1000 results). */
 const MAX_PAGES = 100;
@@ -34,29 +36,32 @@ const CATEGORY_BY_NYT_DESK: Record<string, Category> = {
   styles: 'entertainment',
 };
 
-interface NytDoc {
-  _id: string;
-  web_url: string;
-  headline?: { main?: string };
-  abstract?: string;
-  snippet?: string;
-  pub_date: string;
-  section_name?: string;
-  news_desk?: string;
-  byline?: { original?: string | null };
-  source?: string;
-  multimedia?: {
-    default?: { url?: string };
-    thumbnail?: { url?: string };
-  } | null;
-}
+/** What an article cannot do without; everything else degrades to absent. */
+const nytImage = z.object({ url: optionalText }).optional().catch(undefined);
 
-interface NytResponse {
-  response: {
-    docs: NytDoc[] | null;
-    metadata?: { hits?: number; offset?: number };
-  };
-}
+const nytDoc = z.object({
+  _id: requiredText,
+  web_url: httpUrl,
+  headline: z.object({ main: requiredText }),
+  pub_date: timestamp,
+  abstract: optionalText,
+  snippet: optionalText,
+  section_name: optionalText,
+  news_desk: optionalText,
+  byline: z.object({ original: optionalText }).nullish().catch(undefined),
+  source: optionalText,
+  multimedia: z
+    .object({ default: nytImage, thumbnail: nytImage })
+    .nullish()
+    .catch(undefined),
+});
+
+type NytDoc = z.output<typeof nytDoc>;
+
+/** The envelope only: items are validated one by one so a bad one is dropped, not fatal. */
+const nytResponse = z.object({
+  response: z.object({ docs: z.array(z.unknown()).nullish() }),
+});
 
 /** "By Muktita Suhartono and Ulet Ifansasti" -> "Muktita Suhartono, Ulet Ifansasti". */
 function normalizeByline(byline: string | null | undefined): string | null {
@@ -79,7 +84,9 @@ function normalizeByline(byline: string | null | undefined): string | null {
 function toImageUrl(multimedia: NytDoc['multimedia']): string | null {
   const url = multimedia?.default?.url ?? multimedia?.thumbnail?.url;
   if (!url) return null;
-  return url.startsWith('http') ? url : `https://static01.nyt.com/${url.replace(/^\/+/, '')}`;
+  // Anything with a scheme is absolute and must be http(s); only a bare path is prefixed.
+  const isAbsolute = /^[a-z][a-z0-9+.-]*:/i.test(url);
+  return asHttpUrl(isAbsolute ? url : `https://static01.nyt.com/${url.replace(/^\/+/, '')}`);
 }
 
 export function toArticle(doc: NytDoc): Article {
@@ -88,7 +95,7 @@ export function toArticle(doc: NytDoc): Article {
 
   return {
     id: `nyt:${doc._id}`,
-    title: doc.headline?.main ?? '',
+    title: doc.headline.main,
     url: doc.web_url,
     normalizedUrl: normalizeUrl(doc.web_url),
     publishedAt: doc.pub_date,
@@ -126,11 +133,12 @@ export const nytSource: NewsSource = {
       end_date: params.to?.replaceAll('-', ''),
     });
 
-    const { response } = await fetchJson<NytResponse>('nyt', url, signal);
+    const { response } = await fetchJson('nyt', url, nytResponse, signal);
     const docs = response.docs ?? [];
 
     return {
-      articles: docs.map(toArticle),
+      articles: keepValid(nytDoc, docs).map(toArticle),
+      // Judged on what came back, not on what survived validation.
       exhausted: params.page >= MAX_PAGES || docs.length < PAGE_SIZE,
     };
   },
