@@ -1,7 +1,8 @@
+import { useId } from 'react';
 import { CalendarIcon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Calendar } from '@/components/ui/calendar';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { LazyCalendar } from './LazyCalendar';
 
 /** `YYYY-MM-DD` in local terms, which is what every adapter expects to be handed. */
 function toIsoDay(date: Date): string {
@@ -36,6 +37,7 @@ interface DateRangeFieldProps {
  * two ends of the range as clearly; here the other end is simply not selectable.
  */
 export function DateRangeField({ label, value, onChange, min, max }: DateRangeFieldProps) {
+  const labelId = useId();
   const selected = fromIsoDay(value);
 
   // react-day-picker rejects an open-ended {before, after}, so each bound is its own
@@ -47,7 +49,7 @@ export function DateRangeField({ label, value, onChange, min, max }: DateRangeFi
 
   return (
     <div className="flex flex-col gap-1">
-      <span className="text-xs text-muted-foreground" id={`date-${label}`}>
+      <span className="text-xs text-muted-foreground" id={labelId}>
         {label}
       </span>
       <Popover>
@@ -55,15 +57,18 @@ export function DateRangeField({ label, value, onChange, min, max }: DateRangeFi
           <Button
             type="button"
             variant="outline"
-            className="w-[11rem] justify-start font-normal"
-            aria-labelledby={`date-${label}`}
+            className="w-full justify-start font-normal sm:w-[11rem]"
+            // An aria-label rather than aria-labelledby: pointing at the visible "From"
+            // would *replace* the button's text, so a screen reader would announce the
+            // field's name and lose the date currently chosen.
+            aria-label={`${label}: ${selected ? LABEL_FORMAT.format(selected) : 'any date'}`}
           >
             <CalendarIcon />
             {selected ? LABEL_FORMAT.format(selected) : <span className="text-muted-foreground">Any</span>}
           </Button>
         </PopoverTrigger>
         <PopoverContent className="w-auto p-0" align="start">
-          <Calendar
+          <LazyCalendar
             mode="single"
             autoFocus
             selected={selected}

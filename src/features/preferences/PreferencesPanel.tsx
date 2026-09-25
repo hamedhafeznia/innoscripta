@@ -55,8 +55,12 @@ export function PreferencesPanel() {
           </p>
         ) : (
           authors.map((author) => (
-            <Badge key={author.name} variant="outline" className="gap-1 bg-background py-1 pr-1">
-              {author.name}
+            <Badge
+              key={author.name}
+              variant="outline"
+              className="max-w-full gap-1 bg-background py-1 pr-1"
+            >
+              <span className="truncate">{author.name}</span>
               <Button
                 type="button"
                 variant="ghost"

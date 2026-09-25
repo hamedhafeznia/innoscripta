@@ -61,7 +61,7 @@ describe('SearchPage', () => {
     renderWithProviders(<SearchPage />, { route: '/search?q=climate' });
     await anArticle();
 
-    await user.click(screen.getByRole('button', { name: 'From' }));
+    await user.click(screen.getByRole('button', { name: 'From: any date' }));
     const grid = await screen.findByRole('grid');
     // react-day-picker labels each day cell with its ISO date; the 12th of the month
     // shown, not a neighbouring month's greyed-out 12th.

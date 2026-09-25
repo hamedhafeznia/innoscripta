@@ -1,10 +1,14 @@
 import { QueryClientProvider } from '@tanstack/react-query';
 import { BrowserRouter, Navigate, NavLink, Route, Routes } from 'react-router-dom';
 import { queryClient } from './queryClient';
+import { ThemeToggle } from '../features/preferences/ThemeToggle';
+import { useApplyTheme } from '../features/preferences/theme';
 import { SearchPage } from '../features/search/SearchPage';
 import { FeedPage } from '../features/feed/FeedPage';
 
 export function App() {
+  useApplyTheme();
+
   return (
     <QueryClientProvider client={queryClient}>
       <BrowserRouter>
@@ -16,7 +20,7 @@ export function App() {
         </a>
         <header className="flex flex-wrap items-baseline justify-between gap-4 border-b p-4">
           <span className="font-semibold">innoscripta news</span>
-          <nav aria-label="Primary" className="flex gap-3">
+          <nav aria-label="Primary" className="flex items-center gap-3">
             <NavLink
               to="/search"
               className={({ isActive }) =>
@@ -33,6 +37,7 @@ export function App() {
             >
               My feed
             </NavLink>
+            <ThemeToggle />
           </nav>
         </header>
         <main id="main" className="mx-auto max-w-6xl p-4">

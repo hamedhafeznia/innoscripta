@@ -46,7 +46,8 @@ export function ArticleCard({ article }: { article: Article }) {
             <time dateTime={article.publishedAt}>{DATE_FORMAT.format(published)}</time>
           </p>
 
-          <h3 className="text-base leading-snug font-semibold">
+          {/* Headlines carry long unbroken strings — URLs, hashtags, German compounds. */}
+          <h3 className="text-base leading-snug font-semibold break-words">
             {/* Links out: none of these APIs reliably return full body text. */}
             <a
               className="hover:underline"
@@ -59,7 +60,7 @@ export function ArticleCard({ article }: { article: Article }) {
           </h3>
 
           {article.description ? (
-            <p className="text-sm text-muted-foreground">{article.description}</p>
+            <p className="text-sm break-words text-muted-foreground">{article.description}</p>
           ) : null}
 
           {article.author ? (

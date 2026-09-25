@@ -100,4 +100,28 @@
     font-family: ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
     line-height: 1.5;
   }
+
+  /*
+   * shadcn's primitives carry their own focus rings, but plain elements — the nav links,
+   * the skip link, an article title — would fall back to whatever the browser draws over
+   * our own background. Everything reachable by keyboard gets the same visible ring.
+   */
+  :focus-visible {
+    @apply outline-ring outline-2 outline-offset-2;
+  }
+
+  /*
+   * The skeletons pulse and the sheet slides. Neither is information, so neither runs for
+   * a reader who has asked the system for less motion.
+   */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
 }

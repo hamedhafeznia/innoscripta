@@ -4,8 +4,7 @@ A React + TypeScript SPA that aggregates **The Guardian**, **NYT Article Search*
 and **NewsAPI.org** into one searchable, filterable, personalisable feed.
 Frontend only, containerised.
 
-> Status: phase 5.5 of 7 (Tailwind + shadcn/ui). Both routes are live; polish and
-> review remain.
+> Status: phase 6 of 7 (polish). Feature-complete; the review pass remains.
 
 ## Run it
 
@@ -162,6 +161,17 @@ exactly one place. Dark values are already declared, which is why dark mode is a
 rather than a rewrite.
 
 Tests assert roles, labels and text, never class names, so restyling cannot break them.
+
+**Dark mode** is a three-way control — system, light, dark — because "follow the system"
+is a real choice and not the same as whichever of the two the system happens to be right
+now. It sets `color-scheme` alongside the class so the browser's own scrollbars and form
+controls follow; a dark page with a light scrollbar is the usual tell of a half-done one.
+
+**Accessibility** is keyboard and labels, as scoped: a skip link, landmarks, one visible
+focus ring on everything focusable (shadcn's primitives style their own, plain links and
+headings would otherwise inherit the browser's over our background), `fieldset`/`legend`
+for every filter group, `aria-pressed` on Follow, live regions for result counts and
+loading, and `prefers-reduced-motion` honoured so the skeleton pulse and sheet slide stop.
 
 ## Tech
 

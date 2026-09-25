@@ -31,7 +31,9 @@ export function FilterBar({ filters, keyword, onKeywordChange, onChange }: Filte
       onSubmit={(event) => event.preventDefault()}
     >
       <div className="flex flex-wrap gap-3">
-        <label className="flex min-w-[16rem] flex-1 flex-col gap-1">
+        {/* `min-w-0` with a basis rather than a min width: at 320px a 16rem minimum is
+            exactly the space available, so any padding change would overflow the page. */}
+        <label className="flex min-w-0 flex-1 basis-64 flex-col gap-1">
           <span className="text-xs text-muted-foreground">Search</span>
           <Input
             type="search"
