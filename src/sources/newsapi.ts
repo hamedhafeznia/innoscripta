@@ -1,6 +1,6 @@
 import { z } from 'zod';
 import type { Article, Category } from '../core/article';
-import { normalizeUrl } from '../core/article';
+import { isCategory, normalizeUrl } from '../core/article';
 import { buildUrl, fetchJson } from '../core/http';
 import { PAGE_SIZE, type NewsSource, type SearchParams, type SourcePage } from '../core/source';
 import { asHttpUrl, httpUrl, keepValid, optionalText, requiredText, timestamp } from '../core/validate';
@@ -9,31 +9,23 @@ import { asHttpUrl, httpUrl, keepValid, optionalText, requiredText, timestamp } 
 const MAX_PAGES = 10;
 
 /**
- * Canonical category -> NewsAPI category. Local to this adapter on purpose.
+ * The categories NewsAPI can express, which are also the ones it labels articles with:
+ * its taxonomy and ours agree, so one set serves both directions. Local to this adapter
+ * on purpose.
+ *
  * NewsAPI has no politics category; its closest equivalent is `general`, which is too
- * broad to pass off as a politics filter, so politics is simply unmapped here and the
+ * broad to pass off as a politics filter, so politics is simply absent here and the
  * source excludes itself from a politics-only search.
  */
-const NEWSAPI_CATEGORY: Partial<Record<Category, string>> = {
-  business: 'business',
-  technology: 'technology',
-  sports: 'sports',
-  science: 'science',
-  health: 'health',
-  entertainment: 'entertainment',
-  general: 'general',
-};
-
-/** NewsAPI category -> canonical. A straight inverse here; the taxonomies agree. */
-const CATEGORY_BY_NEWSAPI: Record<string, Category> = {
-  business: 'business',
-  technology: 'technology',
-  sports: 'sports',
-  science: 'science',
-  health: 'health',
-  entertainment: 'entertainment',
-  general: 'general',
-};
+const NEWSAPI_CATEGORIES: ReadonlySet<string> = new Set([
+  'business',
+  'technology',
+  'sports',
+  'science',
+  'health',
+  'entertainment',
+  'general',
+]);
 
 /** What an article cannot do without; everything else degrades to absent. */
 const newsApiArticle = z.object({
@@ -84,7 +76,7 @@ export function toArticle(article: NewsApiArticle, nativeCategory?: string): Art
     description: article.description ?? null,
     imageUrl: asHttpUrl(article.urlToImage),
     sourceCategory: nativeCategory ?? null,
-    category: (nativeCategory && CATEGORY_BY_NEWSAPI[nativeCategory]) || 'general',
+    category: nativeCategory && isCategory(nativeCategory) ? nativeCategory : 'general',
   };
 }
 
@@ -103,7 +95,7 @@ function requestedCategories(params: SearchParams): Category[] {
  */
 function endpointCategory(params: SearchParams): string | undefined {
   const categories = requestedCategories(params);
-  if (categories.length) return NEWSAPI_CATEGORY[categories[0]!];
+  if (categories.length) return NEWSAPI_CATEGORIES.has(categories[0]!) ? categories[0] : undefined;
   if (!params.query && !params.from && !params.to) return 'general';
   return undefined;
 }
@@ -140,7 +132,7 @@ export const newsapiSource: NewsSource = {
       return 'can only filter one category at a time, so it was left out.';
     }
 
-    if (!NEWSAPI_CATEGORY[categories[0]!]) {
+    if (!NEWSAPI_CATEGORIES.has(categories[0]!)) {
       return `has no ${categories[0]} category, so it was left out.`;
     }
 
