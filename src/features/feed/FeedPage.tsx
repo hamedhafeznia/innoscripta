@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { toSearchParams, type Filters } from '../../core/filters';
 import { Button } from '@/components/ui/button';
 import { ArticleList, ArticleListSkeleton } from '../articles/ArticleList';
+import { LoadMore } from '../articles/LoadMore';
 import { RangeProgress } from '../articles/RangeProgress';
 import { ResultsPlaceholder } from '../articles/ResultsPlaceholder';
 import { SourceNotices } from '../articles/SourceNotices';
@@ -91,18 +92,14 @@ export function FeedPage() {
         </>
       )}
 
-      {hasPreferences && hasNextPage && !unreachable ? (
-        <Button
-          type="button"
-          variant="outline"
-          // Quiet: on a page of photographs and serif headlines a filled accent button is
-          // the loudest thing on screen, and it is not the most important one.
-          className="mx-auto h-11 min-w-56 font-medium"
-          onClick={() => void fetchNextPage()}
-          disabled={isFetchingNextPage}
-        >
-          {isFetchingNextPage ? 'Loading…' : 'Load more'}
-        </Button>
+      {hasPreferences ? (
+        <LoadMore
+          hasNextPage={hasNextPage}
+          unreachable={unreachable}
+          hasArticles={articles.length > 0}
+          isFetchingNextPage={isFetchingNextPage}
+          onLoadMore={() => void fetchNextPage()}
+        />
       ) : null}
     </section>
   );

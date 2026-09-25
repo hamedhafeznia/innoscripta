@@ -1,8 +1,8 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { parseFilters, toSearchParams, type Filters } from '../../core/filters';
-import { Button } from '@/components/ui/button';
 import { ArticleList, ArticleListSkeleton } from '../articles/ArticleList';
+import { LoadMore } from '../articles/LoadMore';
 import { RangeProgress } from '../articles/RangeProgress';
 import { ResultsPlaceholder } from '../articles/ResultsPlaceholder';
 import { SourceNotices } from '../articles/SourceNotices';
@@ -86,23 +86,13 @@ export function SearchPage() {
         </>
       )}
 
-      {/* Explicit Load More rather than infinite scroll: paging costs real requests — and
-          never offered when nothing answered, since the next page would fail identically. */}
-      {hasNextPage && !unreachable ? (
-        <Button
-          type="button"
-          variant="outline"
-          // Quiet: on a page of photographs and serif headlines a filled accent button is
-          // the loudest thing on screen, and it is not the most important one.
-          className="mx-auto h-11 min-w-56 font-medium"
-          onClick={() => void fetchNextPage()}
-          disabled={isFetchingNextPage}
-        >
-          {isFetchingNextPage ? 'Loading…' : 'Load more'}
-        </Button>
-      ) : articles.length > 0 ? (
-        <p className="m-0 w-full border-t pt-6 text-center font-serif text-[0.95rem] text-muted-foreground italic">That is everything these sources have for this search.</p>
-      ) : null}
+      <LoadMore
+        hasNextPage={hasNextPage}
+        unreachable={unreachable}
+        hasArticles={articles.length > 0}
+        isFetchingNextPage={isFetchingNextPage}
+        onLoadMore={() => void fetchNextPage()}
+      />
     </section>
   );
 }

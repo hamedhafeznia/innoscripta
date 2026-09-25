@@ -128,6 +128,32 @@ describe('SearchPage', () => {
     expect(screen.getByRole('button', { name: 'Try again' })).toBeInTheDocument();
   });
 
+  it('offers a retry, not "that is everything", when every source fails on Load more', async () => {
+    let failing = false;
+    const answer = (body: unknown) => () => (failing ? HttpResponse.error() : HttpResponse.json(body as object));
+    server.use(
+      http.get('*/api/guardian/search', answer(guardianFixture)),
+      http.get('*/api/nyt/articlesearch.json', answer(nytFixture)),
+      http.get('*/api/newsapi/everything', answer(newsapiFixture)),
+    );
+    const user = userEvent.setup();
+
+    renderWithProviders(<SearchPage />, { route: '/search?q=climate' });
+    const first = await anArticle();
+
+    failing = true;
+    await user.click(screen.getByRole('button', { name: 'Load more' }));
+
+    // Nothing was searched, so the reader must not be told there is nothing left.
+    expect(await screen.findByText(/No source could be reached to load more/)).toBeInTheDocument();
+    expect(screen.queryByText(/That is everything/)).not.toBeInTheDocument();
+
+    failing = false;
+    await user.click(screen.getByRole('button', { name: 'Try again' }));
+
+    await waitFor(async () => expect((await anArticle()).length).toBeGreaterThan(first.length));
+  });
+
   it('collapses one identical failure per source into a single notice', async () => {
     server.use(
       http.get('*/api/guardian/search', () => HttpResponse.json({}, { status: 401 })),
