@@ -34,6 +34,14 @@ describe('parseFilters', () => {
       });
     });
 
+    it('puts a reversed date range the right way round', () => {
+      // A range read from the wrong end would show one day and call it the whole range.
+      expect(parseFilters('from=2026-09-10&to=2026-09-01')).toMatchObject({
+        from: '2026-09-01',
+        to: '2026-09-10',
+      });
+    });
+
     it('ignores parameters it does not know', () => {
       expect(parseFilters('q=climate&sortBy=relevance&admin=true')).toMatchObject({
         query: 'climate',

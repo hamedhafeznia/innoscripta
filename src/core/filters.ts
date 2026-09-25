@@ -74,7 +74,12 @@ export function parseFilters(search: URLSearchParams | string): Filters {
   const parsed = searchParamsSchema.safeParse(raw);
   if (!parsed.success) return EMPTY_FILTERS;
 
-  const { q, from, to, cat, src } = parsed.data;
+  const { q, cat, src } = parsed.data;
+  let { from, to } = parsed.data;
+  // A range typed or bookmarked back to front means the same two days. Left alone, the
+  // day walk would read only `to` and report the whole range as finished.
+  if (from && to && from > to) [from, to] = [to, from];
+
   return { query: q, from, to, categories: cat, sources: src };
 }
 
