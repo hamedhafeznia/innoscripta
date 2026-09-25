@@ -1,11 +1,14 @@
 import { useState } from 'react';
+import { AlertTriangle, Info, X, ZapOff } from 'lucide-react';
+import { Alert, AlertDescription } from '@/components/ui/alert';
+import { Button } from '@/components/ui/button';
 import type { SourceNotice } from '../query/types';
 
-const KIND_LABEL: Record<SourceNotice['kind'], string> = {
-  excluded: 'Left out',
-  caveat: 'Note',
-  error: 'Unavailable',
-};
+const KIND = {
+  excluded: { label: 'Left out', icon: ZapOff, accent: 'border-l-warning' },
+  caveat: { label: 'Note', icon: Info, accent: 'border-l-muted-foreground' },
+  error: { label: 'Unavailable', icon: AlertTriangle, accent: 'border-l-destructive' },
+} as const;
 
 /**
  * One slot for all three kinds of per-source trouble: an unserviceable filter
@@ -19,23 +22,42 @@ export function SourceNotices({ notices }: { notices: SourceNotice[] }) {
   if (!visible.length) return null;
 
   return (
-    <ul className="notices" aria-label="Source notices">
-      {visible.map((notice) => (
-        <li key={notice.id} className={`notice notice-${notice.kind}`}>
-          <span className="notice-kind">{KIND_LABEL[notice.kind]}</span>
-          <span className="notice-body">
-            <strong>{notice.sourceLabel}</strong> {notice.message}
-          </span>
-          <button
-            type="button"
-            className="notice-dismiss"
-            onClick={() => setDismissed((current) => [...current, notice.id])}
-            aria-label={`Dismiss notice about ${notice.sourceLabel}`}
-          >
-            &times;
-          </button>
-        </li>
-      ))}
+    <ul aria-label="Source notices" className="flex w-full list-none flex-col gap-2 p-0">
+      {visible.map((notice) => {
+        const { label, icon: Icon, accent } = KIND[notice.kind];
+
+        return (
+          <li key={notice.id}>
+            <Alert
+              // Alert hard-codes role="alert", which is assertive. A failure earns that;
+              // a dismissible caveat does not, so it is announced politely instead.
+              role={notice.kind === 'error' ? 'alert' : 'status'}
+              variant={notice.kind === 'error' ? 'destructive' : 'default'}
+              className={`border-l-[3px] bg-surface ${accent}`}
+            >
+              <Icon />
+              <AlertDescription className="flex flex-wrap items-baseline gap-x-2 gap-y-1 pr-6 text-foreground">
+                <span className="text-xs tracking-wide text-muted-foreground uppercase">
+                  {label}
+                </span>
+                <span>
+                  <strong className="font-semibold">{notice.sourceLabel}</strong> {notice.message}
+                </span>
+              </AlertDescription>
+              <Button
+                type="button"
+                variant="ghost"
+                size="icon-xs"
+                className="absolute top-2 right-2 text-muted-foreground"
+                onClick={() => setDismissed((current) => [...current, notice.id])}
+                aria-label={`Dismiss notice about ${notice.sourceLabel}`}
+              >
+                <X />
+              </Button>
+            </Alert>
+          </li>
+        );
+      })}
     </ul>
   );
 }
