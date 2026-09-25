@@ -1,6 +1,15 @@
 @import 'tailwindcss';
 @import 'tw-animate-css';
 
+/*
+ * Self-hosted, bundled with the app: no CDN request, no layout shift from a late
+ * stylesheet, and it still works in the container with no network. Newsreader carries an
+ * optical-size axis, so a 28px headline and a 13px byline are drawn as different shapes
+ * rather than one shape scaled — which is most of why editorial type reads as considered.
+ */
+@import '@fontsource-variable/newsreader';
+@import '@fontsource-variable/inter';
+
 @custom-variant dark (&:is(.dark *));
 
 /*
@@ -23,6 +32,10 @@
   --danger: #c0392b;
   --warning: #b7791f;
   --radius: 0.625rem;
+
+  /* Serif carries the words; sans carries the controls. The split is the whole voice. */
+  --font-serif: 'Newsreader Variable', ui-serif, Georgia, 'Times New Roman', serif;
+  --font-sans: 'Inter Variable', ui-sans-serif, system-ui, -apple-system, sans-serif;
 
   /* shadcn's names, mapped onto the tokens above. */
   --background: var(--bg);
@@ -57,6 +70,8 @@
   --border: #2b2f38;
   --brand: #7ba4f5;
   --brand-contrast: #0f1115;
+  /* Lifted off --bg: at #191c22 the panel and the page read as one flat field. */
+  --surface: #1c2027;
   --danger: #f2796b;
   --warning: #e0b75f;
 }
@@ -84,6 +99,9 @@
   --color-surface: var(--surface);
   --color-warning: var(--warning);
 
+  --font-serif: var(--font-serif);
+  --font-sans: var(--font-sans);
+
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
@@ -96,9 +114,26 @@
   }
 
   body {
-    @apply bg-background text-foreground;
-    font-family: ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+    @apply bg-background text-foreground font-sans;
     line-height: 1.5;
+    /* Let the browser pick the optical size for the rendered size, not the file. */
+    font-optical-sizing: auto;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  /*
+   * Browser surfaces we did not draw but still ship: a selection and a caret left at the
+   * default belong to no design system.
+   */
+  ::selection {
+    background: color-mix(in oklab, var(--brand) 22%, transparent);
+    color: var(--foreground);
+  }
+
+  :root {
+    accent-color: var(--brand);
+    caret-color: var(--brand);
   }
 
   /*

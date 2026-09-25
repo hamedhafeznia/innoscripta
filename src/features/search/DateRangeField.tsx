@@ -49,7 +49,10 @@ export function DateRangeField({ label, value, onChange, min, max }: DateRangeFi
 
   return (
     <div className="flex flex-col gap-1">
-      <span className="text-xs text-muted-foreground" id={labelId}>
+      <span
+        className="text-[0.7rem] font-medium tracking-[0.08em] text-muted-foreground uppercase"
+        id={labelId}
+      >
         {label}
       </span>
       <Popover>
@@ -57,7 +60,7 @@ export function DateRangeField({ label, value, onChange, min, max }: DateRangeFi
           <Button
             type="button"
             variant="outline"
-            className="w-full justify-start font-normal sm:w-[11rem]"
+            className="w-full justify-start font-normal tabular-nums sm:w-[11rem]"
             // An aria-label rather than aria-labelledby: pointing at the visible "From"
             // would *replace* the button's text, so a screen reader would announce the
             // field's name and lose the date currently chosen.

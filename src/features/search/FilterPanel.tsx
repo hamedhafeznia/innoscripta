@@ -30,21 +30,25 @@ export function FilterPanel({ activeCount, ...filterBarProps }: FilterPanelProps
       <div className="w-full md:hidden">
         <Sheet>
           <SheetTrigger asChild>
-            <Button type="button" variant="outline" className="w-full">
+            <Button type="button" variant="outline" className="h-11 w-full justify-start">
               <SlidersHorizontal />
               Filters
-              {activeCount > 0 ? ` (${activeCount})` : ''}
+              {activeCount > 0 ? (
+                <span className="ml-auto tabular-nums text-muted-foreground">{activeCount}</span>
+              ) : null}
             </Button>
           </SheetTrigger>
-          <SheetContent side="bottom" className="max-h-[85svh] overflow-y-auto">
-            <SheetHeader>
-              <SheetTitle>Filters</SheetTitle>
-              <SheetDescription>
+          <SheetContent side="bottom" className="max-h-[85svh] overflow-y-auto rounded-t-xl">
+            <SheetHeader className="pb-2">
+              <SheetTitle className="font-serif text-lg font-medium">Filters</SheetTitle>
+              {/* Vertical space is the scarcest thing in a bottom sheet; the controls say
+                  the rest. Kept for the accessible description, not shown twice. */}
+              <SheetDescription className="sr-only">
                 Keyword, dates, categories and providers. Changes apply as you make them.
               </SheetDescription>
             </SheetHeader>
-            <div className="p-4 pt-0">
-              <FilterBar {...filterBarProps} />
+            <div className="px-4 pb-6">
+              <FilterBar {...filterBarProps} bare />
             </div>
           </SheetContent>
         </Sheet>

@@ -29,5 +29,7 @@ export function useArticles(filters: Filters, authors: FollowedAuthor[]) {
     notices: [...new Map(pages.flatMap((page) => page.notices).map((n) => [n.id, n])).values()],
     /** Client-side filtering ran out of road before it found anything more. */
     outOfMatches: lastPage?.outOfMatches ?? false,
+    /** Nothing answered, so there is nothing to page through and nothing to report empty. */
+    unreachable: lastPage?.unreachable ?? false,
   };
 }

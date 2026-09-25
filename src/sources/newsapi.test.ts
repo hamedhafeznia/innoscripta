@@ -67,7 +67,7 @@ describe('newsapi adapter', () => {
 
     it('warns that a category search returns recent headlines only', () => {
       expect(newsapiSource.notice({ page: 1, categories: ['technology'] })).toBe(
-        'NewsAPI: recent headlines only',
+        'is showing recent headlines only.',
       );
       expect(newsapiSource.notice({ page: 1, query: 'ai' })).toBeNull();
     });

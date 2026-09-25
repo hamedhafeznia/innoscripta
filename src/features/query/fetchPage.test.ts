@@ -72,7 +72,7 @@ describe('fetchPage', () => {
       const page = await run({ query: 'climate' });
 
       expect(page.notices).toContainEqual(
-        expect.objectContaining({ sourceId: 'newsapi', message: 'Daily request limit reached.' }),
+        expect.objectContaining({ sourceId: 'newsapi', message: 'has answered all it can today.' }),
       );
     });
 
@@ -84,6 +84,44 @@ describe('fetchPage', () => {
 
       expect(page.cursor.perSource.nyt.nextPage).toBe(1);
       expect(page.cursor.perSource.guardian.nextPage).toBe(2);
+    });
+  });
+
+  describe('when nothing is reachable', () => {
+    it('reports unreachable rather than an empty result set', async () => {
+      server.use(
+        http.get('*/api/guardian/search', () => HttpResponse.error()),
+        http.get('*/api/nyt/articlesearch.json', () => HttpResponse.error()),
+        http.get('*/api/newsapi/everything', () => HttpResponse.error()),
+      );
+
+      const page = await run({ query: 'climate' });
+
+      expect(page.unreachable).toBe(true);
+      // Nothing was searched, so there is nothing to have run out of matches for.
+      expect(page.outOfMatches).toBe(false);
+    });
+
+    it('stops after one round instead of spending the budget on the same failure', async () => {
+      let calls = 0;
+      server.use(
+        http.get('*/api/guardian/search', () => {
+          calls += 1;
+          return HttpResponse.error();
+        }),
+      );
+
+      await run({ query: 'climate', sources: ['guardian'] });
+
+      // One attempt, not one plus the two client-side-filter retries.
+      expect(calls).toBe(1);
+    });
+
+    it('is not unreachable while one source still answers', async () => {
+      serveAll();
+      server.use(http.get('*/api/nyt/articlesearch.json', () => HttpResponse.error()));
+
+      await expect(run({ query: 'climate' })).resolves.toMatchObject({ unreachable: false });
     });
   });
 
@@ -105,7 +143,7 @@ describe('fetchPage', () => {
       const page = await run({ query: 'ai', categories: ['technology'] });
 
       expect(page.notices).toContainEqual(
-        expect.objectContaining({ kind: 'caveat', message: 'NewsAPI: recent headlines only' }),
+        expect.objectContaining({ kind: 'caveat', message: 'is showing recent headlines only.' }),
       );
     });
   });

@@ -46,4 +46,10 @@ export interface ResultPage {
    * everything, and the auto-fetch budget ran out before anything matched.
    */
   outOfMatches: boolean;
+  /**
+   * Every source we actually asked this round failed. Distinct from "nothing matched":
+   * nothing was searched at all, so telling the reader there are no more matches — or
+   * offering to load more of them — would be a lie.
+   */
+  unreachable: boolean;
 }

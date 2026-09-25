@@ -19,10 +19,10 @@ export function PreferencesPanel() {
   return (
     <section
       aria-label="Feed preferences"
-      className="flex w-full flex-col gap-3 rounded-lg border bg-surface p-4"
+      className="flex w-full flex-col gap-4 border-b pb-6"
     >
       <fieldset className="m-0 flex flex-wrap items-center gap-2 border-0 p-0">
-        <legend className="text-xs text-muted-foreground">Categories I follow</legend>
+        <legend className="mb-2 text-[0.7rem] font-medium tracking-[0.08em] text-muted-foreground uppercase">Categories I follow</legend>
         {CATEGORIES.map((category) => (
           <CheckboxChip
             key={category}
@@ -35,7 +35,7 @@ export function PreferencesPanel() {
       </fieldset>
 
       <fieldset className="m-0 flex flex-wrap items-center gap-2 border-0 p-0">
-        <legend className="text-xs text-muted-foreground">Providers I read</legend>
+        <legend className="mb-2 text-[0.7rem] font-medium tracking-[0.08em] text-muted-foreground uppercase">Providers I read</legend>
         {SOURCES.map((source) => (
           <CheckboxChip
             key={source.id}
@@ -48,7 +48,7 @@ export function PreferencesPanel() {
       </fieldset>
 
       <fieldset className="m-0 flex flex-wrap items-center gap-2 border-0 p-0">
-        <legend className="text-xs text-muted-foreground">Authors I follow</legend>
+        <legend className="mb-2 text-[0.7rem] font-medium tracking-[0.08em] text-muted-foreground uppercase">Authors I follow</legend>
         {authors.length === 0 ? (
           <p className="text-xs text-muted-foreground">
             None yet — use “Follow” on any article card to add one.
@@ -77,7 +77,7 @@ export function PreferencesPanel() {
       </fieldset>
 
       {hasAny ? (
-        <Button type="button" variant="outline" size="sm" className="self-start" onClick={clear}>
+        <Button type="button" variant="outline" size="sm" className="self-start text-muted-foreground" onClick={clear}>
           Clear preferences
         </Button>
       ) : null}

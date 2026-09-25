@@ -182,6 +182,11 @@ to see if you know what's worth testing.
 ## Styling
 
 Tailwind CSS v4 via `@tailwindcss/vite` (no `tailwind.config.js`; theme lives in CSS).
+
+**The voice is a serif/sans split**, self-hosted via fontsource so the container needs no
+network: **Newsreader** (variable, optical-size axis) for headlines, page titles, the
+wordmark and bylines; **Inter** for controls and body. `--font-serif` / `--font-sans` are
+tokens like any other. Dates and counts use `tabular-nums`.
 shadcn/ui components are **vendored into `src/components/ui/`** — they are our source,
 not a dependency, and may be edited.
 

@@ -47,17 +47,21 @@ export async function fetchJson<T>(
     response = await fetch(url, { signal, headers: { Accept: 'application/json' } });
   } catch (cause) {
     if (cause instanceof DOMException && cause.name === 'AbortError') throw cause;
-    throw new SourceError(sourceId, 'network', 'Could not be reached.');
+    throw new SourceError(sourceId, 'network', 'could not be reached.');
   }
 
   if (!response.ok) {
-    throw new SourceError(sourceId, kindFromStatus(response.status), messageFromStatus(response.status));
+    throw new SourceError(
+      sourceId,
+      kindFromStatus(response.status),
+      messageFromStatus(response.status),
+    );
   }
 
   try {
     return (await response.json()) as T;
   } catch {
-    throw new SourceError(sourceId, 'upstream', 'Returned a response we could not read.');
+    throw new SourceError(sourceId, 'upstream', 'sent something we could not read.');
   }
 }
 
@@ -67,8 +71,12 @@ function kindFromStatus(status: number): SourceErrorKind {
   return 'upstream';
 }
 
+/**
+ * Reader-facing, always. An HTTP status code on screen tells a reader nothing except
+ * that something technical broke and they are not the audience for the explanation.
+ */
 function messageFromStatus(status: number): string {
-  if (status === 429) return 'Daily request limit reached.';
-  if (status === 401 || status === 403) return 'Rejected the API key.';
-  return `Responded with an error (${status}).`;
+  if (status === 429) return 'has answered all it can today.';
+  if (status === 401 || status === 403) return 'would not let us in.';
+  return 'is not responding just now.';
 }

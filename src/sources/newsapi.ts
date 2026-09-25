@@ -91,6 +91,21 @@ function requestedCategories(params: SearchParams): Category[] {
   return (params.categories ?? []).filter((category) => category !== 'general');
 }
 
+/**
+ * Which NewsAPI category this request rides on, or `undefined` for `/everything`.
+ *
+ * With neither a keyword nor a category there is nothing for `/everything` to search and
+ * it answers 400 — which is exactly the bare `/search` landing view, so the reader's very
+ * first screen used to be a failure notice. `/top-headlines` with the `general` category
+ * is the honest answer to "no question asked": the current front page.
+ */
+function endpointCategory(params: SearchParams): string | undefined {
+  const categories = requestedCategories(params);
+  if (categories.length) return NEWSAPI_CATEGORY[categories[0]!];
+  if (!params.query && !params.from && !params.to) return 'general';
+  return undefined;
+}
+
 export const newsapiSource: NewsSource = {
   id: 'newsapi',
   label: 'NewsAPI',
@@ -120,14 +135,13 @@ export const newsapiSource: NewsSource = {
   },
 
   notice(params: SearchParams): string | null {
-    if (!requestedCategories(params).length) return null;
+    if (!endpointCategory(params)) return null;
     // /top-headlines has no sortBy and no date parameters: it is the current front page.
-    return 'NewsAPI: recent headlines only';
+    return 'is showing recent headlines only.';
   },
 
   async search(params: SearchParams, signal?: AbortSignal): Promise<SourcePage> {
-    const categories = requestedCategories(params);
-    const nativeCategory = categories.length ? NEWSAPI_CATEGORY[categories[0]!] : undefined;
+    const nativeCategory = endpointCategory(params);
 
     const url = nativeCategory
       ? buildUrl('/api/newsapi/top-headlines', {

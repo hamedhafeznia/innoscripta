@@ -18,13 +18,23 @@ export function App() {
         >
           Skip to content
         </a>
-        <header className="flex flex-wrap items-baseline justify-between gap-4 border-b p-4">
-          <span className="font-semibold">innoscripta news</span>
-          <nav aria-label="Primary" className="flex items-center gap-3">
+        {/* Sticky and quiet: a hairline and the wordmark, so the page below it is the
+            thing with presence. Solid rather than blurred — nothing here needs to suggest
+            depth, and a calm surface is the point. */}
+        <header className="sticky top-0 z-20 border-b bg-background/98">
+          <div className="mx-auto flex max-w-6xl flex-wrap items-baseline justify-between gap-4 px-4 py-3.5 sm:px-6">
+            <span className="font-serif text-[1.15rem] leading-none font-medium tracking-[-0.015em]">
+              innoscripta <span className="text-muted-foreground">news</span>
+            </span>
+            <nav aria-label="Primary" className="flex items-center gap-5">
             <NavLink
               to="/search"
               className={({ isActive }) =>
-                isActive ? 'font-semibold text-primary' : 'text-muted-foreground hover:underline'
+                `text-sm underline-offset-[6px] decoration-1 ${
+                  isActive
+                    ? 'font-medium text-foreground underline'
+                    : 'text-muted-foreground hover:text-foreground'
+                }`
               }
             >
               Search
@@ -32,15 +42,20 @@ export function App() {
             <NavLink
               to="/feed"
               className={({ isActive }) =>
-                isActive ? 'font-semibold text-primary' : 'text-muted-foreground hover:underline'
+                `text-sm underline-offset-[6px] decoration-1 ${
+                  isActive
+                    ? 'font-medium text-foreground underline'
+                    : 'text-muted-foreground hover:text-foreground'
+                }`
               }
             >
               My feed
             </NavLink>
-            <ThemeToggle />
-          </nav>
+              <ThemeToggle />
+            </nav>
+          </div>
         </header>
-        <main id="main" className="mx-auto max-w-6xl p-4">
+        <main id="main" className="mx-auto max-w-6xl px-4 py-8 sm:px-6 sm:py-10">
           <Routes>
             <Route path="/" element={<Navigate to="/search" replace />} />
             <Route path="/search" element={<SearchPage />} />

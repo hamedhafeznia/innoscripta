@@ -62,7 +62,8 @@ describe('SearchPage', () => {
     await anArticle();
 
     await user.click(screen.getByRole('button', { name: 'From: any date' }));
-    const grid = await screen.findByRole('grid');
+    // The calendar is lazy-loaded, so the chunk resolves after the popover opens.
+    const grid = await screen.findByRole('grid', {}, { timeout: 5000 });
     // react-day-picker labels each day cell with its ISO date; the 12th of the month
     // shown, not a neighbouring month's greyed-out 12th.
     const twelfth = within(grid)
@@ -110,6 +111,37 @@ describe('SearchPage', () => {
     await user.click(screen.getByRole('button', { name: 'Load more' }));
 
     await waitFor(async () => expect((await anArticle()).length).toBeGreaterThan(first.length));
+  });
+
+  it('does not offer to load more of what it never reached', async () => {
+    server.use(
+      http.get('*/api/guardian/search', () => HttpResponse.error()),
+      http.get('*/api/nyt/articlesearch.json', () => HttpResponse.error()),
+      http.get('*/api/newsapi/everything', () => HttpResponse.error()),
+    );
+
+    renderWithProviders(<SearchPage />, { route: '/search?q=climate' });
+
+    expect(await screen.findByText('No source could be reached.')).toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: 'Load more' })).not.toBeInTheDocument();
+    expect(screen.queryByText(/Nothing matched in the pages checked/)).not.toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Try again' })).toBeInTheDocument();
+  });
+
+  it('collapses one identical failure per source into a single notice', async () => {
+    server.use(
+      http.get('*/api/guardian/search', () => HttpResponse.json({}, { status: 401 })),
+      http.get('*/api/nyt/articlesearch.json', () => HttpResponse.json({}, { status: 401 })),
+      http.get('*/api/newsapi/everything', () => HttpResponse.json({}, { status: 401 })),
+    );
+
+    renderWithProviders(<SearchPage />, { route: '/search?q=climate' });
+
+    const notices = await screen.findByRole('list', { name: 'Source notices' });
+    expect(within(notices).getAllByRole('listitem')).toHaveLength(1);
+    expect(
+      within(notices).getByText(/The Guardian, The New York Times and NewsAPI/),
+    ).toBeInTheDocument();
   });
 
   it('explains an empty result rather than showing a blank page', async () => {

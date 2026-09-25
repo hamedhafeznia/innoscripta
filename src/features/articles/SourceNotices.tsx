@@ -5,52 +5,91 @@ import { Button } from '@/components/ui/button';
 import type { SourceNotice } from '../query/types';
 
 const KIND = {
-  excluded: { label: 'Left out', icon: ZapOff, accent: 'border-l-warning' },
-  caveat: { label: 'Note', icon: Info, accent: 'border-l-muted-foreground' },
-  error: { label: 'Unavailable', icon: AlertTriangle, accent: 'border-l-destructive' },
+  excluded: { icon: ZapOff, tone: 'text-warning' },
+  caveat: { icon: Info, tone: 'text-muted-foreground' },
+  error: { icon: AlertTriangle, tone: 'text-destructive' },
 } as const;
+
+interface Grouped {
+  id: string;
+  kind: SourceNotice['kind'];
+  message: string;
+  sources: string[];
+}
+
+/** "A", "A and B", "A, B and C" — the sources share one sentence, not one each. */
+function listNames(names: string[]): string {
+  if (names.length <= 1) return names[0] ?? '';
+  return `${names.slice(0, -1).join(', ')} and ${names.at(-1)}`;
+}
+
+/**
+ * Notices that say the same thing about different sources are one notice. Three stacked
+ * rows of "Rejected the API key" is the same single fact read three times, and it buries
+ * the page's actual state under repetition.
+ */
+function group(notices: SourceNotice[]): Grouped[] {
+  const groups = new Map<string, Grouped>();
+
+  for (const notice of notices) {
+    const key = `${notice.kind}:${notice.message}`;
+    const existing = groups.get(key);
+    if (existing) {
+      existing.sources.push(notice.sourceLabel);
+    } else {
+      groups.set(key, {
+        id: key,
+        kind: notice.kind,
+        message: notice.message,
+        sources: [notice.sourceLabel],
+      });
+    }
+  }
+
+  return [...groups.values()];
+}
 
 /**
  * One slot for all three kinds of per-source trouble: an unserviceable filter
  * combination, a narrowed answer, and an outright failure. Each is dismissible,
- * because a reviewer who has read it once should not have to read it on every page.
+ * because a reader who has read it once should not have to read it on every page.
  */
 export function SourceNotices({ notices }: { notices: SourceNotice[] }) {
   const [dismissed, setDismissed] = useState<string[]>([]);
-  const visible = notices.filter((notice) => !dismissed.includes(notice.id));
+  const visible = group(notices).filter((notice) => !dismissed.includes(notice.id));
 
   if (!visible.length) return null;
 
   return (
     <ul aria-label="Source notices" className="flex w-full list-none flex-col gap-2 p-0">
       {visible.map((notice) => {
-        const { label, icon: Icon, accent } = KIND[notice.kind];
+        const { icon: Icon, tone } = KIND[notice.kind];
 
         return (
           <li key={notice.id}>
             <Alert
               // Alert hard-codes role="alert", which is assertive. A failure earns that;
-              // a dismissible caveat does not, so it is announced politely instead.
+              // a dismissible caveat about narrowed results does not, so it is announced
+              // politely instead.
               role={notice.kind === 'error' ? 'alert' : 'status'}
-              variant={notice.kind === 'error' ? 'destructive' : 'default'}
-              className={`border-l-[3px] bg-surface ${accent}`}
+              className="items-center border-border/70 bg-transparent px-4 py-2.5"
             >
-              <Icon />
-              <AlertDescription className="flex flex-wrap items-baseline gap-x-2 gap-y-1 pr-6 text-foreground">
-                <span className="text-xs tracking-wide text-muted-foreground uppercase">
-                  {label}
-                </span>
+              <Icon className={tone} />
+              <AlertDescription className="pr-7 text-[0.85rem] text-muted-foreground">
                 <span>
-                  <strong className="font-semibold">{notice.sourceLabel}</strong> {notice.message}
+                  <strong className="font-medium text-foreground">
+                    {listNames(notice.sources)}
+                  </strong>{' '}
+                  {notice.message}
                 </span>
               </AlertDescription>
               <Button
                 type="button"
                 variant="ghost"
-                size="icon-xs"
-                className="absolute top-2 right-2 text-muted-foreground"
+                size="icon-sm"
+                className="absolute top-1.5 right-1.5 text-muted-foreground"
                 onClick={() => setDismissed((current) => [...current, notice.id])}
-                aria-label={`Dismiss notice about ${notice.sourceLabel}`}
+                aria-label={`Dismiss notice about ${listNames(notice.sources)}`}
               >
                 <X />
               </Button>

@@ -158,7 +158,7 @@ async function fetchRound(
     if (outcome.status === 'rejected') {
       const reason: unknown = outcome.reason;
       const message =
-        reason instanceof SourceError ? reason.message : 'Could not be loaded just now.';
+        reason instanceof SourceError ? reason.message : 'could not be loaded just now.';
       notices.push(notice(source, 'error', message));
       results.push({ sourceId: source.id, status: 'failed' });
       return;
@@ -227,6 +227,7 @@ export async function fetchPage({
   let current = cursor;
   let articles: Article[] = [];
   let roundNotices: SourceNotice[] = [];
+  let lastResults: readonly SourceResult[] = [];
   let rounds = 0;
   let exhaustedEverything = live.length === 0;
 
@@ -244,12 +245,19 @@ export async function fetchPage({
 
     const round = await fetchRound(filters, authors, current, stillLive, signal);
     roundNotices = round.notices;
+    lastResults = round.results;
 
     const merged = mergePage({ buffer: current.buffer, results: round.results });
     current = advance(current, round.results, merged.buffer);
     articles = merged.articles;
 
     if (articles.length) break;
+
+    // The extra rounds exist to get past client-side filtering that emptied a page. If
+    // every source failed there is nothing to filter and nothing to get past: retrying
+    // the fan-out just spends the request budget on the same failure.
+    if (round.results.every((result) => result.status === 'failed')) break;
+
     rounds += 1;
   }
 
@@ -257,11 +265,16 @@ export async function fetchPage({
     exhaustedEverything ||
     (live.every((source) => current.perSource[source.id]!.exhausted) && !current.buffer.length);
 
+  const unreachable =
+    lastResults.length > 0 && lastResults.every((result) => result.status === 'failed');
+
   return {
     articles,
     cursor: current,
     notices: [...staticNotices, ...roundNotices],
     done,
-    outOfMatches: !articles.length && !done,
+    // An empty page with nothing reachable is not an empty result set.
+    outOfMatches: !articles.length && !done && !unreachable,
+    unreachable,
   };
 }

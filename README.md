@@ -154,6 +154,12 @@ link out), SSR, E2E/Playwright, a11y beyond keyboard + labels, PWA/offline.
 Tailwind CSS v4 (via `@tailwindcss/vite`, so the theme lives in CSS and there is no
 `tailwind.config.js`) with shadcn/ui primitives vendored into `src/components/ui/`.
 
+The surface is meant to read as a news app rather than a dashboard: **Newsreader** for
+headlines and bylines, **Inter** for controls, both self-hosted so the container needs no
+network. Filters are a hairline toolbar rather than a filled panel, so the news starts
+above the fold; the accent colour is reserved for focus and selection rather than spent on
+the largest button on the page.
+
 The design tokens are the contract: shadcn's variable names (`--background`, `--primary`,
 `--muted-foreground`, …) are *mapped onto* our `--bg / --surface / --text / --text-muted /
 --border / --brand` set rather than given values of their own, so a colour is chosen in
