@@ -64,13 +64,9 @@ describe('SearchPage', () => {
     await user.click(screen.getByRole('button', { name: 'From: any date' }));
     // The calendar is lazy-loaded, so the chunk resolves after the popover opens.
     const grid = await screen.findByRole('grid', {}, { timeout: 5000 });
-    // react-day-picker labels each day cell with its ISO date; the 12th of the month
-    // shown, not a neighbouring month's greyed-out 12th.
-    const twelfth = within(grid)
-      .getAllByRole('gridcell')
-      .find((cell) => cell.dataset.day?.endsWith('-12') && cell.dataset.outside !== 'true');
-
-    await user.click(twelfth!.querySelector('button') ?? twelfth!);
+    // Each day is a button named by its date ("Friday, September 12th, 2026"). Only the
+    // month shown has a 12th: the greyed-out days of its neighbours stop at the 6th.
+    await user.click(within(grid).getByRole('button', { name: /\b12(th)?\b/ }));
 
     await waitFor(() => expect(currentLocation()).toMatch(/[?&]from=\d{4}-\d{2}-12/));
   });
