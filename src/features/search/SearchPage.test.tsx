@@ -54,6 +54,26 @@ describe('SearchPage', () => {
     await waitFor(() => expect(currentLocation()).toBe('/search?q=climate&cat=science'));
   });
 
+  it('puts a date chosen from the calendar into the URL as ?from=', async () => {
+    serveAll();
+    const user = userEvent.setup();
+
+    renderWithProviders(<SearchPage />, { route: '/search?q=climate' });
+    await anArticle();
+
+    await user.click(screen.getByRole('button', { name: 'From' }));
+    const grid = await screen.findByRole('grid');
+    // react-day-picker labels each day cell with its ISO date; the 12th of the month
+    // shown, not a neighbouring month's greyed-out 12th.
+    const twelfth = within(grid)
+      .getAllByRole('gridcell')
+      .find((cell) => cell.dataset.day?.endsWith('-12') && cell.dataset.outside !== 'true');
+
+    await user.click(twelfth!.querySelector('button') ?? twelfth!);
+
+    await waitFor(() => expect(currentLocation()).toMatch(/[?&]from=\d{4}-\d{2}-12/));
+  });
+
   it('shows what returned and a notice naming the source that failed', async () => {
     serveAll();
     server.use(http.get('*/api/nyt/articlesearch.json', () => HttpResponse.error()));

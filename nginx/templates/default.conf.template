@@ -22,6 +22,14 @@ server {
     proxy_cache news;
     proxy_cache_valid 200 2m;
     proxy_cache_lock on;
+    # Without these the cache never stores anything: the Guardian answers with
+    # `cache-control: max-age=0` and a load-balancer `Set-Cookie`, and nginx honours both
+    # by refusing to cache. The upstreams are keyless public JSON from our point of view,
+    # and the freshness window is ours to choose, so their hints are overridden.
+    proxy_ignore_headers Cache-Control Expires Set-Cookie Vary;
+    # An upstream's load-balancer cookie must not reach the browser, and must certainly
+    # not be handed to every reader out of one cached response.
+    proxy_hide_header Set-Cookie;
     proxy_ssl_server_name on;
     proxy_http_version 1.1;
     proxy_set_header Accept-Encoding "";

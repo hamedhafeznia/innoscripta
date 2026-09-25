@@ -1,5 +1,9 @@
+import { X } from 'lucide-react';
 import { CATEGORIES } from '../../core/article';
 import { SOURCES } from '../../sources/registry';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { CheckboxChip } from '../articles/CheckboxChip';
 import { usePreferences } from './store';
 
 /**
@@ -13,62 +17,65 @@ export function PreferencesPanel() {
   const hasAny = categories.length > 0 || sources.length > 0 || authors.length > 0;
 
   return (
-    <section className="filters" aria-label="Feed preferences">
-      <fieldset className="filter-group">
-        <legend>Categories I follow</legend>
+    <section
+      aria-label="Feed preferences"
+      className="flex w-full flex-col gap-3 rounded-lg border bg-surface p-4"
+    >
+      <fieldset className="m-0 flex flex-wrap items-center gap-2 border-0 p-0">
+        <legend className="text-xs text-muted-foreground">Categories I follow</legend>
         {CATEGORIES.map((category) => (
-          <label key={category} className="chip">
-            <input
-              type="checkbox"
-              checked={categories.includes(category)}
-              onChange={() => toggleCategory(category)}
-            />
-            <span>{category}</span>
-          </label>
+          <CheckboxChip
+            key={category}
+            label={category}
+            checked={categories.includes(category)}
+            onToggle={() => toggleCategory(category)}
+            className="bg-background"
+          />
         ))}
       </fieldset>
 
-      <fieldset className="filter-group">
-        <legend>Providers I read</legend>
+      <fieldset className="m-0 flex flex-wrap items-center gap-2 border-0 p-0">
+        <legend className="text-xs text-muted-foreground">Providers I read</legend>
         {SOURCES.map((source) => (
-          <label key={source.id} className="chip">
-            <input
-              type="checkbox"
-              checked={sources.includes(source.id)}
-              onChange={() => toggleSource(source.id)}
-            />
-            <span>{source.label}</span>
-          </label>
+          <CheckboxChip
+            key={source.id}
+            label={source.label}
+            checked={sources.includes(source.id)}
+            onToggle={() => toggleSource(source.id)}
+            className="bg-background"
+          />
         ))}
       </fieldset>
 
-      <fieldset className="filter-group">
-        <legend>Authors I follow</legend>
+      <fieldset className="m-0 flex flex-wrap items-center gap-2 border-0 p-0">
+        <legend className="text-xs text-muted-foreground">Authors I follow</legend>
         {authors.length === 0 ? (
-          <p className="field-label">
+          <p className="text-xs text-muted-foreground">
             None yet — use “Follow” on any article card to add one.
           </p>
         ) : (
           authors.map((author) => (
-            <span key={author.name} className="chip">
+            <Badge key={author.name} variant="outline" className="gap-1 bg-background py-1 pr-1">
               {author.name}
-              <button
+              <Button
                 type="button"
-                className="notice-dismiss"
+                variant="ghost"
+                size="icon-xs"
+                className="text-muted-foreground"
                 onClick={() => unfollowAuthor(author.name)}
                 aria-label={`Unfollow ${author.name}`}
               >
-                &times;
-              </button>
-            </span>
+                <X />
+              </Button>
+            </Badge>
           ))
         )}
       </fieldset>
 
       {hasAny ? (
-        <button type="button" className="button-quiet" onClick={clear}>
+        <Button type="button" variant="outline" size="sm" className="self-start" onClick={clear}>
           Clear preferences
-        </button>
+        </Button>
       ) : null}
     </section>
   );

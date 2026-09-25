@@ -4,7 +4,8 @@ A React + TypeScript SPA that aggregates **The Guardian**, **NYT Article Search*
 and **NewsAPI.org** into one searchable, filterable, personalisable feed.
 Frontend only, containerised.
 
-> Status: phase 5 of 7 (feed). Both routes are live; polish and review remain.
+> Status: phase 5.5 of 7 (Tailwind + shadcn/ui). Both routes are live; polish and
+> review remain.
 
 ## Run it
 
@@ -149,7 +150,20 @@ preference persistence, i18n, infinite scroll (an explicit **Load More** instead
 article detail pages (none of these APIs reliably return full body text, so cards
 link out), SSR, E2E/Playwright, a11y beyond keyboard + labels, PWA/offline.
 
+## Styling
+
+Tailwind CSS v4 (via `@tailwindcss/vite`, so the theme lives in CSS and there is no
+`tailwind.config.js`) with shadcn/ui primitives vendored into `src/components/ui/`.
+
+The design tokens are the contract: shadcn's variable names (`--background`, `--primary`,
+`--muted-foreground`, …) are *mapped onto* our `--bg / --surface / --text / --text-muted /
+--border / --brand` set rather than given values of their own, so a colour is chosen in
+exactly one place. Dark values are already declared, which is why dark mode is a toggle
+rather than a rewrite.
+
+Tests assert roles, labels and text, never class names, so restyling cannot break them.
+
 ## Tech
 
-Vite · React · TypeScript · React Query · Zustand + localStorage · Vitest + RTL + MSW ·
-Docker multi-stage → nginx.
+Vite · React · TypeScript · React Query · Zustand + localStorage · Tailwind CSS v4 +
+shadcn/ui · Vitest + RTL + MSW · Docker multi-stage → nginx.

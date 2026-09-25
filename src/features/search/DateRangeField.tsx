@@ -1,0 +1,91 @@
+import { CalendarIcon } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Calendar } from '@/components/ui/calendar';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+
+/** `YYYY-MM-DD` in local terms, which is what every adapter expects to be handed. */
+function toIsoDay(date: Date): string {
+  const month = `${date.getMonth() + 1}`.padStart(2, '0');
+  const day = `${date.getDate()}`.padStart(2, '0');
+  return `${date.getFullYear()}-${month}-${day}`;
+}
+
+function fromIsoDay(value: string | undefined): Date | undefined {
+  if (!value) return undefined;
+  const [year, month, day] = value.split('-').map(Number);
+  return new Date(year!, month! - 1, day!);
+}
+
+const LABEL_FORMAT = new Intl.DateTimeFormat(undefined, {
+  day: 'numeric',
+  month: 'short',
+  year: 'numeric',
+});
+
+interface DateRangeFieldProps {
+  label: string;
+  value: string | undefined;
+  onChange: (value: string | undefined) => void;
+  min?: string;
+  max?: string;
+}
+
+/**
+ * A Popover + Calendar in place of `<input type="date">`. The native control renders
+ * differently in every browser and cannot express the min/max relationship between the
+ * two ends of the range as clearly; here the other end is simply not selectable.
+ */
+export function DateRangeField({ label, value, onChange, min, max }: DateRangeFieldProps) {
+  const selected = fromIsoDay(value);
+
+  // react-day-picker rejects an open-ended {before, after}, so each bound is its own
+  // matcher and an absent bound contributes none.
+  const bounds = [
+    fromIsoDay(min) ? { before: fromIsoDay(min)! } : undefined,
+    fromIsoDay(max) ? { after: fromIsoDay(max)! } : undefined,
+  ].filter((bound): bound is { before: Date } | { after: Date } => Boolean(bound));
+
+  return (
+    <div className="flex flex-col gap-1">
+      <span className="text-xs text-muted-foreground" id={`date-${label}`}>
+        {label}
+      </span>
+      <Popover>
+        <PopoverTrigger asChild>
+          <Button
+            type="button"
+            variant="outline"
+            className="w-[11rem] justify-start font-normal"
+            aria-labelledby={`date-${label}`}
+          >
+            <CalendarIcon />
+            {selected ? LABEL_FORMAT.format(selected) : <span className="text-muted-foreground">Any</span>}
+          </Button>
+        </PopoverTrigger>
+        <PopoverContent className="w-auto p-0" align="start">
+          <Calendar
+            mode="single"
+            autoFocus
+            selected={selected}
+            defaultMonth={selected}
+            disabled={bounds}
+            onSelect={(date) => onChange(date ? toIsoDay(date) : undefined)}
+          />
+          {value ? (
+            <div className="border-t p-2">
+              <Button
+                type="button"
+                variant="ghost"
+                size="sm"
+                className="w-full"
+                onClick={() => onChange(undefined)}
+              >
+                Clear {label.toLowerCase()}
+              </Button>
+            </div>
+          ) : null}
+        </PopoverContent>
+      </Popover>
+    </div>
+  );
+}

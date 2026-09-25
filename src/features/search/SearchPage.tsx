@@ -1,10 +1,11 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { parseFilters, toSearchParams, type Filters } from '../../core/filters';
+import { Button } from '@/components/ui/button';
 import { ArticleList, ArticleListSkeleton } from '../articles/ArticleList';
 import { SourceNotices } from '../articles/SourceNotices';
 import { useArticles } from '../query/useArticles';
-import { FilterBar } from './FilterBar';
+import { countActiveFilters, FilterPanel } from './FilterPanel';
 import { useDebouncedValue } from './useDebouncedValue';
 
 export function SearchPage() {
@@ -36,10 +37,11 @@ export function SearchPage() {
     useArticles(filters, []);
 
   return (
-    <section className="page">
-      <h1 className="page-title">Search</h1>
+    <section className="flex flex-col items-start gap-4">
+      <h1 className="m-0 text-2xl font-semibold">Search</h1>
 
-      <FilterBar
+      <FilterPanel
+        activeCount={countActiveFilters(filters)}
         filters={filters}
         keyword={keyword}
         onKeywordChange={setKeyword}
@@ -50,24 +52,24 @@ export function SearchPage() {
 
       {isPending ? (
         <>
-          <p className="visually-hidden" role="status">
+          <p className="sr-only" role="status">
             Loading articles
           </p>
           <ArticleListSkeleton />
         </>
       ) : isError ? (
-        <p className="state state-error" role="alert">
+        <p className="m-0 w-full rounded-lg border border-destructive p-6 text-center text-destructive" role="alert">
           Nothing could be loaded: {error.message}
         </p>
       ) : articles.length === 0 ? (
-        <p className="state">
+        <p className="m-0 w-full rounded-lg border border-dashed bg-surface p-6 text-center text-muted-foreground">
           {outOfMatches
             ? 'No more matches in the pages we checked. Load more to keep looking.'
             : 'No articles matched these filters. Try widening the date range or clearing a category.'}
         </p>
       ) : (
         <>
-          <p className="result-count" role="status">
+          <p className="m-0 text-sm text-muted-foreground" role="status">
             {articles.length} article{articles.length === 1 ? '' : 's'}
           </p>
           <ArticleList articles={articles} />
@@ -76,16 +78,15 @@ export function SearchPage() {
 
       {/* Explicit Load More rather than infinite scroll: paging costs real requests. */}
       {hasNextPage ? (
-        <button
+        <Button
           type="button"
-          className="button"
           onClick={() => void fetchNextPage()}
           disabled={isFetchingNextPage}
         >
           {isFetchingNextPage ? 'Loading…' : 'Load more'}
-        </button>
+        </Button>
       ) : articles.length > 0 ? (
-        <p className="state">That is everything these sources have for this search.</p>
+        <p className="m-0 w-full rounded-lg border border-dashed bg-surface p-6 text-center text-muted-foreground">That is everything these sources have for this search.</p>
       ) : null}
     </section>
   );
