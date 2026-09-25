@@ -115,7 +115,7 @@ export const nytSource: NewsSource = {
   id: 'nyt',
   label: 'The New York Times',
   // Category and author are filtered client-side: see the `fq` note in search() below.
-  capabilities: { query: true, dateRange: true, category: 'client', author: 'client' },
+  capabilities: { category: 'client', author: 'client' },
 
   unserviceable: () => null,
   notice: () => null,

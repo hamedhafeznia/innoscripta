@@ -120,7 +120,7 @@ export function toArticle(result: GuardianResult): Article {
 export const guardianSource: NewsSource = {
   id: 'guardian',
   label: 'The Guardian',
-  capabilities: { query: true, dateRange: true, category: 'server', author: 'server' },
+  capabilities: { category: 'server', author: 'server' },
 
   unserviceable: () => null,
   notice: () => null,

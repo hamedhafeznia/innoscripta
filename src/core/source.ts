@@ -33,15 +33,16 @@ export interface SourcePage {
 }
 
 /**
- * What a source can actually do. The query layer reads this instead of special-casing
- * source ids, which is what keeps "add a source = one adapter file + one registry line"
- * true: a new adapter declares its own limits and the UI adapts without being edited.
+ * What a source can do that differs between sources, and so has to be asked rather than
+ * assumed. The query layer reads this instead of special-casing source ids, which is what
+ * keeps "add a source = one adapter file + one registry line" true: a new adapter declares
+ * its own limits and the UI adapts without being edited.
+ *
+ * Only facets someone reads are listed. Keyword and date-range search are supported by
+ * every source, and a limit on them (NewsAPI's, say) is expressed through `unserviceable`
+ * instead, which can say which *combination* cannot be served.
  */
 export interface Capabilities {
-  /** Free-text keyword search. */
-  query: boolean;
-  /** Arbitrary date-range filtering. */
-  dateRange: boolean;
   /**
    * Where category filtering happens. `'client'` means the source cannot filter by
    * category itself and the query layer drops non-matching articles after the fetch.

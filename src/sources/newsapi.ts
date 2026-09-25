@@ -105,7 +105,7 @@ export const newsapiSource: NewsSource = {
   label: 'NewsAPI',
   // Author is display-only: NewsAPI cannot filter by it, so the query layer does it
   // after the fetch. Category is server-side, but only via /top-headlines.
-  capabilities: { query: true, dateRange: true, category: 'server', author: 'client' },
+  capabilities: { category: 'server', author: 'client' },
 
   // Every reason is a sentence fragment: the notice already prints the source name in
   // bold ahead of it, so a message that names NewsAPI again reads "NewsAPI NewsAPI ...".

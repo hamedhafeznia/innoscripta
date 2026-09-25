@@ -9,7 +9,8 @@ describe('source registry', () => {
     // A fourth adapter is added here and nowhere else; this is the contract it must meet.
     for (const source of SOURCES) {
       expect(source.label).toBeTruthy();
-      expect(source.capabilities).toMatchObject({ query: expect.any(Boolean) });
+      expect(['server', 'client', false]).toContain(source.capabilities.category);
+      expect(['server', 'client', false]).toContain(source.capabilities.author);
       expect(source.unserviceable({ page: 1 })).toBeNull();
       expect(typeof source.notice).toBe('function');
       expect(typeof source.search).toBe('function');
