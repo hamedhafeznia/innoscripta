@@ -287,6 +287,8 @@ export async function fetchPage({
   let lastResults: readonly SourceResult[] = [];
   let rounds = 0;
   let exhaustedEverything = live.length === 0;
+  // Set when a walked day got no answer from anyone: the cursor stays on it.
+  let dayUnread = false;
 
   while (rounds <= MAX_EXTRA_ROUNDS) {
     const stillLive = live.filter((source) => !current.perSource[source.id]!.exhausted);
@@ -309,6 +311,15 @@ export async function fetchPage({
     );
     roundNotices = round.notices;
     lastResults = round.results;
+
+    // A day nobody answered for has not been read, so it must not be walked past: Load
+    // more steps to the day *before*, which would skip this one for good. Stay on it, so
+    // trying again asks for the same day, and stop rather than spend the budget on the
+    // next day's identical failure.
+    if (window && round.results.every((result) => result.status === 'failed')) {
+      dayUnread = true;
+      break;
+    }
 
     // Walking a range emits the whole day it just read. `exhausted` is literally true
     // here — this day will not be asked for again — and with no live source left to
@@ -365,8 +376,8 @@ export async function fetchPage({
     current = { ...current, buffer: current.buffer.slice(take) };
   }
 
-  const nextDay = window ? addDays(window.day, -1) : undefined;
-  const walkedPast = Boolean(window && nextDay! < filters.from!);
+  const nextDay = window ? (dayUnread ? window.day : addDays(window.day, -1)) : undefined;
+  const walkedPast = Boolean(window && !dayUnread && nextDay! < filters.from!);
 
   const done =
     walkedPast ||

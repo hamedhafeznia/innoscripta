@@ -445,6 +445,37 @@ describe('walking a date range a day at a time', () => {
     ]);
   });
 
+  it('stays on the day it could not read when every source fails', async () => {
+    // Stepping back would skip the day for good: Load more moves to the day before, so a
+    // day nobody answered for would never be asked about again.
+    let requests = 0;
+    server.use(
+      http.get('*/api/guardian/search', () => {
+        requests += 1;
+        return HttpResponse.error();
+      }),
+    );
+
+    const page = await run({ from: '2026-09-01', to: '2026-09-10', sources: ['guardian'] });
+
+    expect(requests).toBe(1);
+    expect(page.unreachable).toBe(true);
+    expect(page.day).toBe('2026-09-10');
+    // Trying again asks for the same day, not the one before it.
+    expect(page.nextDay).toBe('2026-09-10');
+    expect(page.done).toBe(false);
+
+    serveDays([]);
+    const retry = await fetchPage({
+      filters: filters({ from: '2026-09-01', to: '2026-09-10', sources: ['guardian'] }),
+      authors: [],
+      cursor: page.cursor,
+    });
+
+    expect(retry.day).toBe('2026-09-10');
+    expect(retry.articles.length).toBeGreaterThan(0);
+  });
+
   it('emits the whole day rather than holding a tail back', async () => {
     // Every article of the next day is older than every article of this one, so there is
     // nothing a cut could protect — holding items back would only strand them.
