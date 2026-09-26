@@ -8,6 +8,11 @@ interface ResultsPlaceholderProps {
   outOfMatches: boolean;
   /** What to say when the sources answered and simply had nothing. */
   emptyMessage: string;
+  /**
+   * A reason the result may be short that the reader can undo, said after either empty
+   * message. The feed uses it to name followed authors, which narrow it.
+   */
+  cause?: string;
   onRetry: () => void;
   isRetrying: boolean;
 }
@@ -24,6 +29,7 @@ export function ResultsPlaceholder({
   unreachable,
   outOfMatches,
   emptyMessage,
+  cause,
   onRetry,
   isRetrying,
 }: ResultsPlaceholderProps) {
@@ -51,6 +57,7 @@ export function ResultsPlaceholder({
       {outOfMatches
         ? 'Nothing matched in the pages checked so far. Load more to keep looking.'
         : emptyMessage}
+      {cause ? ` ${cause}` : null}
     </p>
   );
 }

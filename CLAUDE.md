@@ -148,8 +148,12 @@ errors use the same notice slot. A reviewer *will* kill a key to see what happen
 - `src` selects **providers** (which adapters run), not publishers. Cards display
   the publisher name where available (e.g. NewsAPI `source.name`). README says so.
 - **sources + categories: AND.** Predicates on a query → live in the URL.
-- **authors: OR, additive** — a "Follow author" button on cards, not another
-  filter. A property of the user → lives in Zustand/localStorage, not the URL.
+- **authors: OR among themselves, narrowing the feed** — a "Follow author" button on
+  cards, not another filter on the URL. Following a second author adds theirs to the
+  first's, but the set as a whole is AND-ed with the chosen providers and categories: the
+  feed shows followed authors' articles *within* them. Nothing chosen means only followed
+  authors' articles. A property of the user → lives in Zustand/localStorage, not the URL.
+  When that leaves nothing, the empty state says it is because of the followed authors.
 - Author filtering is **server-side on Guardian and NYT, client-side on NewsAPI**,
   and the UI states which. A client-side author filter must never silently empty a
   page: auto-fetch the next page, **capped at 2–3 extra pages**, then show a clear

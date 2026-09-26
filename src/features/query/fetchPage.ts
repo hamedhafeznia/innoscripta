@@ -95,8 +95,8 @@ export interface PageRequest {
  *
  * A source that can filter server-side only does so when every followed author carries
  * an identifier it understands. Send it a partial list and it returns only those
- * authors' articles, silently losing the rest — and follows are additive, so losing one
- * is a wrong answer, not a narrower one. One name-only follow therefore moves the whole
+ * authors' articles, silently losing the rest — and follows are OR-ed together, so losing
+ * one is a wrong answer, not a narrower one. One name-only follow therefore moves the whole
  * set to the client side, where names are all that is needed.
  */
 function authorStrategy(source: NewsSource, authors: FollowedAuthor[]): 'server' | 'client' | 'none' {

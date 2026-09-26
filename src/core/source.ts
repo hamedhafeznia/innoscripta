@@ -17,7 +17,8 @@ export interface SearchParams {
   /** AND-ed with the keyword. Empty means "any category". */
   categories?: Category[];
   /**
-   * OR-ed with each other and additive: a followed author widens the result set.
+   * OR-ed with each other, and AND-ed with everything else: followed authors narrow the
+   * result set to their own articles.
    * Guardian and NYT filter these server-side; NewsAPI cannot, so its adapter
    * declares `author: 'client'` and the query layer filters after the fact.
    */

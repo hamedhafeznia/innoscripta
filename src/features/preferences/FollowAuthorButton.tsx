@@ -4,7 +4,8 @@ import { primaryAuthor, useIsFollowing, usePreferences } from './store';
 
 /**
  * A follow is a property of the reader, not a predicate on a query, so it lives in
- * localStorage rather than the URL — and it widens the feed rather than narrowing it.
+ * localStorage rather than the URL. Following narrows the feed to that author's articles
+ * (OR-ed with the other followed authors), within the chosen providers and categories.
  */
 export function FollowAuthorButton({ article }: { article: Article }) {
   const name = primaryAuthor(article);

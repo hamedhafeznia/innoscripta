@@ -44,8 +44,9 @@ export function FeedPage() {
 
       {authors.length > 0 ? (
         <p className="m-0 max-w-prose text-sm text-muted-foreground">
-          Followed authors widen the feed. The Guardian filters them as you read; the
-          New York Times and NewsAPI are filtered on this device after fetching.
+          Followed authors narrow the feed to their articles, within the providers and
+          categories you chose. The Guardian filters them as you read; the New York Times and
+          NewsAPI are filtered on this device after fetching.
         </p>
       ) : null}
 
@@ -74,6 +75,11 @@ export function FeedPage() {
           unreachable={unreachable}
           outOfMatches={outOfMatches}
           emptyMessage="Nothing matched your preferences yet. Try adding a category or another provider."
+          cause={
+            authors.length > 0
+              ? 'Followed authors narrow the feed to their articles within these providers and categories; unfollow one to see more.'
+              : undefined
+          }
           onRetry={() => void refetch()}
           isRetrying={isFetching}
         />

@@ -118,4 +118,32 @@ describe('FeedPage', () => {
       await screen.findByText(/filtered on this device after fetching/),
     ).toBeInTheDocument();
   });
+
+  it('says the followed authors are why nothing matched, instead of a generic empty state', async () => {
+    serveAll();
+    usePreferences.getState().toggleSource('guardian');
+    usePreferences.setState({ authors: [{ name: 'Nobody At All', ref: null }] });
+
+    renderWithProviders(<FeedPage />, { route: '/feed' });
+
+    // Followed authors narrow the feed to their articles within the chosen providers and
+    // categories, so an empty feed with follows is very likely about the follows.
+    const empty = await screen.findByText(/nothing matched.*followed author/i);
+    expect(empty).toHaveTextContent(/unfollow/i);
+    expect(screen.queryByRole('article')).not.toBeInTheDocument();
+  });
+
+  it('does not blame followed authors when there are none', async () => {
+    server.use(
+      http.get('*/api/guardian/search', () =>
+        HttpResponse.json({ response: { currentPage: 1, pages: 1, results: [] } }),
+      ),
+    );
+    usePreferences.getState().toggleSource('guardian');
+
+    renderWithProviders(<FeedPage />, { route: '/feed' });
+
+    expect(await screen.findByText(/Nothing matched your preferences yet/)).toBeInTheDocument();
+    expect(screen.queryByText(/followed author/i)).not.toBeInTheDocument();
+  });
 });

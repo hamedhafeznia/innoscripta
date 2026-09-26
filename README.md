@@ -86,18 +86,23 @@ The split between the two is about what the thing *is*:
 - **Categories and providers are predicates on a query.** They narrow a result set, they
   are AND-ed together, and they belong in a URL you can share. They live in `/search`'s
   query string, and `/feed` keeps its own copy as a preference.
-- **Followed authors are a property of the reader.** They are OR-ed with each other and
-  additive — each one widens the feed — and they are meaningless in someone else's
-  browser. They live in Zustand, persisted to `localStorage`, and never in the URL.
+- **Followed authors are a property of the reader.** They are OR-ed with each other
+  (following a second author adds theirs to the first's), and the set as a whole
+  **narrows the feed**: it shows those authors' articles *within* the providers and
+  categories you chose, so a feed of "science" and a followed author is that author's
+  science articles. With no providers or categories chosen it is simply their articles.
+  If that leaves nothing, the empty state says the followed authors are why. They are
+  meaningless in someone else's browser, so they live in Zustand, persisted to
+  `localStorage`, and never in the URL.
 
 A **Follow** button sits on every card. Where that filter then runs depends on what the
 source can do, and the feed says so on the page:
 
 - The Guardian can filter server-side, by the contributor tag (`profile/<slug>`) the
   adapter keeps on each article. It only does so when *every* followed author has such a
-  tag — a partial list would return those authors' articles and silently lose the rest,
-  and since follows are additive, that is a wrong answer rather than a narrower one. One
-  name-only follow moves the whole set to client-side matching.
+  tag — a partial list would return only those authors' articles and silently lose the
+  rest, and since follows are OR-ed together, that is a wrong answer rather than a
+  narrower one. One name-only follow moves the whole set to client-side matching.
 - NYT and NewsAPI publish a byline string and no author identifier, so they are always
   matched on this device after fetching.
 
