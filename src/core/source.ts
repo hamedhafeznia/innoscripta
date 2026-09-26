@@ -56,8 +56,8 @@ export interface Capabilities {
   author: 'server' | 'client' | false;
 }
 
-export interface NewsSource {
-  id: SourceId;
+export interface NewsSource<Id extends string = SourceId> {
+  id: Id;
   /** Human-readable provider name, for filter chips and per-source notices. */
   label: string;
   capabilities: Capabilities;

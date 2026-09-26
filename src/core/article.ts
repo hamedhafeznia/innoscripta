@@ -1,5 +1,10 @@
-/** The three providers we fan out to. `src` in the URL selects these, not publishers. */
-export type SourceId = 'guardian' | 'nyt' | 'newsapi';
+import type { SourceId } from '../sources/registry';
+
+/**
+ * The providers we fan out to; `src` in the URL selects these, not publishers. Derived
+ * from the registry, so it is never edited here — see `sources/registry.ts`.
+ */
+export type { SourceId };
 
 /**
  * Canonical categories, used for *filtering* only. Each adapter maps its own native

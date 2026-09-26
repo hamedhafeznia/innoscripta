@@ -289,11 +289,14 @@ describe('fetchPage', () => {
 
       const spent: Cursor = {
         ...first.cursor,
-        perSource: {
-          guardian: { ...first.cursor.perSource.guardian, exhausted: true },
-          nyt: { ...first.cursor.perSource.nyt, exhausted: true },
-          newsapi: { ...first.cursor.perSource.newsapi, exhausted: true },
-        },
+        // Every registered source, whatever the registry holds: this test is not the
+        // place a fourth adapter should have to be listed.
+        perSource: Object.fromEntries(
+          Object.entries(first.cursor.perSource).map(([id, cursor]) => [
+            id,
+            { ...cursor, exhausted: true },
+          ]),
+        ) as Cursor['perSource'],
       };
 
       let requests = 0;

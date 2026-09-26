@@ -1,4 +1,4 @@
-import { SOURCES, getSource } from './registry';
+import { SOURCE_IDS, SOURCES, getSource, type SourceId } from './registry';
 
 describe('source registry', () => {
   it('registers every source under a unique id', () => {
@@ -19,5 +19,12 @@ describe('source registry', () => {
 
   it('looks a source up by id', () => {
     expect(getSource('nyt')?.label).toBe('The New York Times');
+  });
+
+  it('derives SourceId from what is registered, so no id is written out twice', () => {
+    // A compile-time check: a fourth source added to the registry would widen this union
+    // and fail here until the expectation is updated, and nowhere else.
+    expectTypeOf<SourceId>().toEqualTypeOf<'guardian' | 'nyt' | 'newsapi'>();
+    expect(SOURCE_IDS).toEqual(SOURCES.map((source) => source.id));
   });
 });

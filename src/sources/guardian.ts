@@ -117,7 +117,7 @@ export function toArticle(result: GuardianResult): Article {
   };
 }
 
-export const guardianSource: NewsSource = {
+export const guardianSource: NewsSource<'guardian'> = {
   id: 'guardian',
   label: 'The Guardian',
   capabilities: { category: 'server', author: 'server' },

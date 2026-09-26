@@ -111,7 +111,7 @@ export function toArticle(doc: NytDoc): Article {
   };
 }
 
-export const nytSource: NewsSource = {
+export const nytSource: NewsSource<'nyt'> = {
   id: 'nyt',
   label: 'The New York Times',
   // Category and author are filtered client-side: see the `fq` note in search() below.

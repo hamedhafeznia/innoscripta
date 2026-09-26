@@ -145,6 +145,10 @@ Adding a source is **one new adapter file and one registry line**. No UI and no
 query-layer change: each adapter declares its own capabilities and its own
 unserviceable filter combinations, and the rest of the app reads that descriptor
 rather than checking source ids.
+The `SourceId` type is read off the registry rather than written out anywhere, so there
+is no third place to edit. (Checked by adding a throwaway fourth adapter: the app and its
+type-check needed no other change; only the registry's own test, which lists what is
+registered, is updated.)
 
 ## Known API limitations
 

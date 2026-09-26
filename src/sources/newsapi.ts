@@ -100,7 +100,7 @@ function endpointCategory(params: SearchParams): string | undefined {
   return undefined;
 }
 
-export const newsapiSource: NewsSource = {
+export const newsapiSource: NewsSource<'newsapi'> = {
   id: 'newsapi',
   label: 'NewsAPI',
   // Author is display-only: NewsAPI cannot filter by it, so the query layer does it

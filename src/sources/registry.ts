@@ -1,4 +1,3 @@
-import type { SourceId } from '../core/article';
 import type { NewsSource } from '../core/source';
 import { guardianSource } from './guardian';
 import { nytSource } from './nyt';
@@ -11,9 +10,18 @@ import { newsapiSource } from './newsapi';
  * Adding a source is one new adapter file and one line here. Nothing in the UI or the
  * query layer knows the list; both read each source's capability descriptor instead.
  */
-export const SOURCES: readonly NewsSource[] = [guardianSource, nytSource, newsapiSource];
+const registered = [guardianSource, nytSource, newsapiSource] as const;
 
-export const SOURCE_IDS = SOURCES.map((source) => source.id);
+/**
+ * Read off the registry, not written out anywhere: the ids a source can have are exactly
+ * the ids of the sources registered here. This is what makes "one adapter file and one
+ * registry line" the whole of adding a source.
+ */
+export type SourceId = (typeof registered)[number]['id'];
+
+export const SOURCES: readonly NewsSource[] = registered;
+
+export const SOURCE_IDS: readonly SourceId[] = SOURCES.map((source) => source.id);
 
 export function getSource(id: SourceId): NewsSource | undefined {
   return SOURCES.find((source) => source.id === id);
