@@ -3,9 +3,6 @@
 React + TypeScript SPA that aggregates articles from three news APIs into one
 searchable, filterable, personalizable feed. Frontend only. Containerized.
 
-**Deadline: 3 days.** See "Build order": if behind at end of day 2, cut
-`/feed` to saved filters with no author-follow. Do not cut error/empty states.
-
 ---
 
 ## Stack
