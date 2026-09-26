@@ -1,0 +1,17 @@
+# Not our source, or not ours to reformat.
+node_modules
+dist
+coverage
+package-lock.json
+skills-lock.json
+
+# Captured API responses: byte-for-byte what the APIs sent is the point of a fixture.
+src/test/fixtures
+
+# Vendored agent tooling.
+.agents
+.claude
+.impeccable
+
+# Hand-laid-out prose and tables; Prettier would only re-wrap them.
+*.md

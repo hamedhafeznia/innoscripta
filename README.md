@@ -30,6 +30,11 @@ npm test
 npm run build
 ```
 
+Formatting is Prettier's (`npm run format`, or `format:check` to only look). `npm install`
+also wires up two git hooks through Husky: **pre-commit** formats the staged files and runs
+the `tsc -b` type-check, and **pre-push** runs the test suite. The Docker build is
+unaffected: Husky does nothing where there is no `.git`.
+
 Vite's `server.proxy` mirrors the exact same `/api/*` paths that nginx serves, and
 the keys are read from `.env` **without** a `VITE_` prefix — the prefix is precisely
 what would inline them into the bundle. As a result the application code is
