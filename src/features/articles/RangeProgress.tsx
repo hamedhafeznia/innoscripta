@@ -46,7 +46,7 @@ export function RangeProgress({ filters, articles, nextDay, hasMore }: RangeProg
 
   return (
     <p className="m-0 max-w-prose text-sm text-pretty text-muted-foreground">
-      Newest first, back to {formatShortDay(oldestLoaded)} so far. Your range runs {range} — a busy
+      Newest first, back to {formatShortDay(oldestLoaded)} so far. Your range runs {range}. A busy
       day carries hundreds of articles, so load more to keep going back.
     </p>
   );
