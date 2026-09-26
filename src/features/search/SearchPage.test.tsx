@@ -6,6 +6,7 @@ import nytFixture from '../../test/fixtures/nyt.search.json';
 import newsapiFixture from '../../test/fixtures/newsapi.search.json';
 import { currentLocation, renderWithProviders } from '../../test/renderApp';
 import { server } from '../../test/server';
+import { usePreferences } from '../preferences/store';
 import { SearchPage } from './SearchPage';
 
 function serveAll() {
@@ -125,6 +126,27 @@ describe('SearchPage', () => {
     expect(screen.queryByRole('button', { name: 'Load more' })).not.toBeInTheDocument();
     expect(screen.queryByText(/Nothing matched in the pages checked/)).not.toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'Try again' })).toBeInTheDocument();
+  });
+
+  it('follows an author from a result and remembers them for the feed', async () => {
+    serveAll();
+    localStorage.clear();
+    usePreferences.getState().clear();
+    const user = userEvent.setup();
+
+    renderWithProviders(<SearchPage />, { route: '/search?q=climate&src=guardian' });
+    const [first] = await anArticle();
+
+    const follow = within(first!).getByRole('button', { name: /^Follow / });
+    const name = follow.textContent!.replace(/^Follow /, '');
+    await user.click(follow);
+
+    // A Guardian card carries the contributor tag, which is what lets the filter run
+    // server-side rather than on this device.
+    expect(usePreferences.getState().authors[0]).toEqual({
+      name,
+      ref: `profile/${name.toLowerCase().replace(/ /g, '-')}`,
+    });
   });
 
   it('offers a retry, not "that is everything", when every source fails on Load more', async () => {

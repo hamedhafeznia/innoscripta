@@ -18,15 +18,32 @@ import { ARTICLE_GRID } from './layout';
 export function ArticleList({
   articles,
   collapseDays = false,
+  busy = false,
+  showFollow = true,
 }: {
   articles: Article[];
   /** True when a range is being walked: every rendered day is finished and can collapse. */
   collapseDays?: boolean;
+  /**
+   * These are the previous answer, kept on screen while the next one loads. Dimmed and
+   * marked busy so they are not mistaken for the answer to what was just asked.
+   */
+  busy?: boolean;
+  /** Passed down to each card. */
+  showFollow?: boolean;
 }) {
   return (
-    <div className="flex w-full flex-col gap-10">
+    <div
+      aria-busy={busy}
+      className={`flex w-full flex-col gap-10 transition-opacity duration-150 ${busy ? 'opacity-60' : ''}`}
+    >
       {groupByDay(articles).map((group) => (
-        <DaySection key={group.key} group={group} collapsed={collapseDays} />
+        <DaySection
+          key={group.key}
+          group={group}
+          collapsed={collapseDays}
+          showFollow={showFollow}
+        />
       ))}
     </div>
   );

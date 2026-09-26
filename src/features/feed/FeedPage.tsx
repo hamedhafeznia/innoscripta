@@ -38,6 +38,7 @@ export function FeedPage() {
     fetchNextPage,
     hasNextPage,
     isFetchingNextPage,
+    isPlaceholderData,
   } = useArticles(filters, authors);
 
   const hasPreferences = categories.length > 0 || sources.length > 0 || authors.length > 0;
@@ -117,7 +118,12 @@ export function FeedPage() {
             nextDay={nextDay}
             hasMore={hasNextPage}
           />
-          <ArticleList articles={articles} collapseDays={Boolean(oldestDay)} />
+          <ArticleList
+            articles={articles}
+            collapseDays={Boolean(oldestDay)}
+            busy={isPlaceholderData}
+            showFollow={false}
+          />
         </>
       )}
 
@@ -126,7 +132,7 @@ export function FeedPage() {
           hasNextPage={hasNextPage}
           unreachable={unreachable}
           hasArticles={articles.length > 0}
-          isFetchingNextPage={isFetchingNextPage}
+          isFetchingNextPage={isFetchingNextPage || isPlaceholderData}
           onLoadMore={() => void fetchNextPage()}
         />
       ) : null}

@@ -45,7 +45,14 @@ function ImageFallback({ publisher }: { publisher: string }) {
   );
 }
 
-export function ArticleCard({ article }: { article: Article }) {
+export function ArticleCard({
+  article,
+  showFollow = true,
+}: {
+  article: Article;
+  /** False where following would rebuild the page the reader is standing in: the feed. */
+  showFollow?: boolean;
+}) {
   const published = new Date(article.publishedAt);
   const provider = providerLabel(article);
   const publisher = article.publisher ?? provider;
@@ -132,7 +139,7 @@ export function ArticleCard({ article }: { article: Article }) {
           ) : (
             <span />
           )}
-          <FollowAuthorButton article={article} />
+          {showFollow ? <FollowAuthorButton article={article} /> : null}
         </div>
 
         {/* Provenance only when it is surprising: "via NewsAPI" on an Irish Times story is

@@ -9,7 +9,15 @@ import { ARTICLE_GRID } from './layout';
 /** Two clean rows on a three-column grid, and the next day reachable by scrolling. */
 const VISIBLE_PER_DAY = 6;
 
-export function DaySection({ group, collapsed }: { group: DayGroup; collapsed: boolean }) {
+export function DaySection({
+  group,
+  collapsed,
+  showFollow = true,
+}: {
+  group: DayGroup;
+  collapsed: boolean;
+  showFollow?: boolean;
+}) {
   const [expanded, setExpanded] = useState(false);
   const listId = useId();
 
@@ -41,7 +49,7 @@ export function DaySection({ group, collapsed }: { group: DayGroup; collapsed: b
       <ul id={listId} className={ARTICLE_GRID}>
         {visible.map((article) => (
           <li key={article.id}>
-            <ArticleCard article={article} />
+            <ArticleCard article={article} showFollow={showFollow} />
           </li>
         ))}
       </ul>

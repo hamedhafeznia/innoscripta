@@ -1,4 +1,4 @@
-import { http, HttpResponse } from 'msw';
+import { delay, http, HttpResponse } from 'msw';
 import { screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import guardianFixture from '../../test/fixtures/guardian.search.json';
@@ -71,34 +71,17 @@ describe('FeedPage', () => {
     await waitFor(() => expect(currentLocation()).toBe('/search?cat=science&src=guardian'));
   });
 
-  it('follows an author from a card and lists them among the preferences', async () => {
+  it('offers no Follow button on its cards: authors are followed from search', async () => {
+    // Following narrows the feed, so doing it from inside the feed rebuilds the page under
+    // the reader's finger. The feed lists whom you follow and lets you unfollow; adding
+    // someone happens in /search.
     serveAll();
-    const user = userEvent.setup();
     usePreferences.getState().toggleSource('guardian');
 
     renderWithProviders(<FeedPage />, { route: '/feed' });
     const [first] = await screen.findAllByRole('article');
 
-    const follow = within(first!).getByRole('button', { name: /^Follow / });
-    const name = follow.textContent!.replace(/^Follow /, '');
-
-    await user.click(follow);
-
-    const followed = screen.getByRole('group', { name: 'Authors I follow' });
-    await waitFor(() => expect(within(followed).getByText(name)).toBeInTheDocument());
-    // Following changes the query key, so the feed refetches and the cards remount.
-    await waitFor(() =>
-      expect(screen.getAllByRole('button', { name: `Following ${name}` })[0]).toHaveAttribute(
-        'aria-pressed',
-        'true',
-      ),
-    );
-    // A Guardian card carries the contributor tag, which is what lets the filter run
-    // server-side rather than on this device.
-    expect(usePreferences.getState().authors[0]).toEqual({
-      name,
-      ref: `profile/${name.toLowerCase().replace(/ /g, '-')}`,
-    });
+    expect(within(first!).queryByRole('button', { name: /^Follow / })).not.toBeInTheDocument();
   });
 
   it('says where author filtering happens once an author is followed', async () => {
@@ -115,6 +98,32 @@ describe('FeedPage', () => {
     renderWithProviders(<FeedPage />, { route: '/feed' });
 
     expect(await screen.findByText(/filtered on this device after fetching/)).toBeInTheDocument();
+  });
+
+  it('keeps the feed on screen while it refetches for a changed preference', async () => {
+    // A changed preference changes what the feed asks for. Dropping to the loading
+    // skeleton while it does reads as the page reloading, and throws away the reader's
+    // place in it.
+    serveAll();
+    let slow = false;
+    server.use(
+      http.get('*/api/guardian/search', async () => {
+        if (slow) await delay(400);
+        return HttpResponse.json(guardianFixture);
+      }),
+    );
+    const user = userEvent.setup();
+    usePreferences.getState().toggleSource('guardian');
+
+    renderWithProviders(<FeedPage />, { route: '/feed' });
+    await screen.findAllByRole('article');
+
+    // From here the refetch is in flight when we look.
+    slow = true;
+    await user.click(screen.getByRole('checkbox', { name: 'science' }));
+
+    expect(screen.queryByText('Loading your feed')).not.toBeInTheDocument();
+    expect(screen.getAllByRole('article').length).toBeGreaterThan(0);
   });
 
   it('says the followed authors are why nothing matched, instead of a generic empty state', async () => {

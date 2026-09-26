@@ -54,7 +54,7 @@ export function PreferencesPanel() {
         </legend>
         {authors.length === 0 ? (
           <p className="text-xs text-muted-foreground">
-            None yet — use “Follow” on any article card to add one.
+            None yet — follow an author from any result in search.
           </p>
         ) : (
           authors.map((author) => (

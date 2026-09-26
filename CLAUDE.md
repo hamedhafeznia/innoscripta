@@ -149,7 +149,7 @@ errors use the same notice slot. A reviewer *will* kill a key to see what happen
   the publisher name where available (e.g. NewsAPI `source.name`). README says so.
 - **sources + categories: AND.** Predicates on a query → live in the URL.
 - **authors: OR among themselves, narrowing the feed** — a "Follow author" button on
-  cards, not another filter on the URL. Following a second author adds theirs to the
+  `/search` cards (not on `/feed`, which lists follows and lets you unfollow them), not another filter on the URL. Following a second author adds theirs to the
   first's, but the set as a whole is AND-ed with the chosen providers and categories: the
   feed shows followed authors' articles *within* them. Nothing chosen means only followed
   authors' articles. A property of the user → lives in Zustand/localStorage, not the URL.

@@ -100,7 +100,9 @@ The split between the two is about what the thing *is*:
   meaningless in someone else's browser, so they live in Zustand, persisted to
   `localStorage`, and never in the URL.
 
-A **Follow** button sits on every card. Where that filter then runs depends on what the
+A **Follow** button sits on every card in `/search`. It is deliberately absent from `/feed`:
+following narrows the feed, so doing it from inside would rebuild the page under the reader.
+The feed lists whom you follow and lets you unfollow. Where that filter then runs depends on what the
 source can do, and the feed says so on the page:
 
 - The Guardian can filter server-side, by the contributor tag (`profile/<slug>`) the

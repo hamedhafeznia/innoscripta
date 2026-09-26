@@ -1,4 +1,4 @@
-import { useInfiniteQuery } from '@tanstack/react-query';
+import { keepPreviousData, useInfiniteQuery } from '@tanstack/react-query';
 import type { Filters } from '../../core/filters';
 import type { FollowedAuthor } from '../preferences/store';
 import { fetchPage, initialCursor } from './fetchPage';
@@ -16,6 +16,11 @@ export function useArticles(filters: Filters, authors: FollowedAuthor[]) {
     initialPageParam: initialCursor(),
     queryFn: ({ pageParam, signal }) => fetchPage({ filters, authors, cursor: pageParam, signal }),
     getNextPageParam: (lastPage) => (lastPage.done ? undefined : lastPage.cursor),
+    // A change of filters or follows is a new query with no data of its own. Without this
+    // the page drops to the loading skeleton and rebuilds, which reads as a reload and
+    // throws away the reader's place. Keep the last answer on screen until the next one
+    // lands; `isPlaceholderData` says which one it is.
+    placeholderData: keepPreviousData,
     select: (data) => data.pages,
   });
 

@@ -50,6 +50,7 @@ export function SearchPage() {
     fetchNextPage,
     hasNextPage,
     isFetchingNextPage,
+    isPlaceholderData,
   } = useArticles(filters, []);
 
   return (
@@ -104,7 +105,11 @@ export function SearchPage() {
             nextDay={nextDay}
             hasMore={hasNextPage}
           />
-          <ArticleList articles={articles} collapseDays={Boolean(oldestDay)} />
+          <ArticleList
+            articles={articles}
+            collapseDays={Boolean(oldestDay)}
+            busy={isPlaceholderData}
+          />
         </>
       )}
 
@@ -112,7 +117,7 @@ export function SearchPage() {
         hasNextPage={hasNextPage}
         unreachable={unreachable}
         hasArticles={articles.length > 0}
-        isFetchingNextPage={isFetchingNextPage}
+        isFetchingNextPage={isFetchingNextPage || isPlaceholderData}
         onLoadMore={() => void fetchNextPage()}
       />
     </section>
