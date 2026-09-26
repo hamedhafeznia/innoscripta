@@ -26,7 +26,7 @@ export function App() {
         >
           <div className="mx-auto flex max-w-6xl flex-wrap items-baseline justify-between gap-4 px-4 py-3.5 sm:px-6">
             <span className="font-serif text-[1.15rem] leading-none font-medium tracking-[-0.015em]">
-              innoscripta <span className="text-muted-foreground">news</span>
+              take-home <span className="text-muted-foreground">news</span>
             </span>
             <nav aria-label="Primary" className="flex items-center gap-5">
               <NavLink

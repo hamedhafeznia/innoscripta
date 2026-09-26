@@ -87,7 +87,8 @@ end-to-end tests.
 
 ## Brand Commitments
 
-The name **innoscripta** identifies the assignment and appears as the application's name.
+The application is named **take-home news**, which says what it is: a take-home assignment for
+innoscripta. The company's own name is not used as the product's brand.
 There is no logo, palette, typeface or identity asset to match, and the real company's
 actual identity must not be invented, approximated or imitated. The visual world is an
 open decision.
