@@ -4,8 +4,6 @@ A React + TypeScript SPA that aggregates **The Guardian**, **NYT Article Search*
 and **NewsAPI.org** into one searchable, filterable, personalisable feed.
 Frontend only, containerised.
 
-> Status: phase 6 of 7 (polish). Feature-complete; the review pass remains.
-
 ## Run it
 
 ```bash
