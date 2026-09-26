@@ -20,6 +20,19 @@ nginx reads them when the container starts and injects them into upstream
 requests. Rebuilding is never needed to change a key, and no key is ever present
 in the JavaScript bundle.
 
+### Getting the API keys
+
+All three keys are free and take a couple of minutes to get:
+
+| Variable | Where to get it | Notes |
+|---|---|---|
+| `GUARDIAN_KEY` | <https://open-platform.theguardian.com/access/> | Register for a developer key. |
+| `NYT_KEY` | <https://developer.nytimes.com/get-started> | Create an app under **My Apps** and enable the **Article Search API** for it. |
+| `NEWSAPI_KEY` | <https://newsapi.org/register> | The key is shown on your account page once you register. |
+
+The app still starts if a key is missing or wrong: that provider shows a dismissible notice
+and the other two carry on. NewsAPI's free plan allows 100 requests a day in total.
+
 ### Local development
 
 ```bash
