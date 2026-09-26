@@ -2,8 +2,8 @@ import { useId } from 'react';
 import { Checkbox } from '@/components/ui/checkbox';
 
 /**
- * A checkbox that reads as a chip. It stays a real checkbox — label, role and keyboard
- * behaviour intact — because the filters have to be operable without a mouse.
+ * A checkbox that reads as a chip. It stays a real checkbox (label, role and keyboard
+ * behaviour intact) because the filters have to be operable without a mouse.
  */
 export function CheckboxChip({
   label,

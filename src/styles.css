@@ -5,7 +5,7 @@
  * Self-hosted, bundled with the app: no CDN request, no layout shift from a late
  * stylesheet, and it still works in the container with no network. Newsreader carries an
  * optical-size axis, so a 28px headline and a 13px byline are drawn as different shapes
- * rather than one shape scaled — which is most of why editorial type reads as considered.
+ * rather than one shape scaled, which is most of why editorial type reads as considered.
  */
 @import '@fontsource-variable/newsreader';
 @import '@fontsource-variable/inter';
@@ -137,8 +137,8 @@
   }
 
   /*
-   * shadcn's primitives carry their own focus rings, but plain elements — the nav links,
-   * the skip link, an article title — would fall back to whatever the browser draws over
+   * shadcn's primitives carry their own focus rings, but plain elements (the nav links,
+   * the skip link, an article title) would fall back to whatever the browser draws over
    * our own background. Everything reachable by keyboard gets the same visible ring.
    */
   :focus-visible {

@@ -1,4 +1,4 @@
-# innoscripta — news aggregator
+# innoscripta: news aggregator
 
 A React + TypeScript SPA that aggregates **The Guardian**, **NYT Article Search**
 and **NewsAPI.org** into one searchable, filterable, personalisable feed.
@@ -49,7 +49,7 @@ the `tsc -b` type-check, and **pre-push** runs the test suite. The Docker build 
 unaffected: Husky does nothing where there is no `.git`.
 
 Vite's `server.proxy` mirrors the exact same `/api/*` paths that nginx serves, and
-the keys are read from `.env` **without** a `VITE_` prefix — the prefix is precisely
+the keys are read from `.env` **without** a `VITE_` prefix: the prefix is precisely
 what would inline them into the bundle. As a result the application code is
 byte-identical in dev and in Docker; it never knows which one it is running under.
 
@@ -69,18 +69,18 @@ app server, no backend code and no second container.
 
 Responses are cached by nginx for 5 minutes (NewsAPI) and 2 minutes (Guardian, NYT).
 **Only `200` responses are cached**, so a rate-limit error is never served from cache.
-NewsAPI is 24h-delayed anyway, so its cache costs zero freshness — and it buys real
+NewsAPI is 24h-delayed anyway, so its cache costs zero freshness, and it buys real
 headroom against a free-plan budget of **100 requests/day**.
 
 ## Filters live in the URL
 
-`/search` keeps every filter in the query string — `?q=&from=&to=&cat=a,b&src=x,y` —
+`/search` keeps every filter in the query string, `?q=&from=&to=&cat=a,b&src=x,y`,
 so a search is shareable and survives the back button. One zod schema parses it, and it
 **treats the URL as untrusted input**: unknown categories, unknown providers, malformed
 dates and unknown parameters are dropped, never thrown on. A mangled URL renders an
 unfiltered page rather than a blank screen.
 
-`src` selects **providers** — which of the three APIs we ask — not publishers. A card
+`src` selects **providers** (which of the three APIs we ask), not publishers. A card
 shows the publisher where the source gives us one ("The Irish Times") and the provider
 it came through underneath ("via NewsAPI").
 
@@ -120,7 +120,7 @@ source can do, and the feed says so on the page:
 
 - The Guardian can filter server-side, by the contributor tag (`profile/<slug>`) the
   adapter keeps on each article. It only does so when *every* followed author has such a
-  tag — a partial list would return only those authors' articles and silently lose the
+  tag: a partial list would return only those authors' articles and silently lose the
   rest, and since follows are OR-ed together, that is a wrong answer rather than a
   narrower one. One name-only follow moves the whole set to client-side matching.
 - NYT and NewsAPI publish a byline string and no author identifier, so they are always
@@ -133,7 +133,7 @@ twice more before reporting that there are no further matches.
 
 A busy news day carries around 200 articles *per source*. Read newest-first at ten per
 source per page, a ten-day range would need hundreds of "Load more" clicks before it
-reached its second day — the filter is applied correctly, but the range is unreachable,
+reached its second day: the filter is applied correctly, but the range is unreachable,
 which looks exactly like a filter that does not work.
 
 So a multi-day range is read one day at a time: you get the top of each day, and Load more
@@ -141,7 +141,7 @@ steps back to the previous day. A ten-day range takes ten clicks instead of seve
 hundred, and the page says which day you are in and which day comes next. A single-day
 range pages into that day as usual.
 
-Dates are handled in **UTC end to end** — the three APIs take whole dates with no timezone
+Dates are handled in **UTC end to end**: the three APIs take whole dates with no timezone
 and read them as UTC, so the day shown on a card is the day it was filtered on. Hovering a
 date gives the exact local time.
 
@@ -156,7 +156,7 @@ fetched pages by normalised URL, sorts by publication date, and then **cuts the 
 the most recent of the live sources' oldest items**. Above that floor the ordering is
 complete from every source; everything below it is carried on the cursor and emitted
 once a later page lowers the floor. Exhausted and failed sources are excluded from the
-floor — neither can contribute anything further, so neither should hold articles back.
+floor: neither can contribute anything further, so neither should hold articles back.
 
 Carried articles are never refetched: NewsAPI's free plan allows 100 requests a day in
 total, which a refetch-on-scroll design would burn through in minutes.
@@ -223,7 +223,7 @@ rather than a rewrite.
 
 Tests assert roles, labels and text, never class names, so restyling cannot break them.
 
-**Dark mode** is a three-way control — system, light, dark — because "follow the system"
+**Dark mode** is a three-way control (system, light, dark) because "follow the system"
 is a real choice and not the same as whichever of the two the system happens to be right
 now. It sets `color-scheme` alongside the class so the browser's own scrollbars and form
 controls follow; a dark page with a light scrollbar is the usual tell of a half-done one.

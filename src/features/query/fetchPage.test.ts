@@ -481,7 +481,7 @@ describe('walking a date range a day at a time', () => {
 
   it('emits the whole day rather than holding a tail back', async () => {
     // Every article of the next day is older than every article of this one, so there is
-    // nothing a cut could protect — holding items back would only strand them.
+    // nothing a cut could protect; holding items back would only strand them.
     serveDays([]);
 
     const page = await run({ from: '2026-09-01', to: '2026-09-10', sources: ['guardian'] });

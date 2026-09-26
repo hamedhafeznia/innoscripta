@@ -17,7 +17,7 @@ interface Grouped {
   sources: string[];
 }
 
-/** "A", "A and B", "A, B and C" — the sources share one sentence, not one each. */
+/** "A", "A and B", "A, B and C": the sources share one sentence, not one each. */
 function listNames(names: string[]): string {
   if (names.length <= 1) return names[0] ?? '';
   return `${names.slice(0, -1).join(', ')} and ${names.at(-1)}`;

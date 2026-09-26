@@ -6,7 +6,7 @@ import { FollowAuthorButton } from '../preferences/FollowAuthorButton';
  * UTC, deliberately. The three APIs filter by whole dates with no timezone, which they
  * read as UTC, so a search for "3 to 6 September" is a UTC range. Formatting the card in
  * the reader's own zone makes an article published at 23:41Z on the 6th render as the 7th
- * for anyone east of London — a result dated outside the range the reader just asked for.
+ * for anyone east of London: a result dated outside the range the reader just asked for.
  * The day shown and the day filtered are now the same day.
  */
 const DATE_FORMAT = new Intl.DateTimeFormat(undefined, {
@@ -27,8 +27,8 @@ function providerLabel(article: Article): string {
 }
 
 /**
- * The fallback when a source returns no thumbnail. It holds the grid's rhythm — every
- * card the same height, which is most of what makes a wall of cards feel calm — without
+ * The fallback when a source returns no thumbnail. It holds the grid's rhythm (every
+ * card the same height, which is most of what makes a wall of cards feel calm) without
  * pretending to be a photograph: a tinted field and the publisher's initial in the
  * headline face, at a weight that recedes rather than competes.
  */
@@ -63,7 +63,7 @@ export function ArticleCard({
         <img
           // A hairline inside the edge: without it a pale photograph dissolves into the
           // page and the grid loses its rhythm wherever the sky is white. Pure black and
-          // pure white, never a tinted near-black — a tinted edge picks up the surface
+          // pure white, never a tinted near-black: a tinted edge picks up the surface
           // beneath it and reads as dirt on the photograph.
           className="aspect-[3/2] w-full rounded-md bg-surface object-cover outline-1 -outline-offset-1 outline-black/10 dark:outline-white/10"
           src={article.imageUrl}
@@ -94,11 +94,11 @@ export function ArticleCard({
         </p>
 
         {/* h3 under the day's h2, under the page's h1: a complete ladder with nothing
-            skipped. Serif, tight, balanced — the headline is the only thing on the card
+            skipped. Serif, tight, balanced: the headline is the only thing on the card
             allowed to be loud, and wrapping it evenly stops the grid looking ragged. */}
         <h3 className="font-serif text-[1.35rem] leading-[1.25] font-medium tracking-[-0.011em] text-balance break-words">
           {/* Links out: none of these APIs reliably return full body text, so there is no
-              detail page to open — the "Read at" link below says so on the card itself. */}
+              detail page to open: the "Read at" link below says so on the card itself. */}
           <a
             className="decoration-1 underline-offset-[3px] group-hover:underline focus-visible:underline"
             href={article.url}

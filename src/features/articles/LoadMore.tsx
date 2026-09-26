@@ -44,7 +44,7 @@ export function LoadMore({
   if (!hasArticles) return null;
 
   if (hasNextPage) {
-    // Nothing answered, so the list is not finished — it is just not loading. The cursor
+    // Nothing answered, so the list is not finished: it is just not loading. The cursor
     // has not moved, so trying again asks for exactly the page that failed.
     return (
       <div

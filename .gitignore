@@ -5,7 +5,7 @@ node_modules/
 dist/
 *.tsbuildinfo
 
-# env — real keys never get committed; .env.example is the tracked template
+# env: real keys never get committed; .env.example is the tracked template
 .env
 .env.*
 !.env.example

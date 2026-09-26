@@ -20,7 +20,7 @@ const MAX_EXTRA_ROUNDS = 2;
  * The ragged-tail cut can legitimately emit very little: the shallowest source's reach
  * sets the floor, and a source filtered client-side (NYT by category) may have reached
  * back only a few hours while contributing a single match. The buffer holds the rest, so
- * nothing is lost — but a page of one article reads as a broken filter. Below this many,
+ * nothing is lost, but a page of one article reads as a broken filter. Below this many,
  * the fan-out goes another round and the pages are shown together. Bounded by
  * `MAX_EXTRA_ROUNDS`, so the request budget stays capped; if that is not enough, the page
  * is topped up from the buffer (see the end of `fetchPage`).
@@ -38,7 +38,7 @@ function addDays(day: string, delta: number): string {
  * A range spanning more than one day is walked a day at a time.
  *
  * Both bounds are required: without them there is no newest day to start from or no
- * oldest day to stop at. A single-day range needs no walking — ordinary paging already
+ * oldest day to stop at. A single-day range needs no walking; ordinary paging already
  * burrows into exactly the day that was asked for.
  *
  * The reason is arithmetic. A busy day carries a couple of hundred articles per source,
@@ -95,7 +95,7 @@ export interface PageRequest {
  *
  * A source that can filter server-side only does so when every followed author carries
  * an identifier it understands. Send it a partial list and it returns only those
- * authors' articles, silently losing the rest — and follows are OR-ed together, so losing
+ * authors' articles, silently losing the rest, and follows are OR-ed together, so losing
  * one is a wrong answer, not a narrower one. One name-only follow therefore moves the whole
  * set to the client side, where names are all that is needed.
  */
@@ -269,7 +269,7 @@ function advance(cursor: Cursor, results: readonly SourceResult[], buffer: Artic
 
 /**
  * Fetches one page of merged results, retrying the fan-out up to `MAX_EXTRA_ROUNDS`
- * times when client-side filtering — and only client-side filtering — emptied it.
+ * times when client-side filtering (and only client-side filtering) emptied it.
  * A page must never come back empty while live sources still have pages left.
  */
 export async function fetchPage({
@@ -316,7 +316,7 @@ export async function fetchPage({
     }
 
     // Walking a range emits the whole day it just read. `exhausted` is literally true
-    // here — this day will not be asked for again — and with no live source left to
+    // here (this day will not be asked for again), and with no live source left to
     // undercut it, the ragged-tail cut has nothing to hold back. Every article of the
     // next day is older than every article of this one, so the ordering stays sound.
     const results = window

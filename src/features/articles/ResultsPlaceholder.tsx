@@ -2,7 +2,7 @@ import { RotateCw } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 interface ResultsPlaceholderProps {
-  /** Nothing answered at all — not the same thing as an empty result set. */
+  /** Nothing answered at all, not the same thing as an empty result set. */
   unreachable: boolean;
   /** Client-side filtering ran out of pages before it found a match. */
   outOfMatches: boolean;

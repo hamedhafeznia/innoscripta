@@ -9,8 +9,8 @@ import { ARTICLE_GRID } from './layout';
  *
  * A busy day carries ~200 articles per source, so ten pages of a ten-day range can all
  * belong to the same day. Ungrouped, that reads as a filter that did not work. The
- * heading says which day you are in, and it makes the newest-first merge — the thing the
- * whole query layer exists to do — visible instead of implied.
+ * heading says which day you are in, and it makes the newest-first merge (the thing the
+ * whole query layer exists to do) visible instead of implied.
  *
  * Each day shows a handful and keeps the rest one click away, so the day after this one
  * is reachable by scrolling rather than by fetching.
@@ -50,8 +50,8 @@ export function ArticleList({
 }
 
 /**
- * Mirrors the real card's shape — image, eyebrow, two headline lines, description, byline
- * — so nothing jumps when the articles arrive.
+ * Mirrors the real card's shape (image, eyebrow, two headline lines, description, byline)
+ * so nothing jumps when the articles arrive.
  */
 export function ArticleListSkeleton({ count = 6 }: { count?: number }) {
   return (

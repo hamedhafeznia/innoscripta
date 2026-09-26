@@ -13,8 +13,8 @@ interface RangeProgressProps {
 /**
  * A range that is read newest-first looks broken from the inside: a busy day carries a
  * couple of hundred articles per source, so ten pages of a ten-day range can all belong
- * to the same day. This line says where in the range the reader actually is, and — when
- * the range is being walked — which day comes next.
+ * to the same day. This line says where in the range the reader actually is, and, when
+ * the range is being walked, which day comes next.
  */
 export function RangeProgress({ filters, articles, nextDay, hasMore }: RangeProgressProps) {
   if (!filters.from && !filters.to) return null;

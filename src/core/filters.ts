@@ -24,7 +24,7 @@ export const EMPTY_FILTERS: Filters = { query: '', categories: [], sources: [] }
  *
  * The check is total rather than relying on the regex having already rejected the value:
  * zod runs every check on a field, so a refinement that can throw escapes `.catch()`
- * and takes the whole parse down with it — which is exactly what must not happen to
+ * and takes the whole parse down with it, which is exactly what must not happen to
  * input that arrives from the URL bar.
  */
 function isRealIsoDate(value: string): boolean {

@@ -125,8 +125,8 @@ export const nytSource: NewsSource<'nyt'> = {
   notice: () => null,
 
   async search(params: SearchParams, signal?: AbortSignal): Promise<SourcePage> {
-    // No `fq` is sent. Every `fq` query against the live API — including the examples in
-    // NYT's own documentation — now comes back `hits: 0, docs: null`, so sending one would
+    // No `fq` is sent. Every `fq` query against the live API, including the examples in
+    // NYT's own documentation, now comes back `hits: 0, docs: null`, so sending one would
     // silently drop NYT out of any category- or author-filtered search. Filtering those
     // two facets client-side costs a little precision and always returns something.
     const url = buildUrl('/api/nyt/articlesearch.json', {

@@ -19,7 +19,7 @@ export function App() {
           Skip to content
         </a>
         {/* Sticky and quiet: a hairline and the wordmark, so the page below it is the
-            thing with presence. Solid rather than blurred — nothing here needs to suggest
+            thing with presence. Solid rather than blurred: nothing here needs to suggest
             depth, and a calm surface is the point. */}
         <header // Fully opaque: at 98% the day headings ghost through as they scroll under it.
           className="sticky top-0 z-20 border-b bg-background"

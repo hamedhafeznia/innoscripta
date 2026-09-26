@@ -13,7 +13,7 @@ describe('ArticleCard date', () => {
     );
 
     const time = screen.getByRole('time');
-    // The day, whatever the locale orders it as — never the 7th.
+    // The day, whatever the locale orders it as, never the 7th.
     expect(time.textContent).toMatch(/\b6\b/);
     expect(time.textContent).not.toMatch(/\b7\b/);
     expect(time).toHaveAttribute('datetime', '2026-09-06T23:41:15Z');

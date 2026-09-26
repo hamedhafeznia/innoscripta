@@ -35,7 +35,7 @@ can make a feed that is theirs and persists.
 The three sources disagree about nearly everything operational: page size, how deep results
 go, how dates are expressed, what a category is, whether an author can be filtered at all.
 The distinguishing mechanism is that the product **reconciles those differences and then
-tells the reader the truth about the ones it cannot reconcile** — which source was left out
+tells the reader the truth about the ones it cannot reconcile**, which source was left out
 of a search and why, which source answered a narrower question than was asked, which source
 is being filtered after the fact. The easy version of this product silently shows a shorter
 list. This one says what happened.
@@ -65,8 +65,8 @@ merged and deduplicated results ordered newest-first; per-source notices; follow
 that persist; loading, empty and error states; light, dark and follow-the-system themes.
 
 **Terminology, which the interface must keep straight:** a **provider** is one of the three
-APIs we query. A **publisher** is who actually wrote the article — "The Irish Times" arriving
-through NewsAPI. The provider filter selects providers, never publishers.
+APIs we query. A **publisher** is who actually wrote the article ("The Irish Times" arriving
+through NewsAPI). The provider filter selects providers, never publishers.
 
 Durable technical constraints:
 
@@ -103,7 +103,7 @@ open decision.
 - **A verified container**: image builds without keys, SPA fallback works, all three proxy
   routes return 200 with keys injected server-side, and no key appears in the served bundle.
 - **The requirements record** is `CLAUDE.md`. It is a synthesis of settled decisions written
-  during the build, not a client document — no official brief or rubric from innoscripta
+  during the build, not a client document: no official brief or rubric from innoscripta
   exists in this repository.
 - **No testimonials, customers, usage data, benchmarks or press exist.** Nothing of the kind
   may be fabricated for any surface.
@@ -123,7 +123,7 @@ open decision.
 
 ## Accessibility & Inclusion
 
-Established requirement: full keyboard operation and correctly labelled controls — visible
+Established requirement: full keyboard operation and correctly labelled controls, visible
 focus on everything focusable, real form semantics, live regions for results and loading,
 and `prefers-reduced-motion` honoured. Deliberately not claimed: a full WCAG conformance
 target, screen-reader certification, or audits beyond keyboard and labels.

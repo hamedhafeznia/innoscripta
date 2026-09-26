@@ -23,14 +23,14 @@ export type SourceResult =
 export interface MergeInput {
   /** Articles carried from previous rounds. Never emitted without re-passing the cut. */
   buffer: Article[];
-  /** This round's results, in registry order — which is also the collision tie-break. */
+  /** This round's results, in registry order, which is also the collision tie-break. */
   results: readonly SourceResult[];
 }
 
 export interface MergeResult {
   /** Safe to render: above this floor the ordering is complete from every live source. */
   articles: Article[];
-  /** Carried to the next round. Never refetched — the 100/day budget cannot afford it. */
+  /** Carried to the next round. Never refetched: the 100/day budget cannot afford it. */
   buffer: Article[];
 }
 
@@ -109,7 +109,7 @@ function findCutPoint(results: readonly SourceResult[]): string | null {
 
 /**
  * Keeps one copy per normalised URL: the more populated one, and on a tie the one that
- * came first — which, given the input order, means registry order. `Promise.allSettled`
+ * came first, which, given the input order, means registry order. `Promise.allSettled`
  * preserves input order anyway; stating the rule keeps the merge visibly deterministic.
  */
 function dedupe(articles: readonly Article[]): Article[] {

@@ -96,7 +96,7 @@ function requestedCategories(params: SearchParams): Category[] {
  * Which NewsAPI category this request rides on, or `undefined` for `/everything`.
  *
  * With neither a keyword nor a category there is nothing for `/everything` to search and
- * it answers 400 — which is exactly the bare `/search` landing view, so the reader's very
+ * it answers 400, which is exactly the bare `/search` landing view, so the reader's very
  * first screen used to be a failure notice. `/top-headlines` with the `general` category
  * is the honest answer to "no question asked": the current front page.
  */

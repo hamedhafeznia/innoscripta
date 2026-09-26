@@ -64,14 +64,14 @@ export interface NewsSource<Id extends string = SourceId> {
   /**
    * Why this source cannot serve these params at all, or `null` when it can.
    * A non-null reason excludes the source from the fan-out and is shown verbatim
-   * in the per-source notice slot — so it is written as user-facing copy.
+   * in the per-source notice slot, so it is written as user-facing copy.
    *
    * Example: NewsAPI needs `/top-headlines` for a category and `/everything` for
    * dates, and neither endpoint does both.
    */
   unserviceable(params: SearchParams): string | null;
   /**
-   * A caveat about results this source *will* return — a narrowed endpoint, a
+   * A caveat about results this source *will* return: a narrowed endpoint, a
    * truncated window. Shown in the same notice slot as `unserviceable`.
    */
   notice(params: SearchParams): string | null;

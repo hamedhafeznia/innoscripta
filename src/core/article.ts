@@ -2,7 +2,7 @@ import type { SourceId } from '../sources/registry';
 
 /**
  * The providers we fan out to; `src` in the URL selects these, not publishers. Derived
- * from the registry, so it is never edited here — see `sources/registry.ts`.
+ * from the registry, so it is never edited here: see `sources/registry.ts`.
  */
 export type { SourceId };
 
@@ -29,12 +29,12 @@ export function isCategory(value: string): value is Category {
 }
 
 export interface Article {
-  /** `<sourceId>:<native id>` — stable across pages, unique across sources. */
+  /** `<sourceId>:<native id>`, stable across pages, unique across sources. */
   id: string;
   title: string;
   /** The original URL, used for the outbound link. Never normalised in place. */
   url: string;
-  /** Dedupe key only — see `normalizeUrl`. */
+  /** Dedupe key only: see `normalizeUrl`. */
   normalizedUrl: string;
   /** ISO 8601. Every adapter converts its native format to this. */
   publishedAt: string;
@@ -45,8 +45,8 @@ export interface Article {
   /** Normalised by the adapter: no leading "By ", no trailing whitespace. */
   author: string | null;
   /**
-   * The primary author as the *source* identifies them, when it identifies them at all
-   * — the Guardian's `profile/<slug>` contributor tag. It is what lets a followed author
+   * The primary author as the *source* identifies them, when it identifies them at all:
+   * the Guardian's `profile/<slug>` contributor tag. It is what lets a followed author
    * be filtered server-side; sources that only publish a byline string leave it null.
    */
   authorRef: string | null;

@@ -4,7 +4,7 @@ import type { SourceId } from './article';
 export type SourceErrorKind =
   /** The source's quota is spent. NewsAPI's free plan allows 100 requests a day. */
   | 'rateLimited'
-  /** Missing or rejected key — the reviewer killed it, or never set it. */
+  /** Missing or rejected key: the reviewer killed it, or never set it. */
   | 'unauthorized'
   /** Any other non-2xx, or a response we could not parse. */
   | 'upstream'
@@ -96,7 +96,7 @@ function kindFromStatus(status: number): SourceErrorKind {
  */
 function messageFromStatus(status: number): string {
   // Neutral about the window on purpose. A 429 from NewsAPI is its 100-a-day cap, but
-  // from NYT it is usually a per-minute throttle that clears in seconds — and the status
+  // from NYT it is usually a per-minute throttle that clears in seconds, and the status
   // alone cannot tell them apart. "Today" would send a reader away for a day over a
   // one-minute limit.
   if (status === 429) return 'has hit its request limit for now.';

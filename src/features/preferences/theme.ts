@@ -23,7 +23,7 @@ const prefersDark = () =>
 
 /**
  * Applies the theme to `<html>`. `color-scheme` is set alongside the class so the
- * browser's own chrome — scrollbars, form controls, the address bar — follows too;
+ * browser's own chrome (scrollbars, form controls, the address bar) follows too;
  * a dark page with a light scrollbar is the usual tell of a half-done dark mode.
  */
 export function useApplyTheme() {
