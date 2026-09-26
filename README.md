@@ -166,6 +166,16 @@ per-source notice rather than silently returning a short list.
   does not send it and filters those two facets client-side instead.
 - **NewsAPI's free plan allows 100 requests a day in total** and its articles are
   delayed 24 hours with a one-month lookback.
+- **A walked day can be incomplete.** When a date range is read a day at a time and one
+  source fails for that day while the others answer, the day is shown without it and is
+  not retried: Load more moves to the day before. The notice names the source that
+  dropped out. When *every* source fails the cursor stays on the day, so Try again asks
+  for the same day again.
+- **A thin page is topped up from the buffer.** A page always shows at least six
+  articles when that many were fetched. If the merge's ragged-tail cut would hold back
+  more than that, the newest carried articles are released early, so an article from a
+  shallow source that has not been fetched yet may appear on the next page, above them.
+  Nothing is refetched and each page stays newest-first internally.
 
 ## Cut from scope
 
