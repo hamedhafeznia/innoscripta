@@ -3,7 +3,14 @@ import type { Article, Category } from '../core/article';
 import { isCategory, normalizeUrl } from '../core/article';
 import { buildUrl, fetchJson } from '../core/http';
 import { PAGE_SIZE, type NewsSource, type SearchParams, type SourcePage } from '../core/source';
-import { asHttpUrl, httpUrl, keepValid, optionalText, requiredText, timestamp } from '../core/validate';
+import {
+  asHttpUrl,
+  httpUrl,
+  keepValid,
+  optionalText,
+  requiredText,
+  timestamp,
+} from '../core/validate';
 
 /** `/everything` caps the free plan at 100 results, i.e. 10 pages of 10. */
 const MAX_PAGES = 10;
@@ -169,7 +176,9 @@ export const newsapiSource: NewsSource<'newsapi'> = {
     const articles = body.articles ?? [];
 
     return {
-      articles: keepValid(newsApiArticle, articles).map((article) => toArticle(article, nativeCategory)),
+      articles: keepValid(newsApiArticle, articles).map((article) =>
+        toArticle(article, nativeCategory),
+      ),
       // Judged on what came back, not on what survived validation.
       exhausted: params.page >= MAX_PAGES || articles.length < PAGE_SIZE,
     };

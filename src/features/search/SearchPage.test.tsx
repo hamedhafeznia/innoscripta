@@ -129,7 +129,8 @@ describe('SearchPage', () => {
 
   it('offers a retry, not "that is everything", when every source fails on Load more', async () => {
     let failing = false;
-    const answer = (body: unknown) => () => (failing ? HttpResponse.error() : HttpResponse.json(body as object));
+    const answer = (body: unknown) => () =>
+      failing ? HttpResponse.error() : HttpResponse.json(body as object);
     server.use(
       http.get('*/api/guardian/search', answer(guardianFixture)),
       http.get('*/api/nyt/articlesearch.json', answer(nytFixture)),

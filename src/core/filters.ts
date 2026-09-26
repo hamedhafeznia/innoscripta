@@ -57,7 +57,9 @@ const searchParamsSchema = z.object({
   from: isoDate.optional().catch(undefined),
   to: isoDate.optional().catch(undefined),
   cat: csvOf(CATEGORIES).catch([]).default([]),
-  src: csvOf(SOURCE_IDS as readonly SourceId[]).catch([]).default([]),
+  src: csvOf(SOURCE_IDS as readonly SourceId[])
+    .catch([])
+    .default([]),
 });
 
 export function parseFilters(search: URLSearchParams | string): Filters {

@@ -22,11 +22,7 @@ describe('RangeProgress', () => {
 
   it('falls back to how far back it has read when the range is not walked', () => {
     const { container } = render(
-      <RangeProgress
-        filters={{ ...EMPTY_FILTERS, to: '2026-09-10' }}
-        articles={loaded}
-        hasMore
-      />,
+      <RangeProgress filters={{ ...EMPTY_FILTERS, to: '2026-09-10' }} articles={loaded} hasMore />,
     );
 
     expect(container.textContent).toMatch(/back to .*10.* so far/);

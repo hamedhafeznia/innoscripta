@@ -24,9 +24,7 @@ describe('preferences store', () => {
     it('follows the first name of a multi-name byline', () => {
       usePreferences.getState().followAuthor(article('Muktita Suhartono, Ulet Ifansasti'));
 
-      expect(usePreferences.getState().authors).toEqual([
-        { name: 'Muktita Suhartono', ref: null },
-      ]);
+      expect(usePreferences.getState().authors).toEqual([{ name: 'Muktita Suhartono', ref: null }]);
     });
 
     it('keeps the source identifier when the card carried one', () => {

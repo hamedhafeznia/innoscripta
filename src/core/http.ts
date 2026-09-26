@@ -24,7 +24,10 @@ export class SourceError extends Error {
 }
 
 /** Builds a query string, dropping empty values so no `&q=` noise reaches the upstream. */
-export function buildUrl(path: string, params: Record<string, string | number | undefined>): string {
+export function buildUrl(
+  path: string,
+  params: Record<string, string | number | undefined>,
+): string {
   const search = new URLSearchParams();
   for (const [key, value] of Object.entries(params)) {
     if (value === undefined || value === '') continue;

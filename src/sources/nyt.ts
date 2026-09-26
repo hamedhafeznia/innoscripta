@@ -3,7 +3,14 @@ import type { Article, Category } from '../core/article';
 import { normalizeUrl } from '../core/article';
 import { buildUrl, fetchJson } from '../core/http';
 import { PAGE_SIZE, type NewsSource, type SearchParams, type SourcePage } from '../core/source';
-import { asHttpUrl, httpUrl, keepValid, optionalText, requiredText, timestamp } from '../core/validate';
+import {
+  asHttpUrl,
+  httpUrl,
+  keepValid,
+  optionalText,
+  requiredText,
+  timestamp,
+} from '../core/validate';
 
 /** Article Search returns a fixed 10 docs and caps out at 100 pages (1000 results). */
 const MAX_PAGES = 100;
@@ -50,10 +57,7 @@ const nytDoc = z.object({
   news_desk: optionalText,
   byline: z.object({ original: optionalText }).nullish().catch(undefined),
   source: optionalText,
-  multimedia: z
-    .object({ default: nytImage, thumbnail: nytImage })
-    .nullish()
-    .catch(undefined),
+  multimedia: z.object({ default: nytImage, thumbnail: nytImage }).nullish().catch(undefined),
 });
 
 type NytDoc = z.output<typeof nytDoc>;

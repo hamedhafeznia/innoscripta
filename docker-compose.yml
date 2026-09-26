@@ -3,7 +3,7 @@ services:
     build: .
     image: innoscripta-news
     ports:
-      - "8080:80"
+      - '8080:80'
     # Keys are read at container start, not at build time.
     env_file:
       - .env

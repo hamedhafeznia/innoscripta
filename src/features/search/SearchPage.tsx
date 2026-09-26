@@ -35,12 +35,28 @@ export function SearchPage() {
   // A back/forward navigation changes the URL under us; the input follows it.
   useEffect(() => setKeyword(filters.query), [filters.query]);
 
-  const { articles, notices, outOfMatches, unreachable, oldestDay, nextDay, isPending, isError, error, refetch, isFetching, fetchNextPage, hasNextPage, isFetchingNextPage } =
-    useArticles(filters, []);
+  const {
+    articles,
+    notices,
+    outOfMatches,
+    unreachable,
+    oldestDay,
+    nextDay,
+    isPending,
+    isError,
+    error,
+    refetch,
+    isFetching,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+  } = useArticles(filters, []);
 
   return (
     <section className="flex w-full flex-col items-start gap-6">
-      <h1 className="m-0 font-serif text-[2rem] leading-none font-medium tracking-[-0.02em]">Search</h1>
+      <h1 className="m-0 font-serif text-[2rem] leading-none font-medium tracking-[-0.02em]">
+        Search
+      </h1>
 
       <FilterPanel
         activeCount={countActiveFilters(filters)}
@@ -60,7 +76,10 @@ export function SearchPage() {
           <ArticleListSkeleton />
         </>
       ) : isError ? (
-        <p className="m-0 w-full rounded-lg border border-destructive/40 bg-destructive/5 p-8 text-center text-destructive" role="alert">
+        <p
+          className="m-0 w-full rounded-lg border border-destructive/40 bg-destructive/5 p-8 text-center text-destructive"
+          role="alert"
+        >
           Nothing could be loaded: {error.message}
         </p>
       ) : articles.length === 0 ? (
@@ -73,7 +92,10 @@ export function SearchPage() {
         />
       ) : (
         <>
-          <p className="m-0 text-[0.7rem] font-medium tracking-[0.08em] text-muted-foreground uppercase tabular-nums" role="status">
+          <p
+            className="m-0 text-[0.7rem] font-medium tracking-[0.08em] text-muted-foreground uppercase tabular-nums"
+            role="status"
+          >
             {articles.length} article{articles.length === 1 ? '' : 's'}
           </p>
           <RangeProgress

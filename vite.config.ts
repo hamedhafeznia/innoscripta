@@ -4,7 +4,6 @@ import react from '@vitejs/plugin-react';
 import tailwindcss from '@tailwindcss/vite';
 import path from 'node:path';
 
-
 /**
  * Dev proxy mirrors the nginx `/api/*` routes exactly (see nginx/templates/default.conf.template).
  * App code therefore never knows whether it runs under `vite dev` or nginx: it always calls
@@ -41,11 +40,7 @@ export default defineConfig(({ mode }) => {
           target: 'https://api.nytimes.com',
           changeOrigin: true,
           rewrite: (url) =>
-            withKey(
-              url.replace(/^\/api\/nyt/, '/svc/search/v2'),
-              'api-key',
-              env.NYT_KEY,
-            ),
+            withKey(url.replace(/^\/api\/nyt/, '/svc/search/v2'), 'api-key', env.NYT_KEY),
         },
         '/api/newsapi': {
           target: 'https://newsapi.org',

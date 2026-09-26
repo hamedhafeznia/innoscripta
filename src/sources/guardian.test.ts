@@ -26,12 +26,19 @@ describe('guardian adapter', () => {
     });
 
     it('turns trailText markup into plain text for the card description', () => {
-      const withHtml = { ...results[0]!, fields: { trailText: 'Xi <strong>Jinping</strong> says' } };
+      const withHtml = {
+        ...results[0]!,
+        fields: { trailText: 'Xi <strong>Jinping</strong> says' },
+      };
       expect(toArticle(withHtml).description).toBe('Xi Jinping says');
     });
 
     it('files an unmapped section under general while keeping its display label', () => {
-      const article = toArticle({ ...results[0]!, sectionId: 'crosswords', sectionName: 'Crosswords' });
+      const article = toArticle({
+        ...results[0]!,
+        sectionId: 'crosswords',
+        sectionName: 'Crosswords',
+      });
 
       expect(article.category).toBe('general');
       expect(article.sourceCategory).toBe('Crosswords');
@@ -78,7 +85,15 @@ describe('guardian adapter', () => {
       );
     });
 
-    it.each(['business', 'technology', 'sports', 'science', 'health', 'politics', 'entertainment'] as const)(
+    it.each([
+      'business',
+      'technology',
+      'sports',
+      'science',
+      'health',
+      'politics',
+      'entertainment',
+    ] as const)(
       'files every section it asks for under %s as that same category',
       async (category) => {
         const request = captureRequest('/api/guardian/search', fixture);
@@ -120,7 +135,9 @@ describe('guardian adapter', () => {
       const lastPage = { response: { ...fixture.response, currentPage: 13268, pages: 13268 } };
       captureRequest('/api/guardian/search', lastPage);
 
-      await expect(guardianSource.search({ page: 13268 })).resolves.toMatchObject({ exhausted: true });
+      await expect(guardianSource.search({ page: 13268 })).resolves.toMatchObject({
+        exhausted: true,
+      });
     });
   });
 
@@ -129,10 +146,7 @@ describe('guardian adapter', () => {
       captureRequest('/api/guardian/search', {
         response: {
           ...fixture.response,
-          results: [
-            { ...results[0]!, webPublicationDate: 'not a date' },
-            results[1]!,
-          ],
+          results: [{ ...results[0]!, webPublicationDate: 'not a date' }, results[1]!],
         },
       });
 

@@ -17,13 +17,19 @@ describe('SourceNotices', () => {
     it('interrupts for a source that failed', () => {
       render(<SourceNotices notices={[notice({ kind: 'error' })]} />);
 
-      expect(screen.getByRole('alert')).toHaveTextContent('The Guardian is not responding just now.');
+      expect(screen.getByRole('alert')).toHaveTextContent(
+        'The Guardian is not responding just now.',
+      );
     });
 
     it.each(['excluded', 'caveat'] as const)(
       'announces a %s politely, since it is context and not a failure',
       (kind) => {
-        render(<SourceNotices notices={[notice({ kind, message: 'is showing recent headlines only.' })]} />);
+        render(
+          <SourceNotices
+            notices={[notice({ kind, message: 'is showing recent headlines only.' })]}
+          />,
+        );
 
         expect(screen.getByRole('status')).toHaveTextContent('is showing recent headlines only.');
         expect(screen.queryByRole('alert')).not.toBeInTheDocument();
@@ -35,8 +41,18 @@ describe('SourceNotices', () => {
     render(
       <SourceNotices
         notices={[
-          notice({ id: 'a', sourceId: 'guardian', sourceLabel: 'The Guardian', message: 'would not let us in.' }),
-          notice({ id: 'b', sourceId: 'nyt', sourceLabel: 'The New York Times', message: 'would not let us in.' }),
+          notice({
+            id: 'a',
+            sourceId: 'guardian',
+            sourceLabel: 'The Guardian',
+            message: 'would not let us in.',
+          }),
+          notice({
+            id: 'b',
+            sourceId: 'nyt',
+            sourceLabel: 'The New York Times',
+            message: 'would not let us in.',
+          }),
         ]}
       />,
     );
@@ -53,7 +69,11 @@ describe('SourceNotices', () => {
       <SourceNotices
         notices={[
           notice({ kind: 'error' }),
-          notice({ kind: 'caveat', sourceLabel: 'NewsAPI', message: 'is showing recent headlines only.' }),
+          notice({
+            kind: 'caveat',
+            sourceLabel: 'NewsAPI',
+            message: 'is showing recent headlines only.',
+          }),
         ]}
       />,
     );

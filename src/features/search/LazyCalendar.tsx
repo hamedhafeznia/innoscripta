@@ -6,7 +6,9 @@ import { Skeleton } from '@/components/ui/skeleton';
  * opens the date picker. The popover mounts its content lazily anyway, so this turns that
  * into a lazy *download* too, and the first paint no longer pays for a calendar.
  */
-const Calendar = lazy(async () => ({ default: (await import('@/components/ui/calendar')).Calendar }));
+const Calendar = lazy(async () => ({
+  default: (await import('@/components/ui/calendar')).Calendar,
+}));
 
 export function LazyCalendar(props: React.ComponentProps<typeof Calendar>) {
   return (

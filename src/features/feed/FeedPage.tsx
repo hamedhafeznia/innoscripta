@@ -23,15 +23,31 @@ export function FeedPage() {
     [categories, sources],
   );
 
-  const { articles, notices, outOfMatches, unreachable, oldestDay, nextDay, isPending, isError, error, refetch, isFetching, fetchNextPage, hasNextPage, isFetchingNextPage } =
-    useArticles(filters, authors);
+  const {
+    articles,
+    notices,
+    outOfMatches,
+    unreachable,
+    oldestDay,
+    nextDay,
+    isPending,
+    isError,
+    error,
+    refetch,
+    isFetching,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+  } = useArticles(filters, authors);
 
   const hasPreferences = categories.length > 0 || sources.length > 0 || authors.length > 0;
 
   return (
     <section className="flex w-full flex-col items-start gap-6">
       <div className="flex w-full flex-wrap items-center justify-between gap-3">
-        <h1 className="m-0 font-serif text-[2rem] leading-none font-medium tracking-[-0.02em]">My feed</h1>
+        <h1 className="m-0 font-serif text-[2rem] leading-none font-medium tracking-[-0.02em]">
+          My feed
+        </h1>
         {/* Hands the preference-derived filters to /search, pre-filled and editable. */}
         <Button asChild variant="outline" size="sm">
           <Link to={{ pathname: '/search', search: toSearchParams(filters).toString() }}>
@@ -44,9 +60,9 @@ export function FeedPage() {
 
       {authors.length > 0 ? (
         <p className="m-0 max-w-prose text-sm text-muted-foreground">
-          Followed authors narrow the feed to their articles, within the providers and
-          categories you chose. The Guardian filters them as you read; the New York Times and
-          NewsAPI are filtered on this device after fetching.
+          Followed authors narrow the feed to their articles, within the providers and categories
+          you chose. The Guardian filters them as you read; the New York Times and NewsAPI are
+          filtered on this device after fetching.
         </p>
       ) : null}
 
@@ -57,7 +73,8 @@ export function FeedPage() {
           Pick a category or a provider above, or follow an author from{' '}
           <Link className="text-primary underline-offset-4 hover:underline" to="/search">
             search
-          </Link>, and your feed will build itself here.
+          </Link>
+          , and your feed will build itself here.
         </p>
       ) : isPending ? (
         <>
@@ -67,7 +84,10 @@ export function FeedPage() {
           <ArticleListSkeleton />
         </>
       ) : isError ? (
-        <p className="m-0 w-full rounded-lg border border-destructive/40 bg-destructive/5 p-8 text-center text-destructive" role="alert">
+        <p
+          className="m-0 w-full rounded-lg border border-destructive/40 bg-destructive/5 p-8 text-center text-destructive"
+          role="alert"
+        >
           Nothing could be loaded: {error.message}
         </p>
       ) : articles.length === 0 ? (
@@ -85,7 +105,10 @@ export function FeedPage() {
         />
       ) : (
         <>
-          <p className="m-0 text-[0.7rem] font-medium tracking-[0.08em] text-muted-foreground uppercase tabular-nums" role="status">
+          <p
+            className="m-0 text-[0.7rem] font-medium tracking-[0.08em] text-muted-foreground uppercase tabular-nums"
+            role="status"
+          >
             {articles.length} article{articles.length === 1 ? '' : 's'}
           </p>
           <RangeProgress

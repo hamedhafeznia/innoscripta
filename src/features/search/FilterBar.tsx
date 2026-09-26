@@ -26,9 +26,7 @@ export function FilterBar({ filters, keyword, onKeywordChange, onChange, bare }:
       role="search"
       // A hairline toolbar, not a filled panel: on a reading page the filters are how you
       // get to the news, and a slab of tinted card above the fold makes them the subject.
-      className={
-        bare ? 'flex w-full flex-col gap-5' : 'flex w-full flex-col gap-4 border-b pb-6'
-      }
+      className={bare ? 'flex w-full flex-col gap-5' : 'flex w-full flex-col gap-4 border-b pb-6'}
       onSubmit={(event) => event.preventDefault()}
     >
       <div className="flex flex-wrap gap-3">
@@ -71,7 +69,9 @@ export function FilterBar({ filters, keyword, onKeywordChange, onChange, bare }:
             key={category}
             label={category}
             checked={filters.categories.includes(category)}
-            onToggle={() => onChange({ ...filters, categories: toggle(filters.categories, category) })}
+            onToggle={() =>
+              onChange({ ...filters, categories: toggle(filters.categories, category) })
+            }
             className="bg-background"
           />
         ))}

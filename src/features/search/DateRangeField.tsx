@@ -67,7 +67,11 @@ export function DateRangeField({ label, value, onChange, min, max }: DateRangeFi
             aria-label={`${label}: ${selected ? LABEL_FORMAT.format(selected) : 'any date'}`}
           >
             <CalendarIcon strokeWidth={1.5} />
-            {selected ? LABEL_FORMAT.format(selected) : <span className="text-muted-foreground">Any</span>}
+            {selected ? (
+              LABEL_FORMAT.format(selected)
+            ) : (
+              <span className="text-muted-foreground">Any</span>
+            )}
           </Button>
         </PopoverTrigger>
         <PopoverContent className="w-auto p-0" align="start">

@@ -114,9 +114,7 @@ describe('FeedPage', () => {
 
     renderWithProviders(<FeedPage />, { route: '/feed' });
 
-    expect(
-      await screen.findByText(/filtered on this device after fetching/),
-    ).toBeInTheDocument();
+    expect(await screen.findByText(/filtered on this device after fetching/)).toBeInTheDocument();
   });
 
   it('says the followed authors are why nothing matched, instead of a generic empty state', async () => {

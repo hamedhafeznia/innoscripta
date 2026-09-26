@@ -12,7 +12,8 @@ describe('newsapi adapter', () => {
       const article = toArticle(articles[0]!);
 
       expect(article).toMatchObject({
-        title: '‘All hell seems to have broken out’: FF and FG at loggerheads over sports grant announcement',
+        title:
+          '‘All hell seems to have broken out’: FF and FG at loggerheads over sports grant announcement',
         publishedAt: '2026-09-23T22:04:54Z',
         source: 'newsapi',
         author: 'Jack Horgan-Jones',
@@ -81,9 +82,9 @@ describe('newsapi adapter', () => {
     });
 
     it('excludes itself from a multi-category search it cannot express in one request', () => {
-      expect(newsapiSource.unserviceable({ page: 1, categories: ['technology', 'sports'] })).toMatch(
-        /one category at a time/,
-      );
+      expect(
+        newsapiSource.unserviceable({ page: 1, categories: ['technology', 'sports'] }),
+      ).toMatch(/one category at a time/);
     });
 
     it('excludes itself from a politics search, a category it does not have', () => {
@@ -168,9 +169,7 @@ describe('rate limit copy', () => {
   it('does not promise a daily window it cannot know', async () => {
     // NewsAPI's 429 is a daily cap; NYT's is usually a per-minute throttle. The status
     // code cannot tell them apart, so the copy must be true of both.
-    server.use(
-      http.get('*/api/newsapi/everything', () => HttpResponse.json({}, { status: 429 })),
-    );
+    server.use(http.get('*/api/newsapi/everything', () => HttpResponse.json({}, { status: 429 })));
 
     await expect(newsapiSource.search({ page: 1, query: 'ai' })).rejects.toMatchObject({
       kind: 'rateLimited',
@@ -196,7 +195,11 @@ describe('newsapi adapter when the response is not what it should be', () => {
   it('drops an article with no title or no link', async () => {
     captureRequest('/api/newsapi/everything', {
       status: 'ok',
-      articles: [{ ...articles[0]!, title: '' }, { ...articles[1]!, url: 'not a url' }, articles[2]!],
+      articles: [
+        { ...articles[0]!, title: '' },
+        { ...articles[1]!, url: 'not a url' },
+        articles[2]!,
+      ],
     });
 
     expect((await search()).articles).toHaveLength(1);

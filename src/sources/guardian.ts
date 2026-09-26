@@ -3,7 +3,14 @@ import type { Article, Category } from '../core/article';
 import { normalizeUrl } from '../core/article';
 import { buildUrl, fetchJson } from '../core/http';
 import { PAGE_SIZE, type NewsSource, type SearchParams, type SourcePage } from '../core/source';
-import { asHttpUrl, httpUrl, keepValid, optionalText, requiredText, timestamp } from '../core/validate';
+import {
+  asHttpUrl,
+  httpUrl,
+  keepValid,
+  optionalText,
+  requiredText,
+  timestamp,
+} from '../core/validate';
 
 /**
  * Guardian section id -> canonical category. Local to this adapter on purpose: a shared

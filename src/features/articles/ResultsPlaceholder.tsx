@@ -41,8 +41,8 @@ export function ResultsPlaceholder({
       >
         <p className="m-0 font-serif text-xl font-medium">No source could be reached.</p>
         <p className="m-0 max-w-prose text-sm text-pretty text-muted-foreground">
-          Nothing was searched, so there are no results to show — not even an empty one. The
-          notices above say what each source reported.
+          Nothing was searched, so there are no results to show — not even an empty one. The notices
+          above say what each source reported.
         </p>
         <Button type="button" variant="outline" onClick={onRetry} disabled={isRetrying}>
           <RotateCw className={isRetrying ? 'animate-spin' : undefined} />

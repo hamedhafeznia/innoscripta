@@ -99,7 +99,10 @@ export interface PageRequest {
  * one is a wrong answer, not a narrower one. One name-only follow therefore moves the whole
  * set to the client side, where names are all that is needed.
  */
-function authorStrategy(source: NewsSource, authors: FollowedAuthor[]): 'server' | 'client' | 'none' {
+function authorStrategy(
+  source: NewsSource,
+  authors: FollowedAuthor[],
+): 'server' | 'client' | 'none' {
   if (!authors.length) return 'none';
   if (source.capabilities.author === false) return 'none';
   if (source.capabilities.author === 'server' && authors.every((author) => author.ref)) {
@@ -168,11 +171,7 @@ function selectSources(filters: Filters, authors: FollowedAuthor[], cursor: Curs
   return { live, notices };
 }
 
-function notice(
-  source: NewsSource,
-  kind: SourceNotice['kind'],
-  message: string,
-): SourceNotice {
+function notice(source: NewsSource, kind: SourceNotice['kind'], message: string): SourceNotice {
   return {
     id: `${source.id}:${kind}:${message}`,
     sourceId: source.id,
@@ -231,7 +230,8 @@ async function fetchRound(
 
     let oldestFetched: string | undefined;
     for (const article of fetched) {
-      if (!oldestFetched || article.publishedAt < oldestFetched) oldestFetched = article.publishedAt;
+      if (!oldestFetched || article.publishedAt < oldestFetched)
+        oldestFetched = article.publishedAt;
     }
 
     results.push({
@@ -302,13 +302,7 @@ export async function fetchPage({
       break;
     }
 
-    const round = await fetchRound(
-      window?.filters ?? filters,
-      authors,
-      current,
-      stillLive,
-      signal,
-    );
+    const round = await fetchRound(window?.filters ?? filters, authors, current, stillLive, signal);
     roundNotices = round.notices;
     lastResults = round.results;
 

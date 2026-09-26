@@ -2,7 +2,9 @@ import { countActiveFilters, parseFilters, toSearchParams, type Filters } from '
 
 describe('parseFilters', () => {
   it('reads a complete, well-formed URL', () => {
-    expect(parseFilters('q=climate&from=2026-09-01&to=2026-09-24&cat=science,health&src=guardian')).toEqual({
+    expect(
+      parseFilters('q=climate&from=2026-09-01&to=2026-09-24&cat=science,health&src=guardian'),
+    ).toEqual({
       query: 'climate',
       from: '2026-09-01',
       to: '2026-09-24',

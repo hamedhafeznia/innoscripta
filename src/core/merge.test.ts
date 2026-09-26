@@ -14,8 +14,11 @@ const failed = (sourceId: SourceResult['sourceId']): SourceResult => ({
 
 const titles = (articles: ReturnType<typeof makeArticle>[]) => articles.map((a) => a.title);
 
-const at = (publishedAt: string, title: string, rest: Parameters<typeof makeArticle>[0] | object = {}) =>
-  makeArticle({ publishedAt, title, ...rest });
+const at = (
+  publishedAt: string,
+  title: string,
+  rest: Parameters<typeof makeArticle>[0] | object = {},
+) => makeArticle({ publishedAt, title, ...rest });
 
 describe('mergePage', () => {
   it('sorts the emitted articles by publishedAt, newest first', () => {
@@ -67,7 +70,11 @@ describe('mergePage', () => {
       const result = mergePage({
         buffer: [],
         results: [
-          ok('guardian', [at('2026-09-23T00:00:00Z', 'g-23'), at('2026-09-18T00:00:00Z', 'g-18')], true),
+          ok(
+            'guardian',
+            [at('2026-09-23T00:00:00Z', 'g-23'), at('2026-09-18T00:00:00Z', 'g-18')],
+            true,
+          ),
           failed('nyt'),
         ],
       });
@@ -272,7 +279,10 @@ describe('mergePage', () => {
         ],
       });
 
-      const second = mergePage({ buffer: first.buffer, results: [failed('guardian'), failed('nyt')] });
+      const second = mergePage({
+        buffer: first.buffer,
+        results: [failed('guardian'), failed('nyt')],
+      });
 
       expect(titles(first.articles)).toEqual(['g-23', 'n-21']);
       expect(titles(second.articles)).toEqual(['g-19']);

@@ -21,10 +21,14 @@ export function asHttpUrl(value: unknown): string | null {
 }
 
 /** A link we are willing to send the reader to. */
-export const httpUrl = z.string().refine((value) => asHttpUrl(value) !== null, 'not an http(s) URL');
+export const httpUrl = z
+  .string()
+  .refine((value) => asHttpUrl(value) !== null, 'not an http(s) URL');
 
 /** Anything `Date` can read. What the merge sorts and the card formats depends on it. */
-export const timestamp = z.string().refine((value) => !Number.isNaN(Date.parse(value)), 'not a date');
+export const timestamp = z
+  .string()
+  .refine((value) => !Number.isNaN(Date.parse(value)), 'not a date');
 
 /** A required, non-blank string: a headline of nothing is not an article. */
 export const requiredText = z.string().trim().min(1);
@@ -39,7 +43,10 @@ export const optionalText = z.string().nullish().catch(undefined);
  * Validates each item on its own and keeps the ones that pass. One malformed article must
  * cost one article, never the page.
  */
-export function keepValid<S extends z.ZodType>(schema: S, items: readonly unknown[]): z.output<S>[] {
+export function keepValid<S extends z.ZodType>(
+  schema: S,
+  items: readonly unknown[],
+): z.output<S>[] {
   return items.flatMap((item) => {
     const result = schema.safeParse(item);
     return result.success ? [result.data] : [];

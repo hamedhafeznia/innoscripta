@@ -17,8 +17,7 @@ const run = (
   overrides: Partial<Filters> = {},
   cursor: Cursor = initialCursor(),
   authors: FollowedAuthor[] = [],
-) =>
-  fetchPage({ filters: filters(overrides), authors, cursor });
+) => fetchPage({ filters: filters(overrides), authors, cursor });
 
 /** Answers all three providers with their captured fixture. */
 function serveAll() {
@@ -307,7 +306,11 @@ describe('fetchPage', () => {
         }),
       );
 
-      const last = await fetchPage({ filters: filters({ query: 'climate' }), authors: [], cursor: spent });
+      const last = await fetchPage({
+        filters: filters({ query: 'climate' }),
+        authors: [],
+        cursor: spent,
+      });
 
       expect(requests).toBe(0);
       expect(last.articles).toEqual(first.cursor.buffer);
@@ -367,7 +370,9 @@ describe('fetchPage author following', () => {
     });
 
     expect(requested?.searchParams.has('tag')).toBe(false);
-    expect(page.articles.every((article) => /lucy campbell|ada lovelace/i.test(article.author ?? ''))).toBe(true);
+    expect(
+      page.articles.every((article) => /lucy campbell|ada lovelace/i.test(article.author ?? '')),
+    ).toBe(true);
   });
 
   it('matches a followed author inside a multi-name byline', async () => {
@@ -440,12 +445,7 @@ describe('walking a date range a day at a time', () => {
 
     expect(days).toEqual(['2026-09-10', '2026-09-09', '2026-09-08', '2026-09-07']);
     // Always page 1: a new day is a new question, never page 2 of a day never read.
-    expect(seen).toEqual([
-      '2026-09-10:1',
-      '2026-09-09:1',
-      '2026-09-08:1',
-      '2026-09-07:1',
-    ]);
+    expect(seen).toEqual(['2026-09-10:1', '2026-09-09:1', '2026-09-08:1', '2026-09-07:1']);
   });
 
   it('stays on the day it could not read when every source fails', async () => {

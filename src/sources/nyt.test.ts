@@ -95,7 +95,10 @@ describe('nyt adapter', () => {
     it('treats a null docs list as an exhausted empty page', async () => {
       captureRequest('/api/nyt/articlesearch.json', { response: { docs: null } });
 
-      await expect(nytSource.search({ page: 1 })).resolves.toEqual({ articles: [], exhausted: true });
+      await expect(nytSource.search({ page: 1 })).resolves.toEqual({
+        articles: [],
+        exhausted: true,
+      });
     });
   });
 
@@ -124,7 +127,9 @@ describe('nyt adapter', () => {
 
     it('keeps a doc whose image is not an http(s) URL, without the image', async () => {
       captureRequest('/api/nyt/articlesearch.json', {
-        response: { docs: [{ ...docs[0]!, multimedia: { default: { url: 'javascript:alert(1)' } } }] },
+        response: {
+          docs: [{ ...docs[0]!, multimedia: { default: { url: 'javascript:alert(1)' } } }],
+        },
       });
 
       const [article] = (await nytSource.search({ page: 1 })).articles;
