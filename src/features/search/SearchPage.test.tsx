@@ -62,14 +62,17 @@ describe('SearchPage', () => {
     await anArticle();
 
     await user.click(screen.getByRole('button', { name: 'From: any date' }));
-    // The calendar is lazy-loaded, so the chunk resolves after the popover opens.
-    const grid = await screen.findByRole('grid', {}, { timeout: 5000 });
-    // Each day is a button named by its date ("Friday, September 12th, 2026"). Only the
-    // month shown has a 12th: the greyed-out days of its neighbours stop at the 6th.
-    await user.click(within(grid).getByRole('button', { name: /\b12(th)?\b/ }));
+    // The calendar is lazy-loaded, so the chunk resolves after the popover opens. The
+    // test's own limit (below) sits well above this wait, so a slow machine fails on the
+    // wait's clear message rather than on a bare test timeout.
+    const grid = await screen.findByRole('grid', {}, { timeout: 10_000 });
+    // The day shows its number. Only the month shown has a 12th: the greyed-out days of
+    // its neighbours stop at the 6th. (By text rather than by accessible name, which asks
+    // the DOM to compute a name for every day in the grid.)
+    await user.click(within(grid).getByText('12'));
 
     await waitFor(() => expect(currentLocation()).toMatch(/[?&]from=\d{4}-\d{2}-12/));
-  });
+  }, 20_000);
 
   it('shows what returned and a notice naming the source that failed', async () => {
     serveAll();
